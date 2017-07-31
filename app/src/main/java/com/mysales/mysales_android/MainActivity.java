@@ -33,9 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String CLASS_NAME = "MainActivity";
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 0;
-    private static final String ARG_CUST = "cust_name";
-    private static final String ARG_PERIOD = "period";
-    private static final String ARG_YEAR = "year";
 
     private AppCompatAutoCompleteTextView txtcust;
     private MultiSpinnerSearch spperiod, spyear;
@@ -126,9 +123,9 @@ public class MainActivity extends AppCompatActivity {
         String year = getSelected(spyear.getSelectedIds());
 
         Intent i = new Intent(this, CustomerListActivity.class);
-        i.putExtra(ARG_CUST, txtcust.getText());
-        i.putExtra(ARG_PERIOD, period);
-        i.putExtra(ARG_YEAR, year);
+        i.putExtra(CustomerListActivity.ARG_CUST, txtcust.getText().toString());
+        i.putExtra(CustomerListActivity.ARG_PERIOD, period);
+        i.putExtra(CustomerListActivity.ARG_YEAR, year);
 
         startActivity(i);
     }

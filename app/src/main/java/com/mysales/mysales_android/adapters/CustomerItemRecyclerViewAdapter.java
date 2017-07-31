@@ -1,12 +1,14 @@
 package com.mysales.mysales_android.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mysales.mysales_android.CustomerItemDetailActivity;
 import com.mysales.mysales_android.R;
 import com.mysales.mysales_android.models.Customer;
 
@@ -18,9 +20,13 @@ public class CustomerItemRecyclerViewAdapter
         extends RecyclerView.Adapter<CustomerItemRecyclerViewAdapter.ViewHolder> {
 
     private final Customer[] values;
+    private String period;
+    private String year;
 
-    public CustomerItemRecyclerViewAdapter(Customer[] items) {
+    public CustomerItemRecyclerViewAdapter(Customer[] items, String period, String year) {
         values = items;
+        this.period = period;
+        this.year = year;
     }
 
     @Override
@@ -36,7 +42,7 @@ public class CustomerItemRecyclerViewAdapter
             return;
 
         holder.item = values[position];
-        Customer customer = values[position];
+        final Customer customer = values[position];
         holder.txtcustname.setText(customer.getName());
         holder.txtcustcode.setText(customer.getCode());
 
@@ -44,6 +50,12 @@ public class CustomerItemRecyclerViewAdapter
             @Override
             public void onClick(View view) {
                 Context context = view.getContext();
+                Intent intent = new Intent(context, CustomerItemDetailActivity.class);
+                intent.putExtra(CustomerItemDetailActivity.ARG_CUST, customer.getName());
+                intent.putExtra(CustomerItemDetailActivity.ARG_PERIOD, period);
+                intent.putExtra(CustomerItemDetailActivity.ARG_YEAR, year);
+
+                context.startActivity(intent);
             }
         });
     }

@@ -29,6 +29,6 @@
         <item>2012</item>
     </string-array>
     <string name="title_customer_list">Customers</string>
-    <string name="title_customer_detail">Customer Detail</string>
+    <string name="title_customer_detail">Customer Item Detail</string>
 
 </resources>

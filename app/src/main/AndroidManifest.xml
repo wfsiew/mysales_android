@@ -21,16 +21,11 @@
         <activity
             android:name=".CustomerListActivity"
             android:label="@string/title_customer_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".CustomerDetailActivity"
+            android:name=".CustomerItemDetailActivity"
             android:label="@string/title_customer_detail"
-            android:parentActivityName=".CustomerListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.mysales.mysales_android.CustomerListActivity" />
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
