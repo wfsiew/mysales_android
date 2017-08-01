@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < periodlist.size(); i++) {
             KeyPairBoolData h = new KeyPairBoolData();
             String v = periodlist.get(i);
-            h.setId(Long.valueOf(v));
+            h.setId(Integer.valueOf(v));
             h.setName(v);
             h.setSelected(false);
             la.add(h);
@@ -80,14 +80,9 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < yearlist.size(); i++) {
             KeyPairBoolData h = new KeyPairBoolData();
             String v = yearlist.get(i);
-            h.setId(Long.valueOf(v));
+            h.setId(i + 1);
             h.setName(v);
-
-            if (v.equals("2017"))
-                h.setSelected(true);
-
-            else
-                h.setSelected(false);
+            h.setSelected(false);
 
             lb.add(h);
         }
@@ -99,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        spyear.setSelectedIds(new Integer[] { 1 });
 
         btnsubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void searchData() {
         String period = getSelected(spperiod.getSelectedIds());
-        String year = getSelected(spyear.getSelectedIds());
+        String year = getSelectedYear(spyear.getSelectedIds());
 
         Intent i = new Intent(this, CustomerListActivity.class);
         i.putExtra(CustomerListActivity.ARG_CUST, txtcust.getText().toString());
@@ -180,6 +176,29 @@ public class MainActivity extends AppCompatActivity {
                 checkPermission();
             }
         }
+    }
+
+    private String getSelectedYear(List<Long> li) {
+        final List<String> yearlist = Arrays.asList(getResources().getStringArray(R.array.year));
+        StringBuffer sb = new StringBuffer();
+        String r = "";
+
+        if (li.isEmpty()) {
+            return r;
+        }
+
+        for (int i = 0; i < li.size(); i++) {
+            long j = li.get(i);
+            int x = Integer.valueOf(String.valueOf(j)) - 1;
+            String v = yearlist.get(x);
+            sb.append(v);
+            if (i < li.size() - 1) {
+                sb.append(",");
+            }
+        }
+
+        r = sb.toString();
+        return r;
     }
 
     private String getSelected(List<Long> li) {
