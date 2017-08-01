@@ -12,11 +12,15 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.mysales.mysales_android.helpers.DBHelper;
+import com.mysales.mysales_android.helpers.Utils;
 import com.mysales.mysales_android.models.CustomerItem;
+import com.mysales.mysales_android.tasks.CommonTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import needle.Needle;
 
 public class CustomerItemDetailActivity extends AppCompatActivity {
 
@@ -24,6 +28,8 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
     private TextView txtcontent;
 
     private DBHelper db;
+
+    private CustomerItemDetailTask customerItemDetailTask = null;
 
     public static final String ARG_CUST = "cust_code";
     public static final String ARG_PERIOD = "period";
@@ -49,6 +55,13 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (customerItemDetailTask != null && !customerItemDetailTask.isCanceled())
+            customerItemDetailTask.cancel();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -65,34 +78,98 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
         String period = getIntent().getStringExtra(ARG_PERIOD);
         String year = getIntent().getStringExtra(ARG_YEAR);
 
-        HashMap<String, ArrayList<CustomerItem>> m = new HashMap<>();
+        customerItemDetailTask = new CustomerItemDetailTask(cust, period, year);
+        Needle.onBackgroundThread()
+                .withTaskType("customerItemDetail")
+                .execute(customerItemDetailTask);
+    }
 
-        try {
-            m = db.getItemsByCustomer(cust, period, year);
+    private void showProgress(final boolean show) {
+        Utils.showProgress(show, progress, getApplicationContext());
+        txtcontent.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    public class CustomerItemDetailTask extends CommonTask<HashMap<String, ArrayList<CustomerItem>>> {
+
+        private static final String CLASS_NAME = "CustomerItemDetailTask";
+
+        private String cust;
+        private String period;
+        private String year;
+        private ArrayList<String> la;
+
+        public CustomerItemDetailTask(String cust, String period, String year) {
+            super(CustomerItemDetailActivity.this);
+            this.cust = cust;
+            this.period = period;
+            this.year = year;
+            la = new ArrayList<>();
+            showProgress(true);
         }
 
-        catch (Exception e) {
-            Log.e("xxx", e.getMessage(), e);
-        }
+        @Override
+        protected HashMap<String, ArrayList<CustomerItem>> doWork() {
+            HashMap<String, ArrayList<CustomerItem>> m = new HashMap<>();
 
-        finally {
-            db.close();
-        }
-
-        StringBuffer sb = new StringBuffer();
-
-        for (Map.Entry<String, ArrayList<CustomerItem>> entry: m.entrySet()) {
-            String key = entry.getKey();
-            ArrayList<CustomerItem> l = entry.getValue();
-
-            sb.append(key + "\n");
-            for (CustomerItem o: l) {
-                sb.append(o.getItem() + "  " + o.getUnit() + "  " + o.getValue() + "\n");
+            try {
+                m = db.getItemsByCustomer(cust, period, year, la);
             }
 
-            sb.append("\n\n");
+            catch (Exception e) {
+                Log.e(CLASS_NAME, e.getMessage(), e);
+            }
+
+            finally {
+                db.close();
+            }
+
+            return m;
         }
 
-        txtcontent.setText(sb.toString());
+        @Override
+        protected void thenDoUiRelatedWork(HashMap<String, ArrayList<CustomerItem>> m) {
+            showProgress(false);
+            StringBuffer sb = new StringBuffer();
+
+            int salesunittotal = 0;
+            double salesvaluetotal = 0;
+
+            if (la.size() > 0) {
+                ArrayList<CustomerItem> lx = m.get(la.get(0));
+                if (lx.size() > 0) {
+                    CustomerItem x = lx.get(0);
+                    sb.append(x.getName() + "\n")
+                            .append("Total Sales Unit: XXX\nTotal Sales Value: YYY\n\n");
+                }
+            }
+
+            for (String key: la) {
+                ArrayList<CustomerItem> l = m.get(key);
+
+                int salesunit = 0;
+                double salesvalue = 0;
+
+                sb.append(key + "\n");
+                for (CustomerItem o: l) {
+                    sb.append(o.getItem() + "\n")
+                            .append("Sales Unit: " + o.getUnit() + "  Sales Value: " + Utils.formatDouble(o.getValue()) + "\n")
+                            .append("------------------------------------------------\n");
+                    salesunit += o.getUnit();
+                    salesvalue += o.getValue();
+
+                    salesunittotal += o.getUnit();
+                    salesvaluetotal += o.getValue();
+                }
+
+                sb.append("Total Sales Unit: " + salesunit + "  Total Sales Value: " + Utils.formatDouble(salesvalue) + "\n");
+                sb.append("\n");
+            }
+
+            String r = sb.toString()
+                    .replace("XXX", String.valueOf(salesunittotal))
+                    .replace("YYY", Utils.formatDouble(salesvaluetotal));
+
+            txtcontent.setText(r);
+        }
     }
 }

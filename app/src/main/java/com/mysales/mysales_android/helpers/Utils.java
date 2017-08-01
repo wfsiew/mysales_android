@@ -12,11 +12,29 @@ import android.os.Build;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by wingfei.siew on 7/31/2017.
  */
 
 public class Utils {
+
+    public static boolean isEmpty(String s) {
+        boolean b = false;
+        if (s == null)
+            b = true;
+
+        else if (s.isEmpty())
+            b = true;
+
+        return b;
+    }
+
+    public static String formatDouble(double x) {
+        DecimalFormat formatter = new DecimalFormat("#0.00");
+        return formatter.format(x);
+    }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public static void showProgress(final boolean show, final View progress, final Context context) {
@@ -42,12 +60,6 @@ public class Utils {
         catch (Exception e) {
 
         }
-    }
-
-    public static void showProgress(final boolean show, final View progress,
-                                    final TextView txtprogress, final Context context) {
-        showProgress(show, progress, context);
-        txtprogress.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     public static void lockScreenOrientation(Activity a) {

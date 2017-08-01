@@ -72,10 +72,10 @@ public class DBHelper extends SQLiteOpenHelper {
         StringBuffer sb = new StringBuffer();
         sb.append("select distinct cust_code, cust_name from sales");
 
-        if ((name != null && !name.isEmpty()) || !period.isEmpty() || !year.isEmpty()) {
+        if (!Utils.isEmpty(name) || !period.isEmpty() || !year.isEmpty()) {
             sb.append(" where");
 
-            if (name != null && !name.isEmpty()) {
+            if (!Utils.isEmpty(name)) {
                 sb.append(" cust_name like '%" + name + "%'");
                 and = true;
             }
@@ -120,7 +120,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return ls;
     }
 
-    public HashMap<String, ArrayList<CustomerItem>> getItemsByCustomer(String name, String period, String year) {
+    public HashMap<String, ArrayList<CustomerItem>> getItemsByCustomer(String name, String period, String year,
+                                                                       ArrayList<String> ls) {
         HashMap<String, ArrayList<CustomerItem>> m = new HashMap<>();
         openDataBase();
         StringBuffer sb = new StringBuffer();
@@ -136,7 +137,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         sb.append(" group by period, year, item_name")
-                .append(" order by period, year, item_name");
+                .append(" order by salesv desc");
         //System.out.println("===========" + sb.toString());
 
         String q = sb.toString();
@@ -165,6 +166,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 ArrayList<CustomerItem> l = new ArrayList<>();
                 l.add(x);
                 m.put(key, l);
+                ls.add(key);
             }
 
             cur.moveToNext();
