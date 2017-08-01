@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -40,6 +42,7 @@ public class CustomerListActivity extends AppCompatActivity {
     private String cust;
     private String period;
     private String year;
+    private String sort = "";
 
     public static final String ARG_CUST = "cust_name";
     public static final String ARG_PERIOD = "period";
@@ -76,8 +79,45 @@ public class CustomerListActivity extends AppCompatActivity {
             customerListTask.cancel();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_customer_list, menu);
+        final MenuItem sort_custname = menu.findItem(R.id.sort_custname);
+        final MenuItem sort_salesunit = menu.findItem(R.id.sort_salesunit);
+        final MenuItem sort_salesvalue = menu.findItem(R.id.sort_salesvalue);
+
+        sort_custname.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                sort = "cust_name";
+                load();
+                return false;
+            }
+        });
+
+        sort_salesunit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                sort = "salesu desc";
+                load();
+                return false;
+            }
+        });
+
+        sort_salesvalue.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                sort = "salesv desc";
+                load();
+                return false;
+            }
+        });
+
+        return true;
+    }
+
     private void load() {
-        customerListTask = new CustomerListTask(cust, period, year);
+        customerListTask = new CustomerListTask(cust, period, year, sort);
         Needle.onBackgroundThread()
                 .withTaskType("customerList")
                 .execute(customerListTask);
@@ -96,12 +136,14 @@ public class CustomerListActivity extends AppCompatActivity {
         private String cust;
         private String period;
         private String year;
+        private String sort;
 
-        public  CustomerListTask(String cust, String period, String year) {
+        public  CustomerListTask(String cust, String period, String year, String sort) {
             super(CustomerListActivity.this);
             this.cust = cust;
             this.period = period;
             this.year = year;
+            this.sort = sort;
             showProgress(true);
         }
 
@@ -110,7 +152,7 @@ public class CustomerListActivity extends AppCompatActivity {
             ArrayList<Customer> ls = new ArrayList<>();
 
             try {
-                ls = db.filterCustomer(cust, period, year);
+                ls = db.filterCustomer(cust, period, year, sort);
             }
 
             catch (Exception e) {

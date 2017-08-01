@@ -65,12 +65,21 @@ public class DBHelper extends SQLiteOpenHelper {
         return ls;
     }
 
-    public ArrayList<Customer> filterCustomer(String name, String period, String year) {
+    public ArrayList<Customer> filterCustomer(String name, String period, String year, String sort) {
         ArrayList<Customer> ls = new ArrayList<>();
         boolean and = false;
         openDataBase();
         StringBuffer sb = new StringBuffer();
-        sb.append("select distinct cust_code, cust_name from sales");
+
+        if (Utils.isEmpty(sort))
+            sort = "cust_name";
+
+        if (sort.equals("cust_name"))
+            sb.append("select distinct cust_code, cust_name from sales");
+
+        else {
+            sb.append("select cust_code, cust_name, sum(sales_unit) salesu, sum(sales_value) salesv from sales");
+        }
 
         if (!Utils.isEmpty(name) || !period.isEmpty() || !year.isEmpty()) {
             sb.append(" where");
@@ -102,7 +111,11 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
 
-        sb.append(" order by cust_name");
+        if (!sort.equals("cust_name")) {
+            sb.append(" group by cust_code, cust_name");
+        }
+
+        sb.append(" order by " + sort);
         //System.out.println("===========" + sb.toString());
 
         String q = sb.toString();
@@ -121,11 +134,16 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public HashMap<String, ArrayList<CustomerItem>> getItemsByCustomer(String name, String period, String year,
+                                                                       String sort,
                                                                        ArrayList<String> ls) {
         HashMap<String, ArrayList<CustomerItem>> m = new HashMap<>();
         openDataBase();
         StringBuffer sb = new StringBuffer();
         StringBuffer sa = new StringBuffer();
+
+        if (Utils.isEmpty(sort))
+            sort = "salesv desc";
+
         sb.append("select period, year, item_name, sum(sales_unit) salesu, sum(sales_value) salesv from sales")
                 .append(" where cust_name = '" + name + "'");
         sa.append("select period, year, sum(sales_unit) salesu, sum(sales_value) salesv from sales")
@@ -142,9 +160,9 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         sb.append(" group by period, year, item_name")
-                .append(" order by item_name, period, year");
+                .append(" order by period, year, item_name");
         sa.append(" group by period, year")
-                .append(" order by salesv desc");
+                .append(" order by " + sort);
         //System.out.println("===========" + sb.toString());
 
         String q = sb.toString();
@@ -173,23 +191,27 @@ public class DBHelper extends SQLiteOpenHelper {
                 ArrayList<CustomerItem> l = new ArrayList<>();
                 l.add(x);
                 m.put(key, l);
-                //ls.add(key);
+
+                if (sort.equals("item_name"))
+                    ls.add(key);
             }
 
             cur.moveToNext();
         }
 
-        q = sa.toString();
-        cur = db.rawQuery(q, null);
-        cur.moveToFirst();
+        if (!sort.equals("item_name")) {
+            q = sa.toString();
+            cur = db.rawQuery(q, null);
+            cur.moveToFirst();
 
-        while (cur.isAfterLast() == false) {
-            int month = cur.getInt(cur.getColumnIndex("period"));
-            int y = cur.getInt(cur.getColumnIndex("year"));
+            while (cur.isAfterLast() == false) {
+                int month = cur.getInt(cur.getColumnIndex("period"));
+                int y = cur.getInt(cur.getColumnIndex("year"));
 
-            String key = String.format("%d-%d", y, month);
-            ls.add(key);
-            cur.moveToNext();
+                String key = String.format("%d-%d", y, month);
+                ls.add(key);
+                cur.moveToNext();
+            }
         }
 
         return m;

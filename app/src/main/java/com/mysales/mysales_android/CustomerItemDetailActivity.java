@@ -1,12 +1,12 @@
 package com.mysales.mysales_android;
 
-import android.content.Intent;
-import android.support.v4.app.NavUtils;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -18,7 +18,6 @@ import com.mysales.mysales_android.tasks.CommonTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import needle.Needle;
 
@@ -30,6 +29,11 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
     private DBHelper db;
 
     private CustomerItemDetailTask customerItemDetailTask = null;
+
+    private String cust;
+    private String period;
+    private String year;
+    private String sort = "";
 
     public static final String ARG_CUST = "cust_code";
     public static final String ARG_PERIOD = "period";
@@ -49,6 +53,10 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
         progress = findViewById(R.id.progress);
         txtcontent = (TextView) findViewById(R.id.txtcontent);
 
+        cust = getIntent().getStringExtra(ARG_CUST);
+        period = getIntent().getStringExtra(ARG_PERIOD);
+        year = getIntent().getStringExtra(ARG_YEAR);
+
         db = new DBHelper(this);
 
         load();
@@ -59,6 +67,43 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
         super.onDestroy();
         if (customerItemDetailTask != null && !customerItemDetailTask.isCanceled())
             customerItemDetailTask.cancel();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_customer_item_detail, menu);
+        final MenuItem sort_item = menu.findItem(R.id.sort_item);
+        final MenuItem sort_salesunit = menu.findItem(R.id.sort_salesunit);
+        final MenuItem sort_salesvalue = menu.findItem(R.id.sort_salesvalue);
+
+        sort_item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                sort = "item_name";
+                load();
+                return false;
+            }
+        });
+
+        sort_salesunit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                sort = "salesu desc";
+                load();
+                return false;
+            }
+        });
+
+        sort_salesvalue.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                sort = "salesv desc";
+                load();
+                return false;
+            }
+        });
+
+        return true;
     }
 
     @Override
@@ -74,11 +119,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
     }
 
     private void load() {
-        String cust = getIntent().getStringExtra(ARG_CUST);
-        String period = getIntent().getStringExtra(ARG_PERIOD);
-        String year = getIntent().getStringExtra(ARG_YEAR);
-
-        customerItemDetailTask = new CustomerItemDetailTask(cust, period, year);
+        customerItemDetailTask = new CustomerItemDetailTask(cust, period, year, sort);
         Needle.onBackgroundThread()
                 .withTaskType("customerItemDetail")
                 .execute(customerItemDetailTask);
@@ -96,13 +137,15 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
         private String cust;
         private String period;
         private String year;
+        private String sort;
         private ArrayList<String> la;
 
-        public CustomerItemDetailTask(String cust, String period, String year) {
+        public CustomerItemDetailTask(String cust, String period, String year, String sort) {
             super(CustomerItemDetailActivity.this);
             this.cust = cust;
             this.period = period;
             this.year = year;
+            this.sort = sort;
             la = new ArrayList<>();
             showProgress(true);
         }
@@ -112,7 +155,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
             HashMap<String, ArrayList<CustomerItem>> m = new HashMap<>();
 
             try {
-                m = db.getItemsByCustomer(cust, period, year, la);
+                m = db.getItemsByCustomer(cust, period, year, sort, la);
             }
 
             catch (Exception e) {
