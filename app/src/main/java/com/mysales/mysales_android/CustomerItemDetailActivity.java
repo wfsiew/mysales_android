@@ -170,6 +170,8 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
                     .replace("YYY", Utils.formatDouble(salesvaluetotal));
 
             txtcontent.setText(r);
+
+            Utils.unlockScreenOrientation(CustomerItemDetailActivity.this);
         }
     }
 }
