@@ -31,11 +31,13 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
     private CustomerItemDetailTask customerItemDetailTask = null;
 
     private String cust;
+    private String custName;
     private String period;
     private String year;
     private String sort = "";
 
     public static final String ARG_CUST = "cust_code";
+    public static final String ARG_CUST_NAME = "cust_name";
     public static final String ARG_PERIOD = "period";
     public static final String ARG_YEAR = "year";
 
@@ -54,6 +56,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
         txtcontent = (TextView) findViewById(R.id.txtcontent);
 
         cust = getIntent().getStringExtra(ARG_CUST);
+        custName = getIntent().getStringExtra(ARG_CUST_NAME);
         period = getIntent().getStringExtra(ARG_PERIOD);
         year = getIntent().getStringExtra(ARG_YEAR);
 
@@ -119,7 +122,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
     }
 
     private void load() {
-        customerItemDetailTask = new CustomerItemDetailTask(cust, period, year, sort);
+        customerItemDetailTask = new CustomerItemDetailTask(cust, custName, period, year, sort);
         Needle.onBackgroundThread()
                 .withTaskType("customerItemDetail")
                 .execute(customerItemDetailTask);
@@ -135,14 +138,16 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
         private static final String CLASS_NAME = "CustomerItemDetailTask";
 
         private String cust;
+        private String custName;
         private String period;
         private String year;
         private String sort;
         private ArrayList<String> la;
 
-        public CustomerItemDetailTask(String cust, String period, String year, String sort) {
+        public CustomerItemDetailTask(String cust, String custName, String period, String year, String sort) {
             super(CustomerItemDetailActivity.this);
             this.cust = cust;
+            this.custName = custName;
             this.period = period;
             this.year = year;
             this.sort = sort;
@@ -155,7 +160,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
             HashMap<String, ArrayList<CustomerItem>> m = new HashMap<>();
 
             try {
-                m = db.getItemsByCustomer(cust, period, year, sort, la);
+                m = db.getItemsByCustomer(cust, custName, period, year, sort, la);
             }
 
             catch (Exception e) {

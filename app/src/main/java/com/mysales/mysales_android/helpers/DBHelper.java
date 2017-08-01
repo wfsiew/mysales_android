@@ -133,7 +133,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return ls;
     }
 
-    public HashMap<String, ArrayList<CustomerItem>> getItemsByCustomer(String name, String period, String year,
+    public HashMap<String, ArrayList<CustomerItem>> getItemsByCustomer(String code, String name, String period, String year,
                                                                        String sort,
                                                                        ArrayList<String> ls) {
         HashMap<String, ArrayList<CustomerItem>> m = new HashMap<>();
@@ -178,6 +178,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             String key = String.format("%d-%d", y, month);
             CustomerItem x = new CustomerItem();
+            x.setCode(code);
             x.setName(name);
             x.setItem(item);
             x.setUnit(salesq);

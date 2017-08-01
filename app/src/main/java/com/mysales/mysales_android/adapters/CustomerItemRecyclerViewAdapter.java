@@ -51,7 +51,8 @@ public class CustomerItemRecyclerViewAdapter
             public void onClick(View view) {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, CustomerItemDetailActivity.class);
-                intent.putExtra(CustomerItemDetailActivity.ARG_CUST, customer.getName());
+                intent.putExtra(CustomerItemDetailActivity.ARG_CUST, customer.getCode());
+                intent.putExtra(CustomerItemDetailActivity.ARG_CUST_NAME, customer.getName());
                 intent.putExtra(CustomerItemDetailActivity.ARG_PERIOD, period);
                 intent.putExtra(CustomerItemDetailActivity.ARG_YEAR, year);
 

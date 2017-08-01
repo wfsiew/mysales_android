@@ -6,10 +6,19 @@ package com.mysales.mysales_android.models;
 
 public class CustomerItem {
 
+    private String code;
     private String name;
     private String item;
     private int unit;
     private double value;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getName() {
         return name;
