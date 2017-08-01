@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
 import com.mysales.mysales_android.models.Customer;
+import com.mysales.mysales_android.models.CustomerAddress;
 import com.mysales.mysales_android.models.CustomerItem;
 
 import java.lang.reflect.Array;
@@ -78,7 +79,7 @@ public class DBHelper extends SQLiteOpenHelper {
             sb.append("select distinct cust_code, cust_name from sales");
 
         else {
-            sb.append("select cust_code, cust_name, sum(sales_unit) salesu, sum(sales_value) salesv from sales");
+            sb.append("select cust_code, cust_name, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales");
         }
 
         if (!Utils.isEmpty(name) || !period.isEmpty() || !year.isEmpty()) {
@@ -133,20 +134,46 @@ public class DBHelper extends SQLiteOpenHelper {
         return ls;
     }
 
+    public CustomerAddress getCustomerAddress(String name) {
+        CustomerAddress o = new CustomerAddress();
+        String q = "select cust_addr1, cust_addr2, cust_addr3, postal_code, area, territory from sales where cust_name = '" + name  + "'";
+        Cursor cur = db.rawQuery(q, null);
+        cur.moveToFirst();
+
+        String addr1 = cur.getString(cur.getColumnIndex("cust_addr1"));
+        String addr2 = cur.getString(cur.getColumnIndex("cust_addr2"));
+        String addr3 = cur.getString(cur.getColumnIndex("cust_addr3"));
+        String postalcode = cur.getString(cur.getColumnIndex("postal_code"));
+        String area = cur.getString(cur.getColumnIndex("area"));
+        String territory = cur.getString(cur.getColumnIndex("territory"));
+
+        o.setAddr1(addr1);
+        o.setAddr2(addr2);
+        o.setAddr3(addr3);
+        o.setPostalCode(postalcode);
+        o.setArea(area);
+        o.setTerritory(territory);
+
+        return o;
+    }
+
     public HashMap<String, ArrayList<CustomerItem>> getItemsByCustomer(String code, String name, String period, String year,
                                                                        String sort,
+                                                                       CustomerAddress addr,
                                                                        ArrayList<String> ls) {
         HashMap<String, ArrayList<CustomerItem>> m = new HashMap<>();
         openDataBase();
+        CustomerAddress address = getCustomerAddress(name);
+        addr.set(address);
         StringBuffer sb = new StringBuffer();
         StringBuffer sa = new StringBuffer();
 
         if (Utils.isEmpty(sort))
             sort = "salesv desc";
 
-        sb.append("select period, year, item_name, sum(sales_unit) salesu, sum(sales_value) salesv from sales")
+        sb.append("select period, year, item_name, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales")
                 .append(" where cust_name = '" + name + "'");
-        sa.append("select period, year, sum(sales_unit) salesu, sum(sales_value) salesv from sales")
+        sa.append("select period, year, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales")
                 .append(" where cust_name = '" + name + "'");
 
         if (!period.isEmpty()) {
@@ -175,6 +202,7 @@ public class DBHelper extends SQLiteOpenHelper {
             String item = cur.getString(cur.getColumnIndex("item_name"));
             int salesq = cur.getInt(cur.getColumnIndex("salesu"));
             double salesv = cur.getDouble(cur.getColumnIndex("salesv"));
+            int bonus = cur.getInt(cur.getColumnIndex("bonusu"));
 
             String key = String.format("%d-%d", y, month);
             CustomerItem x = new CustomerItem();
@@ -183,6 +211,7 @@ public class DBHelper extends SQLiteOpenHelper {
             x.setItem(item);
             x.setUnit(salesq);
             x.setValue(salesv);
+            x.setBonus(bonus);
 
             if (m.containsKey(key)) {
                 m.get(key).add(x);

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.mysales.mysales_android.helpers.DBHelper;
 import com.mysales.mysales_android.helpers.Utils;
+import com.mysales.mysales_android.models.CustomerAddress;
 import com.mysales.mysales_android.models.CustomerItem;
 import com.mysales.mysales_android.tasks.CommonTask;
 
@@ -78,6 +79,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
         final MenuItem sort_item = menu.findItem(R.id.sort_item);
         final MenuItem sort_salesunit = menu.findItem(R.id.sort_salesunit);
         final MenuItem sort_salesvalue = menu.findItem(R.id.sort_salesvalue);
+        final MenuItem sort_bonusunit = menu.findItem(R.id.sort_bonusunit);
 
         sort_item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -101,6 +103,15 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 sort = "salesv desc";
+                load();
+                return false;
+            }
+        });
+
+        sort_bonusunit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                sort = "bonusu desc";
                 load();
                 return false;
             }
@@ -143,6 +154,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
         private String year;
         private String sort;
         private ArrayList<String> la;
+        private CustomerAddress addr;
 
         public CustomerItemDetailTask(String cust, String custName, String period, String year, String sort) {
             super(CustomerItemDetailActivity.this);
@@ -152,6 +164,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
             this.year = year;
             this.sort = sort;
             la = new ArrayList<>();
+            addr = new CustomerAddress();
             showProgress(true);
         }
 
@@ -160,7 +173,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
             HashMap<String, ArrayList<CustomerItem>> m = new HashMap<>();
 
             try {
-                m = db.getItemsByCustomer(cust, custName, period, year, sort, la);
+                m = db.getItemsByCustomer(cust, custName, period, year, sort, addr, la);
             }
 
             catch (Exception e) {
@@ -181,13 +194,39 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
 
             int salesunittotal = 0;
             double salesvaluetotal = 0;
+            int bonustotal = 0;
 
             if (la.size() > 0) {
                 ArrayList<CustomerItem> lx = m.get(la.get(0));
                 if (lx.size() > 0) {
                     CustomerItem x = lx.get(0);
-                    sb.append(x.getName() + "\n")
-                            .append("Total Sales Unit: XXX\nTotal Sales Value: YYY\n\n");
+                    sb.append(x.getName() + "\n");
+
+                    if (!Utils.isEmpty(addr.getAddr1()))
+                        sb.append(addr.getAddr1());
+
+                    if (!Utils.isEmpty(addr.getAddr2())) {
+                        if (sb.toString().trim().endsWith(",")) {
+                            sb.append(" " + addr.getAddr2());
+                        }
+
+                        else {
+                            sb.append(", " + addr.getAddr2());
+                        }
+                    }
+
+                    if (!Utils.isEmpty(addr.getAddr3())) {
+                        if (sb.toString().trim().endsWith(",")) {
+                            sb.append(" " + addr.getAddr3());
+                        }
+
+                        else {
+                            sb.append(", " + addr.getAddr3());
+                        }
+                    }
+
+                    sb.append("\nTotal Sales Unit: XXX\nTotal Sales Value: YYY\n")
+                            .append("Total Bonus Unit: ZZZ\n\n");
                 }
             }
 
@@ -196,26 +235,31 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
 
                 int salesunit = 0;
                 double salesvalue = 0;
+                int bonus = 0;
 
                 sb.append(key + "\n");
                 for (CustomerItem o: l) {
                     sb.append(o.getItem() + "\n")
                             .append("Sales Unit: " + o.getUnit() + "  Sales Value: " + Utils.formatDouble(o.getValue()) + "\n")
+                            .append("Bonus Unit: " + o.getBonus() + "\n")
                             .append("------------------------------------------------\n");
                     salesunit += o.getUnit();
                     salesvalue += o.getValue();
+                    bonus += o.getBonus();
 
                     salesunittotal += o.getUnit();
                     salesvaluetotal += o.getValue();
+                    bonustotal += o.getBonus();
                 }
 
                 sb.append("Total Sales Unit: " + salesunit + "  Total Sales Value: " + Utils.formatDouble(salesvalue) + "\n");
-                sb.append("\n");
+                sb.append("Total Bonus Unit: " + bonus + "\n\n");
             }
 
             String r = sb.toString()
                     .replace("XXX", String.valueOf(salesunittotal))
-                    .replace("YYY", Utils.formatDouble(salesvaluetotal));
+                    .replace("YYY", Utils.formatDouble(salesvaluetotal))
+                    .replace("ZZZ", String.valueOf(bonustotal));
 
             txtcontent.setText(r);
 

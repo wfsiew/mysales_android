@@ -18,4 +18,9 @@
         android:orderInCategory="100"
         android:title="By Sales Value"
         app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/sort_bonusunit"
+        android:orderInCategory="100"
+        android:title="By Bonus Unit"
+        app:showAsAction="collapseActionView" />
 </menu>

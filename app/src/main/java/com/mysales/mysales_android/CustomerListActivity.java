@@ -85,6 +85,7 @@ public class CustomerListActivity extends AppCompatActivity {
         final MenuItem sort_custname = menu.findItem(R.id.sort_custname);
         final MenuItem sort_salesunit = menu.findItem(R.id.sort_salesunit);
         final MenuItem sort_salesvalue = menu.findItem(R.id.sort_salesvalue);
+        final MenuItem sort_bonusunit = menu.findItem(R.id.sort_bonusunit);
 
         sort_custname.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -108,6 +109,15 @@ public class CustomerListActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 sort = "salesv desc";
+                load();
+                return false;
+            }
+        });
+
+        sort_bonusunit.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                sort = "bonusu desc";
                 load();
                 return false;
             }

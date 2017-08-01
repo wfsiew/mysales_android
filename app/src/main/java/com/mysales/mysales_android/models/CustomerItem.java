@@ -12,6 +12,8 @@ public class CustomerItem {
     private int unit;
     private double value;
 
+    private int bonus;
+
     public String getCode() {
         return code;
     }
@@ -50,5 +52,13 @@ public class CustomerItem {
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    public int getBonus() {
+        return bonus;
+    }
+
+    public void setBonus(int bonus) {
+        this.bonus = bonus;
     }
 }
