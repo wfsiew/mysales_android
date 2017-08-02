@@ -189,22 +189,29 @@ public class DBHelper extends SQLiteOpenHelper {
         CustomerAddress address = getCustomerAddress(name);
         addr.set(address);
         StringBuffer sb = new StringBuffer();
+        StringBuffer sa = new StringBuffer();
 
         if (Utils.isEmpty(sort))
             sort = "salesv desc";
 
         sb.append("select period, year, item_name, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales")
                 .append(" where cust_name = '" + name + "'");
+        sa.append("select period, year, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales")
+                .append(" where cust_name = '" + name + "'");
 
         if (!period.isEmpty()) {
             sb.append(" and period in (" + period + ")");
+            sa.append(" and period in (" + period + ")");
         }
 
         if (!year.isEmpty()) {
             sb.append(" and year in (" + year + ")");
+            sa.append(" and year in (" + year + ")");
         }
 
         sb.append(" group by period, year, item_name")
+                .append(" order by " + sort + ", period, year");
+        sa.append(" group by period, year")
                 .append(" order by " + sort + ", period, year");
         //System.out.println("===========" + sb.toString());
 
@@ -237,10 +244,28 @@ public class DBHelper extends SQLiteOpenHelper {
                 ArrayList<CustomerItem> l = new ArrayList<>();
                 l.add(x);
                 m.put(key, l);
-                ls.add(key);
+
+                if ("item_name".equals(sort))
+                    ls.add(key);
             }
 
             cur.moveToNext();
+        }
+
+        if (!"item_name".equals(sort)) {
+            q = sa.toString();
+            cur = db.rawQuery(q, null);
+            cur.moveToFirst();
+
+            while (cur.isAfterLast() == false) {
+                int month = cur.getInt(cur.getColumnIndex("period"));
+                int y = cur.getInt(cur.getColumnIndex("year"));
+
+                String key = String.format("%d-%d", y, month);
+                ls.add(key);
+
+                cur.moveToNext();
+            }
         }
 
         return m;

@@ -9,15 +9,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.mysales.mysales_android.adapters.CustomerItemDetailAdapter;
 import com.mysales.mysales_android.helpers.DBHelper;
 import com.mysales.mysales_android.helpers.Utils;
 import com.mysales.mysales_android.models.CustomerAddress;
 import com.mysales.mysales_android.models.CustomerItem;
-import com.mysales.mysales_android.models.Result;
 import com.mysales.mysales_android.tasks.CommonTask;
 
 import java.util.ArrayList;
@@ -28,8 +25,7 @@ import needle.Needle;
 public class CustomerItemDetailActivity extends AppCompatActivity {
 
     private View progress;
-    private TextView txtmain;
-    private ListView listitem;
+    private TextView txtcontent;
 
     private DBHelper db;
 
@@ -58,8 +54,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
 
         progress = findViewById(R.id.progress);
-        txtmain = (TextView) findViewById(R.id.txtmain);
-        listitem = (ListView) findViewById(R.id.listitem);
+        txtcontent = (TextView) findViewById(R.id.txtcontent);
 
         cust = getIntent().getStringExtra(ARG_CUST);
         custName = getIntent().getStringExtra(ARG_CUST_NAME);
@@ -146,8 +141,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
 
     private void showProgress(final boolean show) {
         Utils.showProgress(show, progress, getApplicationContext());
-        txtmain.setVisibility(show ? View.GONE : View.VISIBLE);
-        listitem.setVisibility(show ? View.GONE : View.VISIBLE);
+        txtcontent.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
     public class CustomerItemDetailTask extends CommonTask<HashMap<String, ArrayList<CustomerItem>>> {
@@ -193,71 +187,14 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
             return m;
         }
 
-        private Result process(HashMap<String, ArrayList<CustomerItem>> m) {
-            Result r = new Result();
-            ArrayList<CustomerItem> lk = new ArrayList<>();
-            r.setList(lk);
-
-            if (la.isEmpty())
-                return r;
+        @Override
+        protected void thenDoUiRelatedWork(HashMap<String, ArrayList<CustomerItem>> m) {
+            showProgress(false);
+            StringBuffer sb = new StringBuffer();
 
             int salesunittotal = 0;
             double salesvaluetotal = 0;
             int bonustotal = 0;
-
-            for (String key: la) {
-                ArrayList<CustomerItem> l = m.get(key);
-                CustomerItem h = new CustomerItem();
-                h.setHeader(true);
-                h.setHeader(key);
-                lk.add(h);
-
-                int salesunit = 0;
-                double salesvalue = 0;
-                int bonus = 0;
-
-                for (CustomerItem o: l) {
-                    CustomerItem i = new CustomerItem();
-                    i.setItem(o.getItem());
-                    i.setUnit(o.getUnit());
-                    i.setBonus(o.getBonus());
-                    i.setValue(o.getValue());
-                    lk.add(i);
-
-                    salesunit += o.getUnit();
-                    salesvalue += o.getValue();
-                    bonus += o.getBonus();
-
-                    salesunittotal += o.getUnit();
-                    salesvaluetotal += o.getValue();
-                    bonustotal += o.getBonus();
-                }
-
-                CustomerItem f = new CustomerItem();
-                f.setFooter(true);
-                f.setSumunit(salesunit);
-                f.setSumbonus(bonus);
-                f.setSumvalue(salesvalue);
-                lk.add(f);
-            }
-
-            r.setList(lk);
-            r.setTotalSalesUnit(salesunittotal);
-            r.setTotalBonusUnit(bonustotal);
-            r.setTotalSalesValue(salesvaluetotal);
-            return r;
-        }
-
-        @Override
-        protected void thenDoUiRelatedWork(HashMap<String, ArrayList<CustomerItem>> m) {
-            showProgress(false);
-            Result r = process(m);
-            ArrayList<CustomerItem> lk = r.getList();
-
-            CustomerItemDetailAdapter adapter = new CustomerItemDetailAdapter(CustomerItemDetailActivity.this, lk);
-            listitem.setAdapter(adapter);
-
-            StringBuffer sb = new StringBuffer();
 
             if (la.size() > 0) {
                 ArrayList<CustomerItem> lx = m.get(la.get(0));
@@ -288,12 +225,43 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
                         }
                     }
 
-                    sb.append("\nTotal Sales Unit: " + r.getTotalSalesUnit() + "\n")
-                            .append("Total Bonus Unit: " + r.getTotalBonusUnit() + "\n")
-                            .append("Total Sales Value: " + Utils.formatDouble(r.getTotalSalesValue()) + "\n");
-                    txtmain.setText(sb.toString());
+                    sb.append("\nTotal Sales Unit: XXX\nTotal Sales Value: YYY\n")
+                            .append("Total Bonus Unit: ZZZ\n\n");
                 }
             }
+
+            for (String key: la) {
+                ArrayList<CustomerItem> l = m.get(key);
+
+                int salesunit = 0;
+                double salesvalue = 0;
+                int bonus = 0;
+
+                sb.append(key + "\n");
+                for (CustomerItem o: l) {
+                    sb.append(o.getItem() + "\n")
+                            .append("Sales Unit: " + o.getUnit() + "  Sales Value: " + Utils.formatDouble(o.getValue()) + "\n")
+                            .append("Bonus Unit: " + o.getBonus() + "\n")
+                            .append("------------------------------------------------\n");
+                    salesunit += o.getUnit();
+                    salesvalue += o.getValue();
+                    bonus += o.getBonus();
+
+                    salesunittotal += o.getUnit();
+                    salesvaluetotal += o.getValue();
+                    bonustotal += o.getBonus();
+                }
+
+                sb.append("Total Sales Unit: " + salesunit + "  Total Sales Value: " + Utils.formatDouble(salesvalue) + "\n");
+                sb.append("Total Bonus Unit: " + bonus + "\n\n");
+            }
+
+            String r = sb.toString()
+                    .replace("XXX", String.valueOf(salesunittotal))
+                    .replace("YYY", Utils.formatDouble(salesvaluetotal))
+                    .replace("ZZZ", String.valueOf(bonustotal));
+
+            txtcontent.setText(r);
 
             Utils.unlockScreenOrientation(CustomerItemDetailActivity.this);
         }

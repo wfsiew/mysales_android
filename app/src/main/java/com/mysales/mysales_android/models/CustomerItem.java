@@ -11,8 +11,15 @@ public class CustomerItem {
     private String item;
     private int unit;
     private double value;
-
     private int bonus;
+
+    private String header;
+    private boolean isHeader;
+    private boolean isFooter;
+
+    private int sumunit;
+    private int sumbonus;
+    private double sumvalue;
 
     public String getCode() {
         return code;
@@ -60,5 +67,53 @@ public class CustomerItem {
 
     public void setBonus(int bonus) {
         this.bonus = bonus;
+    }
+
+    public boolean isHeader() {
+        return isHeader;
+    }
+
+    public void setHeader(boolean header) {
+        isHeader = header;
+    }
+
+    public boolean isFooter() {
+        return isFooter;
+    }
+
+    public void setFooter(boolean footer) {
+        isFooter = footer;
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public int getSumunit() {
+        return sumunit;
+    }
+
+    public void setSumunit(int sumunit) {
+        this.sumunit = sumunit;
+    }
+
+    public int getSumbonus() {
+        return sumbonus;
+    }
+
+    public void setSumbonus(int sumbonus) {
+        this.sumbonus = sumbonus;
+    }
+
+    public double getSumvalue() {
+        return sumvalue;
+    }
+
+    public void setSumvalue(double sumvalue) {
+        this.sumvalue = sumvalue;
     }
 }

@@ -22,15 +22,12 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/txtmain"
+        android:id="@+id/txtcontent"
+        android:gravity="top"
+        style="?android:listSeparatorTextViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textIsSelectable="true"
-        style="?android:listSeparatorTextViewStyle" />
-
-    <ListView
-        android:id="@+id/listitem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textIsSelectable="true" />
 
 </LinearLayout>
