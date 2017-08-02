@@ -182,29 +182,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private String getSelectedYear(List<Long> li) {
-        final List<String> yearlist = Arrays.asList(getResources().getStringArray(R.array.year));
-        StringBuffer sb = new StringBuffer();
-        String r = "";
-
-        if (li.isEmpty()) {
-            return r;
-        }
-
-        for (int i = 0; i < li.size(); i++) {
-            long j = li.get(i);
-            int x = Integer.valueOf(String.valueOf(j)) - 1;
-            String v = yearlist.get(x);
-            sb.append(v);
-            if (i < li.size() - 1) {
-                sb.append(",");
-            }
-        }
-
-        r = sb.toString();
-        return r;
-    }
-
     private String getSelected(List<KeyPairBoolData> li) {
         return getSelected(li, false);
     }
