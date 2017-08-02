@@ -54,7 +54,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public ArrayList<String> getCustomers() {
         ArrayList<String> ls = new ArrayList<>();
-        openDataBase();
         Cursor cur = db.rawQuery("select distinct cust_name from sales order by cust_name", null);
         cur.moveToFirst();
 
@@ -66,7 +65,20 @@ public class DBHelper extends SQLiteOpenHelper {
         return ls;
     }
 
-    public ArrayList<Customer> filterCustomer(String name, String period, String year, String sort) {
+    public ArrayList<String> getItems() {
+        ArrayList<String> ls = new ArrayList<>();
+        Cursor cur = db.rawQuery("select distinct item_name from sales order by item_name", null);
+        cur.moveToFirst();
+
+        while (cur.isAfterLast() == false) {
+            ls.add(cur.getString(cur.getColumnIndex("item_name")));
+            cur.moveToNext();
+        }
+
+        return ls;
+    }
+
+    public ArrayList<Customer> filterCustomer(String name, String item, String period, String year, String sort) {
         ArrayList<Customer> ls = new ArrayList<>();
         boolean and = false;
         openDataBase();
@@ -82,12 +94,23 @@ public class DBHelper extends SQLiteOpenHelper {
             sb.append("select cust_code, cust_name, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales");
         }
 
-        if (!Utils.isEmpty(name) || !period.isEmpty() || !year.isEmpty()) {
+        if (!Utils.isEmpty(name) || !item.isEmpty() || !period.isEmpty() || !year.isEmpty()) {
             sb.append(" where");
 
             if (!Utils.isEmpty(name)) {
                 sb.append(" cust_name like '%" + name + "%'");
                 and = true;
+            }
+
+            if (!item.isEmpty()) {
+                if (and) {
+                    sb.append(" and item_name in (" + item + ")");
+                }
+
+                else {
+                    sb.append(" item_name in (" + item + ")");
+                    and = true;
+                }
             }
 
             if (!period.isEmpty()) {
@@ -166,30 +189,23 @@ public class DBHelper extends SQLiteOpenHelper {
         CustomerAddress address = getCustomerAddress(name);
         addr.set(address);
         StringBuffer sb = new StringBuffer();
-        StringBuffer sa = new StringBuffer();
 
         if (Utils.isEmpty(sort))
             sort = "salesv desc";
 
         sb.append("select period, year, item_name, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales")
                 .append(" where cust_name = '" + name + "'");
-        sa.append("select period, year, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales")
-                .append(" where cust_name = '" + name + "'");
 
         if (!period.isEmpty()) {
             sb.append(" and period in (" + period + ")");
-            sa.append(" and period in (" + period + ")");
         }
 
         if (!year.isEmpty()) {
             sb.append(" and year in (" + year + ")");
-            sa.append(" and year in (" + year + ")");
         }
 
         sb.append(" group by period, year, item_name")
-                .append(" order by period, year, item_name");
-        sa.append(" group by period, year")
-                .append(" order by " + sort);
+                .append(" order by " + sort + ", period, year");
         //System.out.println("===========" + sb.toString());
 
         String q = sb.toString();
@@ -221,27 +237,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 ArrayList<CustomerItem> l = new ArrayList<>();
                 l.add(x);
                 m.put(key, l);
-
-                if (sort.equals("item_name"))
-                    ls.add(key);
+                ls.add(key);
             }
 
             cur.moveToNext();
-        }
-
-        if (!sort.equals("item_name")) {
-            q = sa.toString();
-            cur = db.rawQuery(q, null);
-            cur.moveToFirst();
-
-            while (cur.isAfterLast() == false) {
-                int month = cur.getInt(cur.getColumnIndex("period"));
-                int y = cur.getInt(cur.getColumnIndex("year"));
-
-                String key = String.format("%d-%d", y, month);
-                ls.add(key);
-                cur.moveToNext();
-            }
         }
 
         return m;

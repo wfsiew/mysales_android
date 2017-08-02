@@ -23,6 +23,7 @@ import com.mysales.mysales_android.tasks.CommonTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import needle.Needle;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 0;
 
     private AppCompatAutoCompleteTextView txtcust;
-    private MultiSpinnerSearch spperiod, spyear;
+    private MultiSpinnerSearch spitem, spperiod, spyear;
     private Button btnsubmit;
 
     private DBHelper db;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         txtcust = (AppCompatAutoCompleteTextView) findViewById(R.id.txtcust);
+        spitem = (MultiSpinnerSearch) findViewById(R.id.spitem);
         spperiod = (MultiSpinnerSearch) findViewById(R.id.spperiod);
         spyear = (MultiSpinnerSearch) findViewById((R.id.spyear));
         btnsubmit = (Button) findViewById(R.id.btnsubmit);
@@ -115,11 +117,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void searchData() {
-        String period = getSelected(spperiod.getSelectedIds());
-        String year = getSelectedYear(spyear.getSelectedIds());
+        String period = getSelected(spperiod.getSelectedItems());
+        String year = getSelected(spyear.getSelectedItems());
+        String item = getSelected(spitem.getSelectedItems(), true);
 
         Intent i = new Intent(this, CustomerListActivity.class);
         i.putExtra(CustomerListActivity.ARG_CUST, txtcust.getText().toString());
+        i.putExtra(CustomerListActivity.ARG_ITEM, item);
         i.putExtra(CustomerListActivity.ARG_PERIOD, period);
         i.putExtra(CustomerListActivity.ARG_YEAR, year);
 
@@ -201,7 +205,11 @@ public class MainActivity extends AppCompatActivity {
         return r;
     }
 
-    private String getSelected(List<Long> li) {
+    private String getSelected(List<KeyPairBoolData> li) {
+        return getSelected(li, false);
+    }
+
+    private String getSelected(List<KeyPairBoolData> li, boolean usequote) {
         StringBuffer sb = new StringBuffer();
         String r = "";
 
@@ -210,7 +218,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         for (int i = 0; i < li.size(); i++) {
-            sb.append(li.get(i));
+            if (usequote)
+                sb.append(String.format("'%s'", li.get(i).getName()));
+
+            else
+                sb.append(li.get(i).getName());
+
             if (i < li.size() - 1) {
                 sb.append(",");
             }
@@ -220,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
         return r;
     }
 
-    public class PopulateCustomerTask extends CommonTask<ArrayList<String>> {
+    public class PopulateCustomerTask extends CommonTask<HashMap<String, ArrayList<String>>> {
 
         private static final String CLASS_NAME = "PopulateCustomerTask";
 
@@ -229,11 +242,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<String> doWork() {
+        protected HashMap<String, ArrayList<String>> doWork() {
+            HashMap<String, ArrayList<String>> m = new HashMap<>();
             ArrayList<String> ls = new ArrayList<>();
+            ArrayList<String> li = new ArrayList<>();
 
             try {
+                db.openDataBase();
                 ls = db.getCustomers();
+                li = db.getItems();
+                m.put("customer", ls);
+                m.put("item", li);
             }
 
             catch (Exception e) {
@@ -244,13 +263,34 @@ public class MainActivity extends AppCompatActivity {
                 db.close();
             }
 
-            return ls;
+            return m;
         }
 
         @Override
-        protected void thenDoUiRelatedWork(ArrayList<String> ls) {
+        protected void thenDoUiRelatedWork(HashMap<String, ArrayList<String>> m) {
+            ArrayList<String> ls = m.get("customer");
+            ArrayList<String> li = m.get("item");
             ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this,
                     android.R.layout.simple_dropdown_item_1line, ls);
+
+            final List<KeyPairBoolData> la = new ArrayList<>();
+
+            for (int i = 0; i < li.size(); i++) {
+                KeyPairBoolData h = new KeyPairBoolData();
+                String v = li.get(i);
+                h.setId(i + 1);
+                h.setName(v);
+                h.setSelected(false);
+                la.add(h);
+            }
+
+            spitem.setLimit(-1, null);
+            spitem.setItems(la, -1, new SpinnerListener() {
+                @Override
+                public void onItemsSelected(List<KeyPairBoolData> items) {
+
+                }
+            });
 
             btnsubmit.setEnabled(true);
             txtcust.setAdapter(adapter);
