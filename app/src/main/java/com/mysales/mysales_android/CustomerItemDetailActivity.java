@@ -262,7 +262,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
                 ArrayList<CustomerItem> lx = m.get(la.get(0));
                 if (lx.size() > 0) {
                     CustomerItem x = lx.get(0);
-                    sb.append(x.getName() + "\n");
+                    sb.append(x.getCode() + " - " + x.getName() + "\n");
 
                     if (!Utils.isEmpty(addr.getAddr1()))
                         sb.append(addr.getAddr1());
