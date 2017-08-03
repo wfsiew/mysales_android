@@ -36,6 +36,15 @@ public class Utils {
         return formatter.format(x);
     }
 
+    public static String escapeStr(String s) {
+        String r = s;
+        if (isEmpty(s))
+            return s;
+
+        r = r.replace("'", "''");
+        return r;
+    }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public static void showProgress(final boolean show, final View progress, final Context context) {
         try {

@@ -195,11 +195,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         for (int i = 0; i < li.size(); i++) {
+            String v = Utils.escapeStr(li.get(i).getName());
             if (usequote)
-                sb.append(String.format("'%s'", li.get(i).getName()));
+                sb.append(String.format("'%s'", v));
 
             else
-                sb.append(li.get(i).getName());
+                sb.append(v);
 
             if (i < li.size() - 1) {
                 sb.append(",");
