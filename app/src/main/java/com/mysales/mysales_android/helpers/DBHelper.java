@@ -11,7 +11,6 @@ import com.mysales.mysales_android.models.Customer;
 import com.mysales.mysales_android.models.CustomerAddress;
 import com.mysales.mysales_android.models.CustomerItem;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -87,14 +86,14 @@ public class DBHelper extends SQLiteOpenHelper {
         if (Utils.isEmpty(sort))
             sort = "cust_name";
 
-        if (sort.equals("cust_name"))
+        if ("cust_name".equals(sort))
             sb.append("select distinct cust_code, cust_name from sales");
 
         else {
             sb.append("select cust_code, cust_name, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales");
         }
 
-        if (!Utils.isEmpty(name) || !item.isEmpty() || !period.isEmpty() || !year.isEmpty()) {
+        if (!Utils.isEmpty(name) || !Utils.isEmpty(item) || !Utils.isEmpty(period) || !Utils.isEmpty(year)) {
             sb.append(" where");
 
             if (!Utils.isEmpty(name)) {
@@ -102,7 +101,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 and = true;
             }
 
-            if (!item.isEmpty()) {
+            if (!Utils.isEmpty(item)) {
                 if (and) {
                     sb.append(" and item_name in (" + item + ")");
                 }
@@ -113,7 +112,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 }
             }
 
-            if (!period.isEmpty()) {
+            if (!Utils.isEmpty(period)) {
                 if (and) {
                     sb.append(" and period in (" + period + ")");
                 }
@@ -124,7 +123,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 }
             }
 
-            if (!year.isEmpty()) {
+            if (!Utils.isEmpty(year)) {
                 if (and) {
                     sb.append(" and year in (" + year + ")");
                 }
@@ -135,7 +134,7 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
 
-        if (!sort.equals("cust_name")) {
+        if (!"cust_name".equals(sort)) {
             sb.append(" group by cust_code, cust_name");
         }
 
@@ -199,12 +198,12 @@ public class DBHelper extends SQLiteOpenHelper {
         sa.append("select period, year, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales")
                 .append(" where cust_name = '" + name + "'");
 
-        if (!period.isEmpty()) {
+        if (!Utils.isEmpty(period)) {
             sb.append(" and period in (" + period + ")");
             sa.append(" and period in (" + period + ")");
         }
 
-        if (!year.isEmpty()) {
+        if (!Utils.isEmpty(year)) {
             sb.append(" and year in (" + year + ")");
             sa.append(" and year in (" + year + ")");
         }
