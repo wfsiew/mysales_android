@@ -86,11 +86,13 @@ public class DBHelper extends SQLiteOpenHelper {
         if (Utils.isEmpty(sort))
             sort = "cust_name";
 
-        if ("cust_name".equals(sort))
+        if ("cust_name".equals(sort)) {
             sb.append("select distinct cust_code, cust_name from sales");
+        }
 
         else {
-            sb.append("select cust_code, cust_name, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales");
+            sb.append("select cust_code, cust_name, sum(sales_unit) salesu, sum(sales_value) salesv,")
+                    .append(" sum(bonus_unit) bonusu from sales");
         }
 
         if (!Utils.isEmpty(name) || !Utils.isEmpty(item) || !Utils.isEmpty(period) || !Utils.isEmpty(year)) {
