@@ -85,10 +85,20 @@ public class CustomerListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_customer_list, menu);
+        final MenuItem sort_custcode = menu.findItem(R.id.sort_custcode);
         final MenuItem sort_custname = menu.findItem(R.id.sort_custname);
         final MenuItem sort_salesunit = menu.findItem(R.id.sort_salesunit);
         final MenuItem sort_salesvalue = menu.findItem(R.id.sort_salesvalue);
         final MenuItem sort_bonusunit = menu.findItem(R.id.sort_bonusunit);
+
+        sort_custcode.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                sort = "cust_code";
+                load();
+                return false;
+            }
+        });
 
         sort_custname.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override

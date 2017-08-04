@@ -158,9 +158,10 @@ public class DBHelper extends SQLiteOpenHelper {
         return ls;
     }
 
-    public CustomerAddress getCustomerAddress(String code) {
+    public CustomerAddress getCustomerAddress(String code, String name) {
         CustomerAddress o = new CustomerAddress();
-        String q = "select cust_addr1, cust_addr2, cust_addr3, postal_code, area, territory from sales where cust_code = '" + code  + "'";
+        String q = "select cust_addr1, cust_addr2, cust_addr3, postal_code, area, territory from sales" +
+                " where cust_code = '" + code  + "'  and cust_name = '" + name + "'";
         Cursor cur = db.rawQuery(q, null);
         cur.moveToFirst();
 
@@ -187,7 +188,7 @@ public class DBHelper extends SQLiteOpenHelper {
                                                                        ArrayList<String> ls) {
         HashMap<String, ArrayList<CustomerItem>> m = new HashMap<>();
         openDataBase();
-        CustomerAddress address = getCustomerAddress(code);
+        CustomerAddress address = getCustomerAddress(code, name);
         addr.set(address);
         StringBuffer sb = new StringBuffer();
         StringBuffer sa = new StringBuffer();
@@ -196,9 +197,9 @@ public class DBHelper extends SQLiteOpenHelper {
             sort = "salesv desc";
 
         sb.append("select period, year, item_name, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales")
-                .append(" where cust_code = '" + code + "'");
+                .append(" where cust_code = '" + code + "' and cust_name = '" + name + "'");
         sa.append("select period, year, sum(sales_unit) salesu, sum(sales_value) salesv, sum(bonus_unit) bonusu from sales")
-                .append(" where cust_code = '" + code + "'");
+                .append(" where cust_code = '" + code + "' and cust_name = '" + name + "'");
 
         if (!Utils.isEmpty(period)) {
             sb.append(" and period in (" + period + ")");

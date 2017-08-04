@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".CustomerListActivity">
     <item
+        android:id="@+id/sort_custcode"
+        android:orderInCategory="100"
+        android:title="By Customer Code"
+        app:showAsAction="collapseActionView" />
+    <item
         android:id="@+id/sort_custname"
         android:orderInCategory="100"
         android:title="By Customer Name"
