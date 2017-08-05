@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mysales.mysales_android.AddDoctorActivity;
 import com.mysales.mysales_android.CustomerItemDetailActivity;
 import com.mysales.mysales_android.R;
 import com.mysales.mysales_android.models.Customer;
@@ -57,6 +58,19 @@ public class CustomerItemRecyclerViewAdapter
                 intent.putExtra(CustomerItemDetailActivity.ARG_YEAR, year);
 
                 context.startActivity(intent);
+            }
+        });
+
+        holder.view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, AddDoctorActivity.class);
+                intent.putExtra(AddDoctorActivity.ARG_CUST, customer.getCode());
+                intent.putExtra(AddDoctorActivity.ARG_CUST_NAME, customer.getName());
+
+                context.startActivity(intent);
+                return false;
             }
         });
     }

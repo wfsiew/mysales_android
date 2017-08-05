@@ -28,12 +28,12 @@ import java.util.List;
 
 import needle.Needle;
 
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String CLASS_NAME = "MainActivity";
-    private static final int REQUEST_READ_EXTERNAL_STORAGE = 0;
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 0;
 
     private AppCompatAutoCompleteTextView txtcust;
     private MultiSpinnerSearch spitem, spperiod, spyear;
@@ -150,23 +150,23 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        if (checkSelfPermission(READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
 
-        if (shouldShowRequestPermissionRationale(READ_EXTERNAL_STORAGE)) {
+        if (shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)) {
             Snackbar.make(txtcust, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
                         public void onClick(View v) {
-                            requestPermissions(new String[]{READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE);
+                            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
                         }
                     });
         }
 
         else {
-            requestPermissions(new String[] { READ_EXTERNAL_STORAGE }, REQUEST_READ_EXTERNAL_STORAGE);
+            requestPermissions(new String[] { WRITE_EXTERNAL_STORAGE }, REQUEST_WRITE_EXTERNAL_STORAGE);
         }
 
         return false;
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_EXTERNAL_STORAGE) {
+        if (requestCode == REQUEST_WRITE_EXTERNAL_STORAGE) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 checkPermission();
             }

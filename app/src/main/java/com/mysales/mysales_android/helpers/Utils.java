@@ -30,6 +30,18 @@ public class Utils {
         return b;
     }
 
+    public static String getEmptyString(String v) {
+        return getEmptyString(v, "");
+    }
+
+    public static String getEmptyString(String v, String k) {
+        String s = v;
+        if (isEmpty(v) || "null".equalsIgnoreCase(v))
+            s = k;
+
+        return s;
+    }
+
     public static String formatDouble(double x) {
         DecimalFormat formatter = new DecimalFormat("#0.00");
         return formatter.format(x);

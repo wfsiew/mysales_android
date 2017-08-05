@@ -3,6 +3,7 @@
     package="com.mysales.mysales_android">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +26,9 @@
         <activity
             android:name=".CustomerItemDetailActivity"
             android:label="@string/title_customer_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AddDoctorActivity"
+            android:label="@string/title_add_doctor"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

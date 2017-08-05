@@ -21,6 +21,7 @@ import java.util.HashMap;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "app.db";
+
     private String db_path = null;
     private SQLiteDatabase db;
 

@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * Created by wfsiew on 8/2/17.
  */
 
-public class CustomerItemDetailAdapter extends ArrayAdapter {
+public class CustomerItemDetailAdapter extends ArrayAdapter<CustomerItem> {
 
     private LayoutInflater inflater;
 
