@@ -51,7 +51,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
 
     public void createDoctor(Doctor doctor) {
         openDataBase();
-        String q = String.format("insert into doctor (name, phone, hp, email) values('%s', '%s', '%s', '%s')");
+        String q = String.format("insert into doctor (name, phone, hp, email, cust_code, cust_name) values('%s', '%s', '%s', '%s', '%s', '%s')");
         db.execSQL(q);
     }
 
@@ -60,7 +60,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
         openDataBase();
         StringBuffer sb = new StringBuffer();
 
-        sb.append("select id, name, phone, hp, email from doctor");
+        sb.append("select id, name, phone, hp, email, cust_code, cust_name from doctor");
 
         if (!Utils.isEmpty(search)) {
             sb.append(" where name like '%" + search + "%' or")
@@ -82,6 +82,8 @@ public class WriteDBHelper extends SQLiteOpenHelper {
             o.setPhone(cur.getString(cur.getColumnIndex("phone")));
             o.setHp(cur.getString(cur.getColumnIndex("hp")));
             o.setEmail(cur.getString(cur.getColumnIndex("email")));
+            o.setCustCode(cur.getString(cur.getColumnIndex("cust_code")));
+            o.setCustName(cur.getString(cur.getColumnIndex("cust_name")));
             ls.add(o);
             cur.moveToNext();
         }

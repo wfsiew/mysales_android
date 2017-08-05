@@ -11,6 +11,8 @@ public class Doctor {
     private String phone;
     private String hp;
     private String email;
+    private String custCode;
+    private String custName;
 
     public int getId() {
         return id;
@@ -50,5 +52,21 @@ public class Doctor {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getCustCode() {
+        return custCode;
+    }
+
+    public void setCustCode(String custCode) {
+        this.custCode = custCode;
+    }
+
+    public String getCustName() {
+        return custName;
+    }
+
+    public void setCustName(String custName) {
+        this.custName = custName;
     }
 }
