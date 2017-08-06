@@ -31,5 +31,6 @@
     <string name="title_customer_list">Customers</string>
     <string name="title_customer_detail">Customer Item Detail</string>
     <string name="title_add_doctor">Add Doctor</string>
+    <string name="mandatory">* Mandatory Field.</string>
 
 </resources>

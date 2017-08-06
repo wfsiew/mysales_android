@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         return r;
     }
 
-    public class PopulateCustomerTask extends CommonTask<HashMap<String, ArrayList<String>>> {
+    class PopulateCustomerTask extends CommonTask<HashMap<String, ArrayList<String>>> {
 
         private static final String CLASS_NAME = "PopulateCustomerTask";
 

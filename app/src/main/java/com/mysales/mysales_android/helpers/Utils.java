@@ -12,6 +12,7 @@ import android.os.Build;
 import android.view.View;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 /**
  * Created by wingfei.siew on 7/31/2017.
@@ -39,6 +40,20 @@ public class Utils {
         if (isEmpty(v) || "null".equalsIgnoreCase(v))
             s = k;
 
+        return s;
+    }
+
+    public static String getMessages(ArrayList<String> ls) {
+        String s = null;
+        if (ls.isEmpty())
+            return s;
+
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < ls.size(); i++) {
+            sb.append(String.format("%d. %s\n", i + 1, ls.get(i)));
+        }
+
+        s = sb.toString();
         return s;
     }
 

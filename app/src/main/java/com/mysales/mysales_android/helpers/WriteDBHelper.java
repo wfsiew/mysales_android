@@ -22,7 +22,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
     private String db_path = null;
     private SQLiteDatabase db;
 
-    public WriteDBHelper(Context context, boolean write) {
+    public WriteDBHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
         db_path = Environment.getExternalStorageDirectory() + "/mysales/data.db";
     }

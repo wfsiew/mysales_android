@@ -152,7 +152,7 @@ public class CustomerListActivity extends AppCompatActivity {
         empty.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
-    public class CustomerListTask extends CommonTask<ArrayList<Customer>> {
+    class CustomerListTask extends CommonTask<ArrayList<Customer>> {
 
         private static final String CLASS_NAME = "CustomerListTask";
 

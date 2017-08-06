@@ -149,7 +149,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
         listitem.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
-    public class CustomerItemDetailTask extends CommonTask<HashMap<String, ArrayList<CustomerItem>>> {
+    class CustomerItemDetailTask extends CommonTask<HashMap<String, ArrayList<CustomerItem>>> {
 
         private static final String CLASS_NAME = "CustomerItemDetailTask";
 
