@@ -31,6 +31,10 @@ public class Utils {
         return b;
     }
 
+    public static String getSqlStr(String s) {
+        return escapeStr(getEmptyString(s));
+    }
+
     public static String getEmptyString(String v) {
         return getEmptyString(v, "");
     }
@@ -69,6 +73,11 @@ public class Utils {
 
         r = r.replace("'", "''");
         return r;
+    }
+
+    public static int getInt(boolean x) {
+        int a = x == true ? 1 : 0;
+        return a;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)

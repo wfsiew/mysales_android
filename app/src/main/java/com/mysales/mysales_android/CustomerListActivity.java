@@ -149,7 +149,7 @@ public class CustomerListActivity extends AppCompatActivity {
     private void showProgress(final boolean show) {
         Utils.showProgress(show, progress, getApplicationContext());
         listcust.setVisibility(View.GONE);
-        empty.setVisibility(show ? View.GONE : View.VISIBLE);
+        empty.setVisibility(View.GONE);
     }
 
     class CustomerListTask extends CommonTask<ArrayList<Customer>> {

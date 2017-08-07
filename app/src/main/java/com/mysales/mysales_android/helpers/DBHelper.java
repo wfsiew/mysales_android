@@ -65,6 +65,22 @@ public class DBHelper extends SQLiteOpenHelper {
         return ls;
     }
 
+    public ArrayList<Customer> getCustomers1() {
+        ArrayList<Customer> ls = new ArrayList<>();
+        Cursor cur = db.rawQuery("select distinct cust_code, cust_name from sales order by cust_name", null);
+        cur.moveToFirst();
+
+        while (cur.isAfterLast() == false) {
+            Customer o = new Customer();
+            o.setCode(cur.getString(cur.getColumnIndex("cust_code")));
+            o.setName(cur.getString(cur.getColumnIndex("cust_name")));
+            ls.add(o);
+            cur.moveToNext();
+        }
+
+        return ls;
+    }
+
     public ArrayList<String> getItems() {
         ArrayList<String> ls = new ArrayList<>();
         Cursor cur = db.rawQuery("select distinct item_name from sales order by item_name", null);

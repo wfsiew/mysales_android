@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,9 +29,14 @@
             android:name=".CustomerItemDetailActivity"
             android:label="@string/title_customer_detail"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AddDoctorActivity"
+        <activity
+            android:name=".AddDoctorActivity"
             android:label="@string/title_add_doctor"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DoctorListActivity"
+            android:label="@string/title_activity_doctor_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

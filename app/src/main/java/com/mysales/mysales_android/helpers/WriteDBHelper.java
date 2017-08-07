@@ -51,16 +51,33 @@ public class WriteDBHelper extends SQLiteOpenHelper {
 
     public void createDoctor(Doctor doctor) {
         openDataBase();
-        String q = String.format("insert into doctor (name, phone, hp, email, cust_code, cust_name) values('%s', '%s', '%s', '%s', '%s', '%s')");
-        db.execSQL(q);
+        StringBuffer sb = new StringBuffer("insert into doctor (name, phone, hp, email, cust_code, cust_name, ")
+                .append("mon_mor, mon_aft, tue_mor, tue_aft, ")
+                .append("wed_mor, wed_aft, thu_mor, thu_aft, ")
+                .append("fri_mor, fri_aft, sat_mor, sat_aft, sun_mor, sun_aft) ")
+                .append("values(?, ?, ?, ?, ?, ?, ")
+                .append("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        String q = sb.toString();
+        Object[] p = new Object[] { doctor.getName(), doctor.getPhone(), doctor.getHp(), doctor.getEmail(),
+                doctor.getCustCode(), doctor.getCustName(),
+                Utils.getInt(doctor.isMonMor()), Utils.getInt(doctor.isMonAft()), Utils.getInt(doctor.isTueMor()), Utils.getInt(doctor.isTueAft()),
+                Utils.getInt(doctor.isWedMor()), Utils.getInt(doctor.isWedAft()), Utils.getInt(doctor.isThuMor()), Utils.getInt(doctor.isThuAft()),
+                Utils.getInt(doctor.isFriMor()), Utils.getInt(doctor.isFriAft()), Utils.getInt(doctor.isSatMor()), Utils.getInt(doctor.isSatAft()),
+                Utils.getInt(doctor.isSunMor()), Utils.getInt(doctor.isSunAft())
+        };
+        db.execSQL(q, p);
     }
 
-    public ArrayList<Doctor> getDoctors(String search) {
+    public ArrayList<Doctor> filterDoctor(String search) {
         ArrayList<Doctor> ls = new ArrayList<>();
         openDataBase();
         StringBuffer sb = new StringBuffer();
 
-        sb.append("select id, name, phone, hp, email, cust_code, cust_name from doctor");
+        sb.append("select id, name, phone, hp, email, cust_code, cust_name, ")
+                .append("mon_mor, mon_aft, tue_mor, tue_aft, ")
+                .append("wed_mor, wed_aft, thu_mor, thu_aft, ")
+                .append("fri_mor, fri_aft, sat_mor, sat_aft, sun_mor, sun_aft ")
+                .append("from doctor");
 
         if (!Utils.isEmpty(search)) {
             sb.append(" where name like '%" + search + "%' or")

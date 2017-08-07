@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -12,6 +11,11 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".AddDoctorActivity"
     tools:showIn="@layout/activity_add_doctor">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/txttitle"
@@ -67,10 +71,6 @@
         android:hint="Email"
         android:inputType="textEmailAddress" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -82,22 +82,24 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="Mon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"/>
+                    android:text="Monday"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/chkmon_morning"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Morning" />
+                    android:text="@string/morning" />
 
                 <CheckBox
                     android:id="@+id/chkmon_afternoon"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Afternoon" />
+                    android:text="@string/afternoon" />
 
             </LinearLayout>
 
@@ -107,22 +109,24 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:text="Tue"
-                    android:layout_weight=".1"
+                    android:text="Tuesday"
+                    android:layout_weight=".2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/chktue_morning"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Morning" />
+                    android:text="@string/morning" />
 
                 <CheckBox
                     android:id="@+id/chktue_afternoon"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Afternoon" />
+                    android:text="@string/afternoon" />
 
             </LinearLayout>
 
@@ -130,18 +134,26 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Wednesday"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/chkwed_morning"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Wed Morning" />
+                    android:text="@string/morning" />
 
                 <CheckBox
                     android:id="@+id/chkwed_afternoon"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Wed Afternoon" />
+                    android:text="@string/afternoon" />
 
             </LinearLayout>
 
@@ -149,18 +161,26 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Thursday"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/chkthu_morning"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Thu Morning" />
+                    android:text="@string/morning" />
 
                 <CheckBox
                     android:id="@+id/chkthu_afternoon"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Thu Afternoon" />
+                    android:text="@string/afternoon" />
 
             </LinearLayout>
 
@@ -168,18 +188,26 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Friday"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/chkfri_morning"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Fri Morning" />
+                    android:text="@string/morning" />
 
                 <CheckBox
                     android:id="@+id/chkfri_afternoon"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Fri Afternoon" />
+                    android:text="@string/afternoon" />
 
             </LinearLayout>
 
@@ -187,18 +215,26 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Saturday"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
 
                 <CheckBox
                     android:id="@+id/chksat_morning"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Sat Morning" />
+                    android:text="@string/morning" />
 
                 <CheckBox
                     android:id="@+id/chksat_afternoon"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Sat Afternoon" />
+                    android:text="@string/afternoon" />
 
             </LinearLayout>
 
@@ -207,23 +243,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <TextView
+                    android:text="Sunday"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
                 <CheckBox
                     android:id="@+id/chksun_morning"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Sun Morning" />
+                    android:text="@string/morning" />
 
                 <CheckBox
                     android:id="@+id/chksun_afternoon"
-                    android:layout_width="wrap_content"
+                    android:layout_weight=".2"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Sun Afternoon" />
+                    android:text="@string/afternoon" />
 
             </LinearLayout>
 
         </LinearLayout>
-
-    </ScrollView>
 
     <ProgressBar
         android:id="@+id/progresssubmit"
@@ -232,4 +274,6 @@
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

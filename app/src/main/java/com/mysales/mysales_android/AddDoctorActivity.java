@@ -22,6 +22,8 @@ import com.mysales.mysales_android.tasks.CommonTask;
 
 import java.util.ArrayList;
 
+import needle.Needle;
+
 public class AddDoctorActivity extends AppCompatActivity {
 
     private View progresssubmit;
@@ -135,6 +137,51 @@ public class AddDoctorActivity extends AppCompatActivity {
                     .show();
             return;
         }
+
+        Doctor o = new Doctor();
+        o.setName(Utils.getSqlStr(txtname.getText().toString()));
+        o.setPhone(Utils.getSqlStr(txtphone.getText().toString()));
+        o.setHp(Utils.getSqlStr(txtmobile.getText().toString()));
+        o.setEmail(Utils.getSqlStr(txtemail.getText().toString()));
+        o.setCustCode(cust);
+        o.setCustName(custName);
+        o.setMonMor(chkmon_mor.isChecked());
+        o.setMonAft(chkmon_aft.isChecked());
+        o.setTueMor(chktue_mor.isChecked());
+        o.setTueAft(chktue_aft.isChecked());
+        o.setWedMor(chkwed_mor.isChecked());
+        o.setWedAft(chkwed_aft.isChecked());
+        o.setThuMor(chkthu_mor.isChecked());
+        o.setThuAft(chkthu_aft.isChecked());
+        o.setFriMor(chkfri_mor.isChecked());
+        o.setFriAft(chkfri_aft.isChecked());
+        o.setSatMor(chksat_mor.isChecked());
+        o.setSatAft(chksat_aft.isChecked());
+        o.setSunMor(chksun_mor.isChecked());
+        o.setSunAft(chksun_aft.isChecked());
+
+        Needle.onBackgroundThread().execute(new AddDoctorTask(o));
+    }
+
+    private void reset() {
+        txtname.setText(null);
+        txtphone.setText(null);
+        txtmobile.setText(null);
+        txtemail.setText(null);
+        chkmon_mor.setChecked(false);
+        chkmon_aft.setChecked(false);
+        chktue_mor.setChecked(false);
+        chktue_aft.setChecked(false);
+        chkwed_mor.setChecked(false);
+        chkwed_aft.setChecked(false);
+        chkthu_mor.setChecked(false);
+        chkthu_aft.setChecked(false);
+        chkfri_mor.setChecked(false);
+        chkfri_aft.setChecked(false);
+        chksat_mor.setChecked(false);
+        chksat_aft.setChecked(false);
+        chksun_mor.setChecked(false);
+        chksun_aft.setChecked(false);
     }
 
     class AddDoctorTask extends CommonTask<String> {
@@ -182,6 +229,7 @@ public class AddDoctorActivity extends AppCompatActivity {
                 }
 
                 if ("success".equals(s)) {
+                    reset();
                     Toast.makeText(AddDoctorActivity.this, "New doctor has been successfully created", Toast.LENGTH_SHORT).show();
                 }
 

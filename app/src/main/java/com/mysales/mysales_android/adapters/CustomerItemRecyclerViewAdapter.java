@@ -33,7 +33,7 @@ public class CustomerItemRecyclerViewAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_customer_content, parent, false);
+                .inflate(R.layout.list_customer, parent, false);
         return new ViewHolder(view);
     }
 
