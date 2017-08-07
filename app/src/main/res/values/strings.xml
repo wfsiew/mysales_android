@@ -28,15 +28,17 @@
         <item>2013</item>
         <item>2012</item>
     </string-array>
+
     <string name="title_customer_list">Customers</string>
     <string name="title_customer_detail">Customer Item Detail</string>
+    <string name="title_activity_doctor_list">Doctors</string>
     <string name="title_add_doctor">Add Doctor</string>
     <string name="mandatory">* Mandatory Field.</string>
     <string name="morning">Morning</string>
     <string name="afternoon">Afternoon</string>
+    <string name="delete_wait">Please wait while the operation is being completed</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="title_activity_doctor_list">DoctorListActivity</string>
 
 </resources>

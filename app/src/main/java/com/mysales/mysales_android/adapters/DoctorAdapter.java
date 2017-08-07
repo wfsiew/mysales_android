@@ -38,15 +38,29 @@ public class DoctorAdapter extends ArrayAdapter<Doctor> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        Doctor o = (Doctor) getItem(position);
         v = inflater.inflate(R.layout.list_doctor, null);
         TextView txtname = (TextView) v.findViewById(R.id.txtname);
         TextView txtphone = (TextView) v.findViewById(R.id.txtphone);
+        TextView txthp = (TextView) v.findViewById(R.id.txthp);
         TextView txtemail = (TextView) v.findViewById(R.id.txtemail);
+        CheckBox chk = (CheckBox) v.findViewById(R.id.chk);
 
+        Doctor o = (Doctor) getItem(position);
         txtname.setText(o.getName());
         txtphone.setText(o.getPhone());
+        txthp.setText(o.getHp());
         txtemail.setText(o.getEmail());
+        chk.setVisibility(showSelect ? View.VISIBLE : View.GONE);
+
+        chk.setTag(position);
+        chk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CheckBox c = (CheckBox) view;
+                int i = (int) c.getTag();
+                doSelect(c, i);
+            }
+        });
 
         return v;
     }

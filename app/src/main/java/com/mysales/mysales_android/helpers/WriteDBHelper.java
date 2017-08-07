@@ -68,6 +68,12 @@ public class WriteDBHelper extends SQLiteOpenHelper {
         db.execSQL(q, p);
     }
 
+    public void deletedoctors(String s) {
+        openDataBase();
+        String q = "delete from doctor where id in (" + s + ")";
+        db.execSQL(q);
+    }
+
     public ArrayList<Doctor> filterDoctor(String search) {
         ArrayList<Doctor> ls = new ArrayList<>();
         openDataBase();

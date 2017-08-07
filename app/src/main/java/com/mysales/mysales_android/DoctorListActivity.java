@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.mysales.mysales_android.adapters.CustomerItemRecyclerViewAdapter;
 import com.mysales.mysales_android.adapters.DoctorAdapter;
@@ -39,10 +40,12 @@ public class DoctorListActivity extends AppCompatActivity
 
     private View progress, lybottom, empty;
     private ListView listdoctor;
+    private FloatingActionButton fab;
     private SearchView searchView;
     private Button btndel, btndelall;
     private ProgressDialog pd;
     private boolean showSelect;
+    private String query;
 
     private WriteDBHelper db;
 
@@ -55,11 +58,12 @@ public class DoctorListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent i = new Intent(DoctorListActivity.this, AddDoctorActivity.class);
+                startActivity(i);
             }
         });
 
@@ -110,14 +114,32 @@ public class DoctorListActivity extends AppCompatActivity
         btndel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DoctorAdapter x = (DoctorAdapter) listdoctor.getAdapter();
+                String s = x.getSelectedIds();
+                if (s == null)
+                    return;
 
+                pd = ProgressDialog.show(DoctorListActivity.this, "",
+                        getResources().getString(R.string.delete_wait));
+                Needle.onBackgroundThread()
+                        .withTaskType("deletedoctor")
+                        .execute(new DeleteDoctorTask(s));
             }
         });
 
         btndelall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DoctorAdapter x = (DoctorAdapter) listdoctor.getAdapter();
+                String s = x.getIds();
+                if (s == null)
+                    return;
 
+                pd = ProgressDialog.show(DoctorListActivity.this, "",
+                        getResources().getString(R.string.delete_wait));
+                Needle.onBackgroundThread()
+                        .withTaskType("deletedoctor")
+                        .execute(new DeleteDoctorTask(s));
             }
         });
 
@@ -149,9 +171,8 @@ public class DoctorListActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.nav_doctor) {
-            Intent i = new Intent(this, AddDoctorActivity.class);
-            startActivity(i);
+        if (id == R.id.nav_main) {
+            super.onBackPressed();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -196,11 +217,10 @@ public class DoctorListActivity extends AppCompatActivity
         if (id == R.id.menu_add_doctor) {
             Intent i = new Intent(this, AddDoctorActivity.class);
             startActivity(i);
-            return true;
         }
 
         else if (id == R.id.menu_reload) {
-            return true;
+            load(query);
         }
 
         return super.onOptionsItemSelected(item);
@@ -211,6 +231,7 @@ public class DoctorListActivity extends AppCompatActivity
     }
 
     private void load(String q) {
+        query = q;
         doctorListTask = new DoctorListTask(q);
         Needle.onBackgroundThread()
                 .withTaskType("doctorList")
@@ -221,6 +242,7 @@ public class DoctorListActivity extends AppCompatActivity
         DoctorAdapter x = (DoctorAdapter) listdoctor.getAdapter();
         showSelect = x.toggleSelect();
         lybottom.setVisibility(showSelect ? View.VISIBLE : View.GONE);
+        fab.setVisibility(showSelect ? View.GONE : View.VISIBLE);
         x.notifyDataSetChanged();
     }
 
@@ -269,7 +291,59 @@ public class DoctorListActivity extends AppCompatActivity
             showProgress(false);
             DoctorAdapter adapter = new DoctorAdapter(DoctorListActivity.this, ls, btndel);
             listdoctor.setAdapter(adapter);
+            lybottom.setVisibility(showSelect ? View.VISIBLE : View.GONE);
             Utils.unlockScreenOrientation(DoctorListActivity.this);
+        }
+    }
+
+    class DeleteDoctorTask extends CommonTask<String> {
+
+        private String ids;
+
+        private static final String CLASS_NAME = "DeleteDoctorTask";
+
+        public DeleteDoctorTask(String ids) {
+            super(DoctorListActivity.this);
+            this.ids = ids;
+        }
+
+        @Override
+        protected String doWork() {
+            String r = null;
+
+            try {
+                db.deletedoctors(ids);
+                r = "success";
+            }
+
+            catch (Exception e) {
+                Log.e(CLASS_NAME, e.getMessage(), e);
+                r = null;
+            }
+
+            finally {
+                db.close();
+            }
+
+            return r;
+        }
+
+        @Override
+        protected void thenDoUiRelatedWork(String s) {
+            pd.dismiss();
+            if (s == null) {
+                Toast.makeText(DoctorListActivity.this, "Doctor(s) failed to be deleted, please retry", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if ("success".equals(s)) {
+                Toast.makeText(DoctorListActivity.this, "Doctor(s) have been successfully deleted", Toast.LENGTH_SHORT).show();
+                load(query);
+            }
+
+            else {
+                Toast.makeText(DoctorListActivity.this, "Doctor(s) failed to be deleted, please retry", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
