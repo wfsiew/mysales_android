@@ -160,9 +160,9 @@ public class DoctorListActivity extends AppCompatActivity
         dlg.setTitle("Please Select Day");
 
         Spinner spday = (Spinner) dlg.findViewById(R.id.spday);
-        spday.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spday.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String[] a = getResources().getStringArray(R.array.days);
                 String x = a[i];
                 if ("All".equals(x)) {
@@ -171,11 +171,6 @@ public class DoctorListActivity extends AppCompatActivity
 
                 dlg.dismiss();
                 load(query, x);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 
@@ -236,12 +231,14 @@ public class DoctorListActivity extends AppCompatActivity
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (Utils.isEmpty(newText))
+                if (Utils.isEmpty(newText)) {
                     load();
+                }
 
                 return false;
             }
         });
+
         return true;
     }
 
@@ -262,6 +259,7 @@ public class DoctorListActivity extends AppCompatActivity
 
         else if (id == R.id.menu_day) {
             dlg.show();
+            return false;
         }
 
         return super.onOptionsItemSelected(item);
@@ -286,7 +284,6 @@ public class DoctorListActivity extends AppCompatActivity
     private void load(String q, String d) {
         query = q;
         day = d;
-        Toast.makeText(this, "===== query = " + query + " --" + day, Toast.LENGTH_SHORT).show();
         doctorListTask = new DoctorListTask();
         Needle.onBackgroundThread()
                 .withTaskType("doctorList")
@@ -310,8 +307,6 @@ public class DoctorListActivity extends AppCompatActivity
     class DoctorListTask extends CommonTask<ArrayList<Doctor>> {
 
         private static final String CLASS_NAME = "DoctorListTask";
-
-        private String keyword, day;
 
         public DoctorListTask() {
             super(DoctorListActivity.this);
