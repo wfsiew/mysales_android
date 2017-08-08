@@ -172,6 +172,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
         sb.append(" order by name");
 
         String q = sb.toString();
+        System.out.println("===========" + q);
         Cursor cur = db.rawQuery(q, null);
         cur.moveToFirst();
 

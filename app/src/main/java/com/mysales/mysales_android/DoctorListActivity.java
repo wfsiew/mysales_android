@@ -286,6 +286,7 @@ public class DoctorListActivity extends AppCompatActivity
     private void load(String q, String d) {
         query = q;
         day = d;
+        Toast.makeText(this, "===== query = " + query + " --" + day, Toast.LENGTH_SHORT).show();
         doctorListTask = new DoctorListTask();
         Needle.onBackgroundThread()
                 .withTaskType("doctorList")
