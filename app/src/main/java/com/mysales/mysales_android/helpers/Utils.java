@@ -22,11 +22,13 @@ public class Utils {
 
     public static boolean isEmpty(String s) {
         boolean b = false;
-        if (s == null)
+        if (s == null) {
             b = true;
+        }
 
-        else if (s.isEmpty())
+        else if (s.isEmpty()) {
             b = true;
+        }
 
         return b;
     }
@@ -41,16 +43,18 @@ public class Utils {
 
     public static String getEmptyString(String v, String k) {
         String s = v;
-        if (isEmpty(v) || "null".equalsIgnoreCase(v))
+        if (isEmpty(v) || "null".equalsIgnoreCase(v)) {
             s = k;
+        }
 
         return s;
     }
 
     public static String getMessages(ArrayList<String> ls) {
         String s = null;
-        if (ls.isEmpty())
+        if (ls.isEmpty()) {
             return s;
+        }
 
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < ls.size(); i++) {
@@ -68,8 +72,9 @@ public class Utils {
 
     public static String escapeStr(String s) {
         String r = s;
-        if (isEmpty(s))
+        if (isEmpty(s)) {
             return s;
+        }
 
         r = r.replace("'", "''");
         return r;
@@ -77,6 +82,11 @@ public class Utils {
 
     public static int getInt(boolean x) {
         int a = x == true ? 1 : 0;
+        return a;
+    }
+
+    public static boolean getBoolean(int x) {
+        boolean a = x == 1 ? true : false;
         return a;
     }
 

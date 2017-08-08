@@ -19,8 +19,9 @@ public class CustomerAddress {
 
     public void setAddr1(String addr1) {
         this.addr1 = addr1;
-        if ("0".equals(this.addr1))
+        if ("0".equals(this.addr1)) {
             this.addr1 = "";
+        }
     }
 
     public String getAddr2() {
@@ -29,8 +30,9 @@ public class CustomerAddress {
 
     public void setAddr2(String addr2) {
         this.addr2 = addr2;
-        if ("0".equals(this.addr2))
+        if ("0".equals(this.addr2)) {
             this.addr2 = "";
+        }
     }
 
     public String getAddr3() {
@@ -39,8 +41,9 @@ public class CustomerAddress {
 
     public void setAddr3(String addr3) {
         this.addr3 = addr3;
-        if ("0".equals(this.addr3))
+        if ("0".equals(this.addr3)) {
             this.addr3 = "";
+        }
     }
 
     public String getPostalCode() {
@@ -49,8 +52,9 @@ public class CustomerAddress {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-        if ("0".equals(this.postalCode))
+        if ("0".equals(this.postalCode)) {
             this.postalCode = "";
+        }
     }
 
     public String getArea() {
@@ -59,8 +63,9 @@ public class CustomerAddress {
 
     public void setArea(String area) {
         this.area = area;
-        if ("0".equals(this.area))
+        if ("0".equals(this.area)) {
             this.area = "";
+        }
     }
 
     public String getTerritory() {
@@ -69,8 +74,9 @@ public class CustomerAddress {
 
     public void setTerritory(String territory) {
         this.territory = territory;
-        if ("0".equals(this.territory))
+        if ("0".equals(this.territory)) {
             this.territory = "";
+        }
     }
 
     public void set(CustomerAddress address) {

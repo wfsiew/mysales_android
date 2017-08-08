@@ -20,14 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ProgressBar
-        android:id="@+id/progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
-
     <ListView
         android:id="@+id/listdoctor"
         android:layout_width="match_parent"
@@ -40,6 +32,14 @@
         android:gravity="center"
         style="?android:textAppearanceLarge"
         android:text="@string/empty_list"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:visibility="gone" />
 
 </LinearLayout>

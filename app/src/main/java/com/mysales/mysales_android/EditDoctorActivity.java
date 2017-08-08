@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mysales.mysales_android.adapters.CustomerAdapter;
+import com.mysales.mysales_android.adapters.DoctorAdapter;
 import com.mysales.mysales_android.helpers.DBHelper;
 import com.mysales.mysales_android.helpers.Utils;
 import com.mysales.mysales_android.helpers.WriteDBHelper;
@@ -28,11 +29,11 @@ import java.util.ArrayList;
 
 import needle.Needle;
 
-public class AddDoctorActivity extends AppCompatActivity {
+public class EditDoctorActivity extends AppCompatActivity {
 
     private View progresssubmit;
     private EditText txtname, txtphone, txtmobile, txtemail;
-    private TextView txttitle, txtcust;
+    private TextView txtcust;
     private Spinner spcust;
     private CheckBox chkmon_mor, chkmon_aft;
     private CheckBox chktue_mor, chktue_aft;
@@ -45,22 +46,21 @@ public class AddDoctorActivity extends AppCompatActivity {
     private WriteDBHelper db;
     private DBHelper dbr;
 
-    private String cust;
-    private String custName;
+    private int id;
     private int submit = 0;
     private static int selectedCustPosition = 0;
 
     private PopulateCustomerTask populateCustomerTask = null;
+    private LoadDoctorTask loadDoctorTask = null;
 
-    public static final String ARG_CUST = "cust_code";
-    public static final String ARG_CUST_NAME = "cust_name";
+    public static final String ARG_DOCTOR_ID = "id";
 
     public static final int SUBMITTED = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_doctor);
+        setContentView(R.layout.activity_edit_doctor);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -70,7 +70,6 @@ public class AddDoctorActivity extends AppCompatActivity {
         }
 
         progresssubmit = findViewById(R.id.progresssubmit);
-        txttitle = (TextView) findViewById(R.id.txttitle);
         txtcust = (TextView) findViewById(R.id.txtcust);
         txtname = (EditText) findViewById(R.id.txtname);
         txtphone = (EditText) findViewById(R.id.txtphone);
@@ -93,35 +92,25 @@ public class AddDoctorActivity extends AppCompatActivity {
         chksun_mor = (CheckBox) findViewById(R.id.chksun_morning);
         chksun_aft = (CheckBox) findViewById(R.id.chksun_afternoon);
 
-        cust = getIntent().getStringExtra(ARG_CUST);
-        custName = getIntent().getStringExtra(ARG_CUST_NAME);
+        id = getIntent().getIntExtra(ARG_DOCTOR_ID, 0);
 
-        if (Utils.isEmpty(cust) || Utils.isEmpty(custName)) {
-            txttitle.setVisibility(View.GONE);
-            dbr = new DBHelper(this);
-            txtcust.setVisibility(View.VISIBLE);
-            spcust.setVisibility(View.VISIBLE);
-            spcust.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    selectedCustPosition = i;
-                }
+        dbr = new DBHelper(this);
+        spcust.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedCustPosition = i;
+            }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-                }
-            });
+            }
+        });
 
-            populateCustomerTask = new PopulateCustomerTask();
-            Needle.onBackgroundThread()
-                    .withTaskType("populateCustomer")
-                    .execute(populateCustomerTask);
-        }
-
-        else {
-            txttitle.setText(String.format("%s - %s", cust, custName));
-        }
+        populateCustomerTask = new PopulateCustomerTask();
+        Needle.onBackgroundThread()
+                .withTaskType("populateCustomer")
+                .execute(populateCustomerTask);
 
         db = new WriteDBHelper(this);
     }
@@ -129,6 +118,10 @@ public class AddDoctorActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (loadDoctorTask != null && !loadDoctorTask.isCanceled()) {
+            loadDoctorTask.cancel();
+        }
+
         if (populateCustomerTask != null && !populateCustomerTask.isCanceled()) {
             populateCustomerTask.cancel();
         }
@@ -136,7 +129,7 @@ public class AddDoctorActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_add_doctor, menu);
+        getMenuInflater().inflate(R.menu.menu_edit_doctor, menu);
         final MenuItem menu_save = menu.findItem(R.id.menu_save);
 
         menu_save.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -183,24 +176,18 @@ public class AddDoctorActivity extends AppCompatActivity {
             return;
         }
 
-        String ccode = cust;
-        String cname = custName;
-
-        if (Utils.isEmpty(ccode) || Utils.isEmpty(cname)) {
-            int i = spcust.getSelectedItemPosition();
-            CustomerAdapter x = (CustomerAdapter) spcust.getAdapter();
-            final Customer customer = x.getItem(i);
-            ccode = customer.getCode();
-            cname = customer.getName();
-        }
+        int i = spcust.getSelectedItemPosition();
+        CustomerAdapter x = (CustomerAdapter) spcust.getAdapter();
+        final Customer customer = x.getItem(i);
 
         Doctor o = new Doctor();
+        o.setId(id);
         o.setName(Utils.getSqlStr(txtname.getText().toString()));
         o.setPhone(Utils.getSqlStr(txtphone.getText().toString()));
         o.setHp(Utils.getSqlStr(txtmobile.getText().toString()));
         o.setEmail(Utils.getSqlStr(txtemail.getText().toString()));
-        o.setCustCode(ccode);
-        o.setCustName(cname);
+        o.setCustCode(customer.getCode());
+        o.setCustName(customer.getName());
         o.setMonMor(chkmon_mor.isChecked());
         o.setMonAft(chkmon_aft.isChecked());
         o.setTueMor(chktue_mor.isChecked());
@@ -216,28 +203,70 @@ public class AddDoctorActivity extends AppCompatActivity {
         o.setSunMor(chksun_mor.isChecked());
         o.setSunAft(chksun_aft.isChecked());
 
-        Needle.onBackgroundThread().execute(new AddDoctorTask(o));
+        Needle.onBackgroundThread().execute(new UpdateDoctorTask(o));
     }
 
-    private void reset() {
-        txtname.setText(null);
-        txtphone.setText(null);
-        txtmobile.setText(null);
-        txtemail.setText(null);
-        chkmon_mor.setChecked(false);
-        chkmon_aft.setChecked(false);
-        chktue_mor.setChecked(false);
-        chktue_aft.setChecked(false);
-        chkwed_mor.setChecked(false);
-        chkwed_aft.setChecked(false);
-        chkthu_mor.setChecked(false);
-        chkthu_aft.setChecked(false);
-        chkfri_mor.setChecked(false);
-        chkfri_aft.setChecked(false);
-        chksat_mor.setChecked(false);
-        chksat_aft.setChecked(false);
-        chksun_mor.setChecked(false);
-        chksun_aft.setChecked(false);
+    class LoadDoctorTask extends CommonTask<Doctor> {
+
+        private static final String CLASS_NAME = "LoadDoctorTask";
+
+        public LoadDoctorTask() {
+            super(EditDoctorActivity.this);
+        }
+
+        @Override
+        protected Doctor doWork() {
+            Doctor o = null;
+
+            try {
+                o = db.getDoctor(id);
+            }
+
+            catch (Exception e) {
+                Log.e(CLASS_NAME, e.getMessage(), e);
+                o = null;
+            }
+
+            finally {
+                db.close();
+            }
+
+            return o;
+        }
+
+        @Override
+        protected void thenDoUiRelatedWork(Doctor o) {
+            if (o == null) {
+                Toast.makeText(EditDoctorActivity.this, "Failed to load doctor deatils with id " + id, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            txtname.setText(o.getName());
+            txtphone.setText(o.getPhone());
+            txtmobile.setText(o.getHp());
+            txtemail.setText(o.getEmail());
+
+            CustomerAdapter x = (CustomerAdapter) spcust.getAdapter();
+            int i = x.getPosition(o.getCustCode(), o.getCustName());
+            spcust.setSelection(i);
+
+            chkmon_mor.setChecked(o.isMonMor());
+            chkmon_aft.setChecked(o.isMonAft());
+            chktue_mor.setChecked(o.isTueMor());
+            chktue_aft.setChecked(o.isTueAft());
+            chkwed_mor.setChecked(o.isWedMor());
+            chkwed_aft.setChecked(o.isWedAft());
+            chkthu_mor.setChecked(o.isThuMor());
+            chkthu_aft.setChecked(o.isThuAft());
+            chkfri_mor.setChecked(o.isFriMor());
+            chkfri_aft.setChecked(o.isFriAft());
+            chksat_mor.setChecked(o.isSatMor());
+            chksat_aft.setChecked(o.isSatAft());
+            chksun_mor.setChecked(o.isSunMor());
+            chksun_aft.setChecked(o.isSunAft());
+
+            Utils.unlockScreenOrientation(EditDoctorActivity.this);
+        }
     }
 
     class PopulateCustomerTask extends CommonTask<ArrayList<Customer>> {
@@ -245,7 +274,7 @@ public class AddDoctorActivity extends AppCompatActivity {
         private static final String CLASS_NAME = "PopulateCustomerTask";
 
         public PopulateCustomerTask() {
-            super(AddDoctorActivity.this);
+            super(EditDoctorActivity.this);
         }
 
         @Override
@@ -270,23 +299,28 @@ public class AddDoctorActivity extends AppCompatActivity {
 
         @Override
         protected void thenDoUiRelatedWork(ArrayList<Customer> ls) {
-            CustomerAdapter adapter = new CustomerAdapter(AddDoctorActivity.this, ls);
+            CustomerAdapter adapter = new CustomerAdapter(EditDoctorActivity.this, ls);
             spcust.setAdapter(adapter);
             spcust.setSelection(selectedCustPosition);
-            Utils.unlockScreenOrientation(AddDoctorActivity.this);
+            Utils.unlockScreenOrientation(EditDoctorActivity.this);
+
+            loadDoctorTask = new LoadDoctorTask();
+            Needle.onBackgroundThread()
+                    .withTaskType("loadDoctor")
+                    .execute(loadDoctorTask);
         }
     }
 
-    class AddDoctorTask extends CommonTask<String> {
+    class UpdateDoctorTask extends CommonTask<String> {
 
         private Doctor doctor;
 
-        private static final String CLASS_NAME = "AddDoctorTask";
+        private static final String CLASS_NAME = "UpdateDoctorTask";
 
-        public AddDoctorTask(Doctor doctor) {
-            super(AddDoctorActivity.this);
+        public UpdateDoctorTask(Doctor doctor) {
+            super(EditDoctorActivity.this);
             this.doctor = doctor;
-            Utils.showProgress(true, progresssubmit, AddDoctorActivity.this);
+            Utils.showProgress(true, progresssubmit, EditDoctorActivity.this);
         }
 
         @Override
@@ -294,7 +328,7 @@ public class AddDoctorActivity extends AppCompatActivity {
             String r = null;
 
             try {
-                db.createDoctor(doctor);
+                db.updateDoctor(doctor);
                 r = "success";
             }
 
@@ -312,26 +346,25 @@ public class AddDoctorActivity extends AppCompatActivity {
 
         @Override
         protected void thenDoUiRelatedWork(String s) {
-            Utils.showProgress(false, progresssubmit, AddDoctorActivity.this);
+            Utils.showProgress(false, progresssubmit, EditDoctorActivity.this);
 
             try {
                 if (s == null) {
-                    Toast.makeText(AddDoctorActivity.this, R.string.add_doctor_fail, Toast.LENGTH_SHORT).show();
-                    Utils.unlockScreenOrientation(AddDoctorActivity.this);
+                    Toast.makeText(EditDoctorActivity.this, R.string.update_doctor_fail, Toast.LENGTH_SHORT).show();
+                    Utils.unlockScreenOrientation(EditDoctorActivity.this);
                     return;
                 }
 
                 if ("success".equals(s)) {
-                    reset();
                     submit = SUBMITTED;
-                    Toast.makeText(AddDoctorActivity.this, R.string.add_doctor_ok, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditDoctorActivity.this, R.string.update_doctor_ok, Toast.LENGTH_SHORT).show();
                 }
 
                 else {
-                    Toast.makeText(AddDoctorActivity.this, R.string.add_doctor_fail, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditDoctorActivity.this, R.string.update_doctor_fail, Toast.LENGTH_SHORT).show();
                 }
 
-                Utils.unlockScreenOrientation(AddDoctorActivity.this);
+                Utils.unlockScreenOrientation(EditDoctorActivity.this);
             }
 
             catch (Exception e) {

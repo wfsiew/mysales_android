@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mysales.mysales_android.R;
+import com.mysales.mysales_android.helpers.Utils;
 import com.mysales.mysales_android.models.Doctor;
 
 import java.util.ArrayList;
@@ -39,10 +41,14 @@ public class DoctorAdapter extends ArrayAdapter<Doctor> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
         v = inflater.inflate(R.layout.list_doctor, null);
+        ImageView imphone = (ImageView) v.findViewById(R.id.imphone);
+        ImageView imhp = (ImageView) v.findViewById(R.id.imhp);
+        ImageView imemail = (ImageView) v.findViewById(R.id.imemail);
         TextView txtname = (TextView) v.findViewById(R.id.txtname);
         TextView txtphone = (TextView) v.findViewById(R.id.txtphone);
         TextView txthp = (TextView) v.findViewById(R.id.txthp);
         TextView txtemail = (TextView) v.findViewById(R.id.txtemail);
+        TextView txtcust = (TextView) v.findViewById(R.id.txtcust);
         CheckBox chk = (CheckBox) v.findViewById(R.id.chk);
 
         Doctor o = (Doctor) getItem(position);
@@ -50,7 +56,11 @@ public class DoctorAdapter extends ArrayAdapter<Doctor> {
         txtphone.setText(o.getPhone());
         txthp.setText(o.getHp());
         txtemail.setText(o.getEmail());
+        txtcust.setText(String.format("%s - %s", o.getCustCode(), o.getCustName()));
         chk.setVisibility(showSelect ? View.VISIBLE : View.GONE);
+        imphone.setVisibility(Utils.isEmpty(o.getPhone()) ? View.GONE : View.VISIBLE);
+        imhp.setVisibility(Utils.isEmpty(o.getHp()) ? View.GONE : View.VISIBLE);
+        imemail.setVisibility(Utils.isEmpty(o.getEmail()) ? View.GONE : View.VISIBLE);
 
         chk.setTag(position);
         chk.setOnClickListener(new View.OnClickListener() {
@@ -102,14 +112,17 @@ public class DoctorAdapter extends ArrayAdapter<Doctor> {
     }
 
     private void doSelect(CheckBox chk, int position) {
-        if (selected == null)
+        if (selected == null) {
             selected = new HashMap<Integer, Integer>();
+        }
 
-        if (chk.isChecked())
+        if (chk.isChecked()) {
             selected.put(items.get(position).getId(), 1);
+        }
 
-        else
+        else {
             selected.remove(items.get(position).getId());
+        }
 
         btndel.setEnabled(!selected.isEmpty());
     }

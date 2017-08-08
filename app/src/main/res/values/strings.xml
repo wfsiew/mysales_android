@@ -29,14 +29,37 @@
         <item>2012</item>
     </string-array>
 
+    <string-array name="days">
+        <item>All</item>
+        <item>Mon Morning</item>
+        <item>Mon Afternoon</item>
+        <item>Tue Morning</item>
+        <item>Tue Afternoon</item>
+        <item>Wed Morning</item>
+        <item>Wed Afternoon</item>
+        <item>Thu Morning</item>
+        <item>Thu Afternoon</item>
+        <item>Fri Morning</item>
+        <item>Fri Afternoon</item>
+        <item>Sat Morning</item>
+        <item>Sat Afternoon</item>
+        <item>Sun Morning</item>
+        <item>Sun Afternoon</item>
+    </string-array>
+
     <string name="title_customer_list">Customers</string>
     <string name="title_customer_detail">Customer Item Detail</string>
     <string name="title_activity_doctor_list">Doctors</string>
     <string name="title_add_doctor">Add Doctor</string>
+    <string name="title_edit_doctor">Edit Doctor</string>
     <string name="mandatory">* Mandatory Field.</string>
     <string name="morning">Morning</string>
     <string name="afternoon">Afternoon</string>
     <string name="delete_wait">Please wait while the operation is being completed</string>
+    <string name="add_doctor_ok">New doctor has been successfully added</string>
+    <string name="add_doctor_fail">Failed to add doctor</string>
+    <string name="update_doctor_ok">Details have been successfully updated</string>
+    <string name="update_doctor_fail">Doctor failed to be updated</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

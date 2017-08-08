@@ -1,5 +1,6 @@
 package com.mysales.mysales_android;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.mysales.mysales_android.adapters.CustomerItemRecyclerViewAdapter;
@@ -44,12 +46,17 @@ public class DoctorListActivity extends AppCompatActivity
     private SearchView searchView;
     private Button btndel, btndelall;
     private ProgressDialog pd;
+    private Dialog dlg;
     private boolean showSelect;
     private String query;
+    private String day;
 
     private WriteDBHelper db;
 
     private DoctorListTask doctorListTask = null;
+
+    private static final int ADDDOCTOR_REQUEST_CODE = 1;
+    private static final int EDITDOCTOR_REQUEST_CODE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +70,7 @@ public class DoctorListActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(DoctorListActivity.this, AddDoctorActivity.class);
-                startActivity(i);
+                startActivityForResult(i, ADDDOCTOR_REQUEST_CODE);
             }
         });
 
@@ -99,14 +106,17 @@ public class DoctorListActivity extends AppCompatActivity
 
         listdoctor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 if (showSelect) {
                     DoctorAdapter x = (DoctorAdapter) listdoctor.getAdapter();
-                    x.select(view, i);
+                    x.select(view, position);
                 }
 
                 else {
-                    Doctor o = (Doctor) listdoctor.getAdapter().getItem(i);
+                    Doctor o = (Doctor) listdoctor.getAdapter().getItem(position);
+                    Intent i = new Intent(DoctorListActivity.this, EditDoctorActivity.class);
+                    i.putExtra(EditDoctorActivity.ARG_DOCTOR_ID, o.getId());
+                    startActivityForResult(i, EDITDOCTOR_REQUEST_CODE);
                 }
             }
         });
@@ -144,6 +154,30 @@ public class DoctorListActivity extends AppCompatActivity
         });
 
         db = new WriteDBHelper(this);
+
+        dlg = new Dialog(this);
+        dlg.setContentView(R.layout.dialog_days);
+        dlg.setTitle("Please Select Day");
+
+        Spinner spday = (Spinner) dlg.findViewById(R.id.spday);
+        spday.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String[] a = getResources().getStringArray(R.array.days);
+                String x = a[i];
+                if ("All".equals(x)) {
+                    x = null;
+                }
+
+                dlg.dismiss();
+                load(query, x);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         load();
     }
@@ -183,8 +217,9 @@ public class DoctorListActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (doctorListTask != null && !doctorListTask.isCanceled())
+        if (doctorListTask != null && !doctorListTask.isCanceled()) {
             doctorListTask.cancel();
+        }
     }
 
     @Override
@@ -195,7 +230,7 @@ public class DoctorListActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                load(query);
+                load(query, day);
                 return false;
             }
 
@@ -216,23 +251,42 @@ public class DoctorListActivity extends AppCompatActivity
 
         if (id == R.id.menu_add_doctor) {
             Intent i = new Intent(this, AddDoctorActivity.class);
-            startActivity(i);
+            startActivityForResult(i, ADDDOCTOR_REQUEST_CODE);
+            return true;
         }
 
         else if (id == R.id.menu_reload) {
-            load(query);
+            load(query, day);
+            return false;
+        }
+
+        else if (id == R.id.menu_day) {
+            dlg.show();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void load() {
-        load(null);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADDDOCTOR_REQUEST_CODE && resultCode == AddDoctorActivity.SUBMITTED) {
+            load(query, day);
+        }
+
+        else if (requestCode == EDITDOCTOR_REQUEST_CODE && resultCode == EditDoctorActivity.SUBMITTED) {
+            load(query, day);
+        }
     }
 
-    private void load(String q) {
+    private void load() {
+        load(null, null);
+    }
+
+    private void load(String q, String d) {
         query = q;
-        doctorListTask = new DoctorListTask(q);
+        day = d;
+        doctorListTask = new DoctorListTask();
         Needle.onBackgroundThread()
                 .withTaskType("doctorList")
                 .execute(doctorListTask);
@@ -249,21 +303,17 @@ public class DoctorListActivity extends AppCompatActivity
     private void showProgress(final boolean show) {
         Utils.showProgress(show, progress, getApplicationContext());
         listdoctor.setVisibility(show ? View.GONE : View.VISIBLE);
+        empty.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
     class DoctorListTask extends CommonTask<ArrayList<Doctor>> {
 
         private static final String CLASS_NAME = "DoctorListTask";
 
-        private String keyword;
+        private String keyword, day;
 
         public DoctorListTask() {
-            this(null);
-        }
-
-        public DoctorListTask(String k) {
             super(DoctorListActivity.this);
-            keyword = k;
             showProgress(true);
         }
 
@@ -272,7 +322,7 @@ public class DoctorListActivity extends AppCompatActivity
             ArrayList<Doctor> ls = new ArrayList<>();
 
             try {
-                ls = db.filterDoctor(keyword);
+                ls = db.filterDoctor(query, day);
             }
 
             catch (Exception e) {
@@ -338,7 +388,7 @@ public class DoctorListActivity extends AppCompatActivity
 
             if ("success".equals(s)) {
                 Toast.makeText(DoctorListActivity.this, "Doctor(s) have been successfully deleted", Toast.LENGTH_SHORT).show();
-                load(query);
+                load(query, day);
             }
 
             else {

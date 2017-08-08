@@ -53,8 +53,9 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         progress = findViewById(R.id.progress);
         txtmain = (TextView) findViewById(R.id.txtmain);
@@ -73,8 +74,9 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (customerItemDetailTask != null && !customerItemDetailTask.isCanceled())
+        if (customerItemDetailTask != null && !customerItemDetailTask.isCanceled()) {
             customerItemDetailTask.cancel();
+        }
     }
 
     @Override
@@ -197,8 +199,9 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
             ArrayList<CustomerItem> lk = new ArrayList<>();
             r.setList(lk);
 
-            if (la.isEmpty())
+            if (la.isEmpty()) {
                 return r;
+            }
 
             int salesunittotal = 0;
             double salesvaluetotal = 0;

@@ -130,8 +130,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (populateCustomerTask != null && !populateCustomerTask.isCanceled())
+        if (populateCustomerTask != null && !populateCustomerTask.isCanceled()) {
             populateCustomerTask.cancel();
+        }
     }
 
     @Override
@@ -231,19 +232,23 @@ public class MainActivity extends AppCompatActivity
         StringBuffer sb = new StringBuffer();
         String r = "";
 
-        if (li.isEmpty())
+        if (li.isEmpty()) {
             return r;
+        }
 
         for (int i = 0; i < li.size(); i++) {
             String v = Utils.escapeStr(li.get(i).getName());
-            if (usequote)
+            if (usequote) {
                 sb.append(String.format("'%s'", v));
+            }
 
-            else
+            else {
                 sb.append(v);
+            }
 
-            if (i < li.size() - 1)
+            if (i < li.size() - 1) {
                 sb.append(",");
+            }
         }
 
         r = sb.toString();
