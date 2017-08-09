@@ -15,6 +15,9 @@ public class Doctor {
     private String phone;
     private String hp;
     private String email;
+    private String assistant1;
+    private String assistant2;
+    private String assistant3;
     private String custCode;
     private String custName;
     private boolean monMor;
@@ -70,6 +73,30 @@ public class Doctor {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAssistant1() {
+        return assistant1;
+    }
+
+    public void setAssistant1(String assistant1) {
+        this.assistant1 = assistant1;
+    }
+
+    public String getAssistant2() {
+        return assistant2;
+    }
+
+    public void setAssistant2(String assistant2) {
+        this.assistant2 = assistant2;
+    }
+
+    public String getAssistant3() {
+        return assistant3;
+    }
+
+    public void setAssistant3(String assistant3) {
+        this.assistant3 = assistant3;
     }
 
     public String getCustCode() {
@@ -198,5 +225,71 @@ public class Doctor {
 
     public void setSunAft(boolean sunAft) {
         this.sunAft = sunAft;
+    }
+
+    public String getDays() {
+        String s = "";
+        StringBuffer sb = new StringBuffer();
+        if (isMonMor()) {
+            sb.append("Mon Morning | ");
+        }
+
+        if (isMonAft()) {
+            sb.append("Mon Afternoon | ");
+        }
+
+        if (isTueMor()) {
+            sb.append("Tue Morning | ");
+        }
+
+        if (isTueAft()) {
+            sb.append("Tue Afternoon | ");
+        }
+
+        if (isWedMor()) {
+            sb.append("Wed Morning | ");
+        }
+
+        if (isWedAft()) {
+            sb.append("Wed Afternoon | ");
+        }
+
+        if (isThuMor()) {
+            sb.append("Thu Morning | ");
+        }
+
+        if (isThuAft()) {
+            sb.append("Thu Afternoon | ");
+        }
+
+        if (isFriMor()) {
+            sb.append("Fri Morning | ");
+        }
+
+        if (isFriAft()) {
+            sb.append("Fri Afternoon | ");
+        }
+
+        if (isSatMor()) {
+            sb.append("Sat Morning | ");
+        }
+
+        if (isSatAft()) {
+            sb.append("Sat Afternoon | ");
+        }
+
+        if (isSunMor()) {
+            sb.append("Sun Morning | ");
+        }
+
+        if (isSunAft()) {
+            sb.append("Sun Afternoon | ");
+        }
+
+        if (sb.length() > 0) {
+            s = sb.substring(0, sb.length() - 3);
+        }
+
+        return s;
     }
 }

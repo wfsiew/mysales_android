@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">My Sales Data</string>
     <string name="action_settings">Settings</string>
-    <string name="permission_rationale">"Read External Storage permissions are needed for this application."</string>
+    <string name="permission_rationale">"Write External Storage permissions are needed for this application."</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="empty_list">No records found!</string>
 
@@ -48,8 +48,9 @@
     </string-array>
 
     <string name="title_customer_list">Customers</string>
-    <string name="title_customer_detail">Customer Item Detail</string>
+    <string name="title_customer_detail">Customer Item Details</string>
     <string name="title_activity_doctor_list">Doctors</string>
+    <string name="title_activity_doctor_detail">Doctor Details</string>
     <string name="title_add_doctor">Add Doctor</string>
     <string name="title_edit_doctor">Edit Doctor</string>
     <string name="mandatory">* Mandatory Field.</string>

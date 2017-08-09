@@ -39,7 +39,6 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    private static final String CLASS_NAME = "MainActivity";
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 0;
 
     private AppCompatAutoCompleteTextView txtcust;

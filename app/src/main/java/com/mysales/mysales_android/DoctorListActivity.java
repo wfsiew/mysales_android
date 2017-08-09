@@ -116,7 +116,7 @@ public class DoctorListActivity extends AppCompatActivity
 
                 else {
                     Doctor o = (Doctor) listdoctor.getAdapter().getItem(position);
-                    Intent i = new Intent(DoctorListActivity.this, EditDoctorActivity.class);
+                    Intent i = new Intent(DoctorListActivity.this, DoctorDetailActivity.class);
                     i.putExtra(EditDoctorActivity.ARG_DOCTOR_ID, o.getId());
                     startActivityForResult(i, EDITDOCTOR_REQUEST_CODE);
                 }
@@ -224,8 +224,6 @@ public class DoctorListActivity extends AppCompatActivity
         Needle.onBackgroundThread()
                 .withTaskType("populateCustomer")
                 .execute(populateCustomerTask);
-
-        load();
     }
 
     @Override
@@ -369,11 +367,6 @@ public class DoctorListActivity extends AppCompatActivity
             ArrayList<Doctor> ls = new ArrayList<>();
 
             try {
-                System.out.println("======query = " +
-                                query + "===day = " +
-                                day + "===custCode = " +
-                                custCode + "===custName = " +
-                                custName);
                 ls = db.filterDoctor(query, day, custCode, custName);
             }
 
@@ -443,6 +436,7 @@ public class DoctorListActivity extends AppCompatActivity
             Spinner spcust = (Spinner) dlg.findViewById(R.id.spcust);
             spcust.setAdapter(adapter);
             Utils.unlockScreenOrientation(DoctorListActivity.this);
+            load();
         }
     }
 

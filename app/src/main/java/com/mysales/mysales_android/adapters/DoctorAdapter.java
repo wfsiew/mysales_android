@@ -58,9 +58,13 @@ public class DoctorAdapter extends ArrayAdapter<Doctor> {
         txtemail.setText(o.getEmail());
         txtcust.setText(String.format("%s - %s", o.getCustCode(), o.getCustName()));
         chk.setVisibility(showSelect ? View.VISIBLE : View.GONE);
+
         imphone.setVisibility(Utils.isEmpty(o.getPhone()) ? View.GONE : View.VISIBLE);
         imhp.setVisibility(Utils.isEmpty(o.getHp()) ? View.GONE : View.VISIBLE);
         imemail.setVisibility(Utils.isEmpty(o.getEmail()) ? View.GONE : View.VISIBLE);
+        txtphone.setVisibility(imphone.getVisibility());
+        txthp.setVisibility(imhp.getVisibility());
+        txtemail.setVisibility(imemail.getVisibility());
 
         chk.setTag(position);
         chk.setOnClickListener(new View.OnClickListener() {

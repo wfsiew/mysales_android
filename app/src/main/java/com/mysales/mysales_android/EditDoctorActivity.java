@@ -358,6 +358,8 @@ public class EditDoctorActivity extends AppCompatActivity {
                 if ("success".equals(s)) {
                     submit = SUBMITTED;
                     Toast.makeText(EditDoctorActivity.this, R.string.update_doctor_ok, Toast.LENGTH_SHORT).show();
+                    setResult(submit);
+                    finish();
                 }
 
                 else {
