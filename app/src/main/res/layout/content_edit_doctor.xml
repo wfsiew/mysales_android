@@ -76,6 +76,36 @@
             android:hint="Email"
             android:inputType="textEmailAddress" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Assistant #1" />
+
+        <EditText
+            android:id="@+id/txtasst1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Assistant #2" />
+
+        <EditText
+            android:id="@+id/txtasst2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Assistant #3" />
+
+        <EditText
+            android:id="@+id/txtasst3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"

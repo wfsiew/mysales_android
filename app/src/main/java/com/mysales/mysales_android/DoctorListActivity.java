@@ -220,10 +220,7 @@ public class DoctorListActivity extends AppCompatActivity
             }
         });
 
-        populateCustomerTask = new PopulateCustomerTask();
-        Needle.onBackgroundThread()
-                .withTaskType("populateCustomer")
-                .execute(populateCustomerTask);
+        init();
     }
 
     @Override
@@ -324,12 +321,19 @@ public class DoctorListActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADDDOCTOR_REQUEST_CODE && resultCode == AddDoctorActivity.SUBMITTED) {
-            load();
+            init();
         }
 
         else if (requestCode == EDITDOCTOR_REQUEST_CODE && resultCode == EditDoctorActivity.SUBMITTED) {
-            load();
+            init();
         }
+    }
+
+    private void init() {
+        populateCustomerTask = new PopulateCustomerTask();
+        Needle.onBackgroundThread()
+                .withTaskType("populateCustomer")
+                .execute(populateCustomerTask);
     }
 
     private void load() {
@@ -482,7 +486,7 @@ public class DoctorListActivity extends AppCompatActivity
 
             if ("success".equals(s)) {
                 Toast.makeText(DoctorListActivity.this, "Doctor(s) have been successfully deleted", Toast.LENGTH_SHORT).show();
-                load();
+                init();
             }
 
             else {

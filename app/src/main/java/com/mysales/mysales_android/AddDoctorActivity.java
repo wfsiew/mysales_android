@@ -31,7 +31,7 @@ import needle.Needle;
 public class AddDoctorActivity extends AppCompatActivity {
 
     private View progresssubmit;
-    private EditText txtname, txtphone, txtmobile, txtemail;
+    private EditText txtname, txtphone, txtmobile, txtemail, txtasst1, txtasst2, txtasst3;
     private TextView txttitle, txtcust;
     private Spinner spcust;
     private CheckBox chkmon_mor, chkmon_aft;
@@ -76,6 +76,9 @@ public class AddDoctorActivity extends AppCompatActivity {
         txtphone = (EditText) findViewById(R.id.txtphone);
         txtmobile = (EditText) findViewById(R.id.txtmobile);
         txtemail = (EditText) findViewById(R.id.txtemail);
+        txtasst1 = (EditText) findViewById(R.id.txtasst1);
+        txtasst2 = (EditText) findViewById(R.id.txtasst2);
+        txtasst3 = (EditText) findViewById(R.id.txtasst3);
         spcust = (Spinner) findViewById(R.id.spcust);
 
         chkmon_mor = (CheckBox) findViewById(R.id.chkmon_morning);
@@ -201,6 +204,9 @@ public class AddDoctorActivity extends AppCompatActivity {
         o.setEmail(Utils.getSqlStr(txtemail.getText().toString()));
         o.setCustCode(ccode);
         o.setCustName(cname);
+        o.setAssistant1(Utils.getSqlStr(txtasst1.getText().toString()));
+        o.setAssistant2(Utils.getSqlStr(txtasst2.getText().toString()));
+        o.setAssistant3(Utils.getSqlStr(txtasst3.getText().toString()));
         o.setMonMor(chkmon_mor.isChecked());
         o.setMonAft(chkmon_aft.isChecked());
         o.setTueMor(chktue_mor.isChecked());
@@ -224,6 +230,9 @@ public class AddDoctorActivity extends AppCompatActivity {
         txtphone.setText(null);
         txtmobile.setText(null);
         txtemail.setText(null);
+        txtasst1.setText(null);
+        txtasst2.setText(null);
+        txtasst3.setText(null);
         chkmon_mor.setChecked(false);
         chkmon_aft.setChecked(false);
         chktue_mor.setChecked(false);

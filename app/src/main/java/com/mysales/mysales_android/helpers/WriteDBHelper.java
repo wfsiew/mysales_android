@@ -75,6 +75,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
         StringBuffer sb = new StringBuffer();
 
         sb.append("select id, name, phone, hp, email, cust_code, cust_name, ")
+                .append("asst1, asst2, asst3, ")
                 .append("mon_mor, mon_aft, tue_mor, tue_aft, ")
                 .append("wed_mor, wed_aft, thu_mor, thu_aft, ")
                 .append("fri_mor, fri_aft, sat_mor, sat_aft, sun_mor, sun_aft ")
@@ -94,6 +95,9 @@ public class WriteDBHelper extends SQLiteOpenHelper {
         o.setEmail(cur.getString(cur.getColumnIndex("email")));
         o.setCustCode(cur.getString(cur.getColumnIndex("cust_code")));
         o.setCustName(cur.getString(cur.getColumnIndex("cust_name")));
+        o.setAssistant1(cur.getString(cur.getColumnIndex("asst1")));
+        o.setAssistant2(cur.getString(cur.getColumnIndex("asst2")));
+        o.setAssistant3(cur.getString(cur.getColumnIndex("asst3")));
         o.setMonMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("mon_mor"))));
         o.setMonAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("mon_aft"))));
         o.setTueMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("tue_mor"))));
@@ -117,14 +121,17 @@ public class WriteDBHelper extends SQLiteOpenHelper {
         StringBuffer sb = new StringBuffer();
 
         sb.append("insert into doctor (name, phone, hp, email, cust_code, cust_name, ")
+                .append("asst1, asst2, asst3, ")
                 .append("mon_mor, mon_aft, tue_mor, tue_aft, ")
                 .append("wed_mor, wed_aft, thu_mor, thu_aft, ")
                 .append("fri_mor, fri_aft, sat_mor, sat_aft, sun_mor, sun_aft) ")
                 .append("values(?, ?, ?, ?, ?, ?, ")
+                .append("?, ?, ?, ")
                 .append("?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         String q = sb.toString();
         Object[] p = new Object[] { doctor.getName(), doctor.getPhone(), doctor.getHp(), doctor.getEmail(),
                 doctor.getCustCode(), doctor.getCustName(),
+                doctor.getAssistant1(), doctor.getAssistant2(), doctor.getAssistant3(),
                 Utils.getInt(doctor.isMonMor()), Utils.getInt(doctor.isMonAft()), Utils.getInt(doctor.isTueMor()), Utils.getInt(doctor.isTueAft()),
                 Utils.getInt(doctor.isWedMor()), Utils.getInt(doctor.isWedAft()), Utils.getInt(doctor.isThuMor()), Utils.getInt(doctor.isThuAft()),
                 Utils.getInt(doctor.isFriMor()), Utils.getInt(doctor.isFriAft()), Utils.getInt(doctor.isSatMor()), Utils.getInt(doctor.isSatAft()),
@@ -138,6 +145,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
         StringBuffer sb = new StringBuffer();
 
         sb.append("update doctor set name = ?, phone = ?, hp = ?, email = ?, cust_code = ?, cust_name = ?, ")
+                .append("asst1 = ?, asst2 = ?, asst3 = ?, ")
                 .append("mon_mor = ?, mon_aft = ?, tue_mor = ?, tue_aft = ?, ")
                 .append("wed_mor = ?, wed_aft = ?, thu_mor = ?, thu_aft = ?, ")
                 .append("fri_mor = ?, fri_aft = ?, sat_mor = ?, sat_aft = ?, sun_mor = ?, sun_aft = ? ")
@@ -145,6 +153,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
         String q = sb.toString();
         Object[] p = new Object[] { doctor.getName(), doctor.getPhone(), doctor.getHp(), doctor.getEmail(),
                 doctor.getCustCode(), doctor.getCustName(),
+                doctor.getAssistant1(), doctor.getAssistant2(), doctor.getAssistant3(),
                 Utils.getInt(doctor.isMonMor()), Utils.getInt(doctor.isMonAft()), Utils.getInt(doctor.isTueMor()), Utils.getInt(doctor.isTueAft()),
                 Utils.getInt(doctor.isWedMor()), Utils.getInt(doctor.isWedAft()), Utils.getInt(doctor.isThuMor()), Utils.getInt(doctor.isThuAft()),
                 Utils.getInt(doctor.isFriMor()), Utils.getInt(doctor.isFriAft()), Utils.getInt(doctor.isSatMor()), Utils.getInt(doctor.isSatAft()),
@@ -167,6 +176,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
         StringBuffer sb = new StringBuffer();
 
         sb.append("select id, name, phone, hp, email, cust_code, cust_name, ")
+                .append("asst1, asst2, asst3, ")
                 .append("mon_mor, mon_aft, tue_mor, tue_aft, ")
                 .append("wed_mor, wed_aft, thu_mor, thu_aft, ")
                 .append("fri_mor, fri_aft, sat_mor, sat_aft, sun_mor, sun_aft ")
@@ -176,7 +186,10 @@ public class WriteDBHelper extends SQLiteOpenHelper {
             sb.append(" where (name like '%" + search + "%' or")
                     .append(" phone like '%" + search + "%' or")
                     .append(" hp like '%" + search + "%' or")
-                    .append(" email like '%" + search + "%')");
+                    .append(" email like '%" + search + "%' or")
+                    .append(" asst1 like '%" + search + "%' or")
+                    .append(" asst2 like '%" + search + "%' or")
+                    .append(" asst3 like '%" + search + "%')");
 
             if (!Utils.isEmpty(day)) {
                 sb.append(" and " + getDay(day) + " = 1");
@@ -219,6 +232,9 @@ public class WriteDBHelper extends SQLiteOpenHelper {
             o.setEmail(cur.getString(cur.getColumnIndex("email")));
             o.setCustCode(cur.getString(cur.getColumnIndex("cust_code")));
             o.setCustName(cur.getString(cur.getColumnIndex("cust_name")));
+            o.setAssistant1(cur.getString(cur.getColumnIndex("asst1")));
+            o.setAssistant2(cur.getString(cur.getColumnIndex("asst2")));
+            o.setAssistant3(cur.getString(cur.getColumnIndex("asst3")));
             ls.add(o);
             cur.moveToNext();
         }

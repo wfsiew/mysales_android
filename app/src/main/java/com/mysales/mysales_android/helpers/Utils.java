@@ -34,7 +34,7 @@ public class Utils {
     }
 
     public static String getSqlStr(String s) {
-        return escapeStr(getEmptyString(s));
+        return s;
     }
 
     public static String getEmptyString(String v) {

@@ -37,9 +37,9 @@ public class DoctorDetailActivity extends AppCompatActivity {
 
     private static final int REQUEST_CALL_PHONE = 0;
 
-    private TextView txtname, txtcust, txtphone, txtmobile, txtemail, txtday;
-    private TextView lbphone, lbmobile, lbemail;
-    private View vphone, vmobile, vemail;
+    private TextView txtname, txtcust, txtphone, txtmobile, txtemail, txtasst1, txtasst2, txtasst3, txtday;
+    private TextView lbphone, lbmobile, lbemail, lbasst1, lbasst2, lbasst3;
+    private View vphone, vmobile, vemail, vasst1, vasst2, vasst3;
     private Button btnedit, btndel, btnphone, btnmobile, btnmobilesms;
     private View lyphone, lymobile;
 
@@ -76,15 +76,24 @@ public class DoctorDetailActivity extends AppCompatActivity {
         txtphone = (TextView) findViewById(R.id.txtphone);
         txtmobile = (TextView) findViewById(R.id.txtmobile);
         txtemail = (TextView) findViewById(R.id.txtemail);
+        txtasst1 = (TextView) findViewById(R.id.txtasst1);
+        txtasst2 = (TextView) findViewById(R.id.txtasst2);
+        txtasst3 = (TextView) findViewById(R.id.txtasst3);
         txtday = (TextView) findViewById(R.id.txtday);
 
         lbphone = (TextView) findViewById(R.id.lbphone);
         lbmobile = (TextView) findViewById(R.id.lbmobile);
         lbemail = (TextView) findViewById(R.id.lbemail);
+        lbasst1 = (TextView) findViewById(R.id.lbasst1);
+        lbasst2 = (TextView) findViewById(R.id.lbasst2);
+        lbasst3 = (TextView) findViewById(R.id.lbasst3);
 
         vphone = findViewById(R.id.vphone);
         vmobile = findViewById(R.id.vmobile);
         vemail = findViewById(R.id.vemail);
+        vasst1 = findViewById(R.id.vasst1);
+        vasst2 = findViewById(R.id.vasst2);
+        vasst3 = findViewById(R.id.vasst3);
 
         lyphone = findViewById(R.id.lyphone);
         lymobile = findViewById(R.id.lymobile);
@@ -110,7 +119,7 @@ public class DoctorDetailActivity extends AppCompatActivity {
                 new AlertDialog.Builder(DoctorDetailActivity.this)
                         .setTitle("Delete doctor")
                         .setMessage("Do you want to delete the selected doctor?")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Needle.onBackgroundThread()
@@ -118,7 +127,7 @@ public class DoctorDetailActivity extends AppCompatActivity {
                                         .execute(new DeleteDoctorTask(String.valueOf(id)));
                             }
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(getResources().getString(R.string.cancel), null)
                         .create()
                         .show();
             }
@@ -288,26 +297,41 @@ public class DoctorDetailActivity extends AppCompatActivity {
             txtphone.setText(o.getPhone());
             txtmobile.setText(o.getHp());
             txtemail.setText(o.getEmail());
+            txtasst1.setText(o.getAssistant1());
+            txtasst2.setText(o.getAssistant2());
+            txtasst3.setText(o.getAssistant3());
 
-            if (Utils.isEmpty(o.getPhone())) {
-                txtphone.setVisibility(View.GONE);
-                lbphone.setVisibility(View.GONE);
-                vphone.setVisibility(View.GONE);
-                lyphone.setVisibility(View.GONE);
-            }
+            int v1 = Utils.isEmpty(o.getPhone()) ? View.GONE : View.VISIBLE;
+            txtphone.setVisibility(v1);
+            lbphone.setVisibility(v1);
+            vphone.setVisibility(v1);
+            lyphone.setVisibility(v1);
 
-            if (Utils.isEmpty(o.getHp())) {
-                txtmobile.setVisibility(View.GONE);
-                lbmobile.setVisibility(View.GONE);
-                vmobile.setVisibility(View.GONE);
-                lymobile.setVisibility(View.GONE);
-            }
+            int v2 = Utils.isEmpty(o.getHp()) ? View.GONE : View.VISIBLE;
+            txtmobile.setVisibility(v2);
+            lbmobile.setVisibility(v2);
+            vmobile.setVisibility(v2);
+            lymobile.setVisibility(v2);
 
-            if (Utils.isEmpty(o.getEmail())) {
-                txtemail.setVisibility(View.GONE);
-                lbemail.setVisibility(View.GONE);
-                vemail.setVisibility(View.GONE);
-            }
+            int v3 = Utils.isEmpty(o.getEmail()) ? View.GONE : View.VISIBLE;
+            txtemail.setVisibility(v3);
+            lbemail.setVisibility(v3);
+            vemail.setVisibility(v3);
+
+            int v4 = Utils.isEmpty(o.getAssistant1()) ? View.GONE : View.VISIBLE;
+            txtasst1.setVisibility(v4);
+            lbasst1.setVisibility(v4);
+            vasst1.setVisibility(v4);
+
+            int v5 = Utils.isEmpty(o.getAssistant2()) ? View.GONE : View.VISIBLE;
+            txtasst2.setVisibility(v5);
+            lbasst2.setVisibility(v5);
+            vasst2.setVisibility(v5);
+
+            int v6 = Utils.isEmpty(o.getAssistant3()) ? View.GONE : View.VISIBLE;
+            txtasst3.setVisibility(v6);
+            lbasst3.setVisibility(v6);
+            vasst3.setVisibility(v6);
 
             txtday.setText(o.getDays());
 

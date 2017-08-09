@@ -56,6 +56,8 @@
     <string name="mandatory">* Mandatory Field.</string>
     <string name="morning">Morning</string>
     <string name="afternoon">Afternoon</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <string name="delete_wait">Please wait while the operation is being completed</string>
     <string name="add_doctor_ok">New doctor has been successfully added</string>
     <string name="add_doctor_fail">Failed to add doctor</string>
