@@ -6,9 +6,37 @@
     android:layout_height="match_parent">
 
     <Spinner
+        android:id="@+id/spcust"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></Spinner>
+
+    <Spinner
         android:id="@+id/spday"
         android:entries="@array/days"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></Spinner>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_gravity="bottom|center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnok"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:text="OK" />
+
+        <Button
+            android:id="@+id/btncancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:text="Cancel" />
+
+    </LinearLayout>
 
 </LinearLayout>

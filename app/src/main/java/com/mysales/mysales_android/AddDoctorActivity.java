@@ -101,10 +101,15 @@ public class AddDoctorActivity extends AppCompatActivity {
             dbr = new DBHelper(this);
             txtcust.setVisibility(View.VISIBLE);
             spcust.setVisibility(View.VISIBLE);
-            spcust.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            spcust.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     selectedCustPosition = i;
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
                 }
             });
 

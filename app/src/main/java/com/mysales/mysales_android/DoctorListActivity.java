@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -25,7 +24,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.mysales.mysales_android.adapters.CustomerItemRecyclerViewAdapter;
+import com.mysales.mysales_android.adapters.CustomerAdapter;
 import com.mysales.mysales_android.adapters.DoctorAdapter;
 import com.mysales.mysales_android.helpers.Utils;
 import com.mysales.mysales_android.helpers.WriteDBHelper;
@@ -49,10 +48,13 @@ public class DoctorListActivity extends AppCompatActivity
     private Dialog dlg;
     private boolean showSelect;
     private String query;
+    private String custCode;
+    private String custName;
     private String day;
 
     private WriteDBHelper db;
 
+    private PopulateCustomerTask populateCustomerTask = null;
     private DoctorListTask doctorListTask = null;
 
     private static final int ADDDOCTOR_REQUEST_CODE = 1;
@@ -157,22 +159,71 @@ public class DoctorListActivity extends AppCompatActivity
 
         dlg = new Dialog(this);
         dlg.setContentView(R.layout.dialog_days);
-        dlg.setTitle("Please Select Day");
+        dlg.setTitle("Please Select");
 
+        Spinner spcust = (Spinner)  dlg.findViewById(R.id.spcust);
         Spinner spday = (Spinner) dlg.findViewById(R.id.spday);
-        spday.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String[] a = getResources().getStringArray(R.array.days);
-                String x = a[i];
-                if ("All".equals(x)) {
-                    x = null;
-                }
+        Button btnok = (Button) dlg.findViewById(R.id.btnok);
+        Button btncancel = (Button) dlg.findViewById(R.id.btncancel);
 
-                dlg.dismiss();
-                load(query, x);
+        spcust.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                CustomerAdapter x = (CustomerAdapter) adapterView.getAdapter();
+                Customer o = x.getItem(i);
+                custCode = o.getCode();
+                custName = o.getName();
+
+                if ("All".equals(custCode)) {
+                    custCode = null;
+                    custName = null;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
+
+        spday.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String[] a = getResources().getStringArray(R.array.days);
+                day = a[i];
+                if ("All".equals(day)) {
+                    day = null;
+                }
+
+                //dlg.dismiss();
+                //load(query, x);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        btnok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dlg.dismiss();
+                load();
+            }
+        });
+
+        btncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dlg.dismiss();
+            }
+        });
+
+        populateCustomerTask = new PopulateCustomerTask();
+        Needle.onBackgroundThread()
+                .withTaskType("populateCustomer")
+                .execute(populateCustomerTask);
 
         load();
     }
@@ -212,6 +263,10 @@ public class DoctorListActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (populateCustomerTask != null && !populateCustomerTask.isCanceled()) {
+            populateCustomerTask.cancel();
+        }
+
         if (doctorListTask != null && !doctorListTask.isCanceled()) {
             doctorListTask.cancel();
         }
@@ -225,13 +280,15 @@ public class DoctorListActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                load(query, day);
+                DoctorListActivity.this.query = query;
+                load();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (Utils.isEmpty(newText)) {
+                    DoctorListActivity.this.query = null;
                     load();
                 }
 
@@ -253,7 +310,7 @@ public class DoctorListActivity extends AppCompatActivity
         }
 
         else if (id == R.id.menu_reload) {
-            load(query, day);
+            load();
             return false;
         }
 
@@ -269,21 +326,15 @@ public class DoctorListActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADDDOCTOR_REQUEST_CODE && resultCode == AddDoctorActivity.SUBMITTED) {
-            load(query, day);
+            load();
         }
 
         else if (requestCode == EDITDOCTOR_REQUEST_CODE && resultCode == EditDoctorActivity.SUBMITTED) {
-            load(query, day);
+            load();
         }
     }
 
     private void load() {
-        load(null, null);
-    }
-
-    private void load(String q, String d) {
-        query = q;
-        day = d;
         doctorListTask = new DoctorListTask();
         Needle.onBackgroundThread()
                 .withTaskType("doctorList")
@@ -318,7 +369,12 @@ public class DoctorListActivity extends AppCompatActivity
             ArrayList<Doctor> ls = new ArrayList<>();
 
             try {
-                ls = db.filterDoctor(query, day);
+                System.out.println("======query = " +
+                                query + "===day = " +
+                                day + "===custCode = " +
+                                custCode + "===custName = " +
+                                custName);
+                ls = db.filterDoctor(query, day, custCode, custName);
             }
 
             catch (Exception e) {
@@ -337,7 +393,55 @@ public class DoctorListActivity extends AppCompatActivity
             showProgress(false);
             DoctorAdapter adapter = new DoctorAdapter(DoctorListActivity.this, ls, btndel);
             listdoctor.setAdapter(adapter);
+
+            if (ls.isEmpty()) {
+                showSelect = false;
+                lybottom.setVisibility(showSelect ? View.VISIBLE : View.GONE);
+                fab.setVisibility(showSelect ? View.GONE : View.VISIBLE);
+                adapter.notifyDataSetChanged();
+            }
+
             lybottom.setVisibility(showSelect ? View.VISIBLE : View.GONE);
+            Utils.unlockScreenOrientation(DoctorListActivity.this);
+        }
+    }
+
+    class PopulateCustomerTask extends CommonTask<ArrayList<Customer>> {
+
+        private static final String CLASS_NAME = "PopulateCustomerTask";
+
+        public PopulateCustomerTask() {
+            super(DoctorListActivity.this);
+        }
+
+        @Override
+        protected ArrayList<Customer> doWork() {
+            ArrayList<Customer> ls = new ArrayList<>();
+
+            try {
+                ls = db.getCustomers();
+                Customer o = new Customer();
+                o.setCode("All");
+                o.setName("All");
+                ls.add(0, o);
+            }
+
+            catch (Exception e) {
+                Log.e(CLASS_NAME, e.getMessage(), e);
+            }
+
+            finally {
+                db.close();
+            }
+
+            return ls;
+        }
+
+        @Override
+        protected void thenDoUiRelatedWork(ArrayList<Customer> ls) {
+            CustomerAdapter adapter = new CustomerAdapter(DoctorListActivity.this, ls);
+            Spinner spcust = (Spinner) dlg.findViewById(R.id.spcust);
+            spcust.setAdapter(adapter);
             Utils.unlockScreenOrientation(DoctorListActivity.this);
         }
     }
@@ -384,7 +488,7 @@ public class DoctorListActivity extends AppCompatActivity
 
             if ("success".equals(s)) {
                 Toast.makeText(DoctorListActivity.this, "Doctor(s) have been successfully deleted", Toast.LENGTH_SHORT).show();
-                load(query, day);
+                load();
             }
 
             else {

@@ -30,6 +30,10 @@ public class Customer {
 
     @Override
     public String toString() {
+        if ("All".equals(getCode())) {
+            return getCode();
+        }
+
         return String.format("%s - %s", getCode(), getName());
     }
 }

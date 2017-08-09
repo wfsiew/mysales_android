@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
+import com.mysales.mysales_android.models.Customer;
 import com.mysales.mysales_android.models.Doctor;
 
 import java.util.ArrayList;
@@ -27,8 +28,9 @@ public class WriteDBHelper extends SQLiteOpenHelper {
         db_path = Environment.getExternalStorageDirectory() + "/mysales/data.db";
     }
 
-    public void openDataBase() throws SQLException {
-        db = SQLiteDatabase.openDatabase(db_path, null, SQLiteDatabase.OPEN_READWRITE);
+    public void openDataBase(boolean read) throws SQLException {
+        int r = read ? SQLiteDatabase.OPEN_READONLY : SQLiteDatabase.OPEN_READWRITE;
+        db = SQLiteDatabase.openDatabase(db_path, null, r);
     }
 
     @Override
@@ -50,9 +52,26 @@ public class WriteDBHelper extends SQLiteOpenHelper {
 
     }
 
+    public ArrayList<Customer> getCustomers() {
+        ArrayList<Customer> ls = new ArrayList<>();
+        openDataBase(true);
+        Cursor cur = db.rawQuery("select distinct cust_code, cust_name from doctor order by cust_name", null);
+        cur.moveToFirst();
+
+        while (cur.isAfterLast() == false) {
+            Customer o = new Customer();
+            o.setCode(cur.getString(cur.getColumnIndex("cust_code")));
+            o.setName(cur.getString(cur.getColumnIndex("cust_name")));
+            ls.add(o);
+            cur.moveToNext();
+        }
+
+        return ls;
+    }
+
     public Doctor getDoctor(int id) {
         Doctor o = new Doctor();
-        openDataBase();
+        openDataBase(true);
         StringBuffer sb = new StringBuffer();
 
         sb.append("select id, name, phone, hp, email, cust_code, cust_name, ")
@@ -94,7 +113,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
     }
 
     public void createDoctor(Doctor doctor) {
-        openDataBase();
+        openDataBase(false);
         StringBuffer sb = new StringBuffer();
 
         sb.append("insert into doctor (name, phone, hp, email, cust_code, cust_name, ")
@@ -115,7 +134,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
     }
 
     public void updateDoctor(Doctor doctor) {
-        openDataBase();
+        openDataBase(false);
         StringBuffer sb = new StringBuffer();
 
         sb.append("update doctor set name = ?, phone = ?, hp = ?, email = ?, cust_code = ?, cust_name = ?, ")
@@ -136,14 +155,15 @@ public class WriteDBHelper extends SQLiteOpenHelper {
     }
 
     public void deletedoctors(String s) {
-        openDataBase();
+        openDataBase(false);
         String q = "delete from doctor where id in (" + s + ")";
         db.execSQL(q);
     }
 
-    public ArrayList<Doctor> filterDoctor(String search, String day) {
+    public ArrayList<Doctor> filterDoctor(String search, String day, String custCode, String custName) {
         ArrayList<Doctor> ls = new ArrayList<>();
-        openDataBase();
+        boolean where = false;
+        openDataBase(true);
         StringBuffer sb = new StringBuffer();
 
         sb.append("select id, name, phone, hp, email, cust_code, cust_name, ")
@@ -161,11 +181,25 @@ public class WriteDBHelper extends SQLiteOpenHelper {
             if (!Utils.isEmpty(day)) {
                 sb.append(" and " + getDay(day) + " = 1");
             }
+
+            if (!Utils.isEmpty(custCode) && !Utils.isEmpty(custName)) {
+                sb.append(" and cust_code = '" + custCode + "'")
+                        .append(" and cust_name = '" + custName + "'");
+            }
         }
 
         else {
             if (!Utils.isEmpty(day)) {
+                where = true;
                 sb.append(" where " + getDay(day) + " = 1");
+            }
+
+            if (!Utils.isEmpty(custCode) && !Utils.isEmpty(custName)) {
+                if (!where)
+                    sb.append(" where ");
+
+                sb.append("cust_code = '" + custCode + "'")
+                        .append(" and cust_name = '" + custName + "'");
             }
         }
 
