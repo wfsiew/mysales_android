@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +41,8 @@ public class DoctorDetailActivity extends AppCompatActivity {
     private TextView txtname, txtcust, txtphone, txtmobile, txtemail, txtasst1, txtasst2, txtasst3, txtday;
     private TextView lbphone, lbmobile, lbemail, lbasst1, lbasst2, lbasst3;
     private View vphone, vmobile, vemail, vasst1, vasst2, vasst3;
-    private Button btnedit, btndel, btnphone, btnmobile, btnmobilesms;
+    private Button btnedit, btndel;
+    private ImageButton btnphone, btnmobile, btnmobilesms;
     private View lyphone, lymobile;
 
     private WriteDBHelper db;
@@ -100,9 +102,9 @@ public class DoctorDetailActivity extends AppCompatActivity {
 
         btnedit = (Button) findViewById(R.id.btnedit);
         btndel = (Button) findViewById(R.id.btndel);
-        btnphone = (Button) findViewById(R.id.btnphone);
-        btnmobile = (Button) findViewById(R.id.btnmobile);
-        btnmobilesms = (Button) findViewById(R.id.btnmobilesms);
+        btnphone = (ImageButton) findViewById(R.id.btnphone);
+        btnmobile = (ImageButton) findViewById(R.id.btnmobile);
+        btnmobilesms = (ImageButton) findViewById(R.id.btnmobilesms);
 
         btnedit.setOnClickListener(new View.OnClickListener() {
             @Override

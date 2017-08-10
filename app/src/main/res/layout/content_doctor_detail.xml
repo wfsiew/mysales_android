@@ -56,12 +56,11 @@
 
         </LinearLayout>
 
-        <Button
+        <ImageButton
             android:id="@+id/btnphone"
-            android:background="@drawable/ic_phone"
-            android:layout_weight=".2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
+            android:src="@drawable/ic_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -98,19 +97,17 @@
 
         </LinearLayout>
 
-        <Button
+        <ImageButton
             android:id="@+id/btnmobile"
-            android:background="@drawable/ic_phone"
-            android:layout_weight=".2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
+            android:src="@drawable/ic_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnmobilesms"
-            android:background="@drawable/ic_sms"
-            android:layout_weight=".2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
+            android:src="@drawable/ic_sms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
