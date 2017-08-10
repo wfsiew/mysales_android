@@ -186,6 +186,7 @@ public class DoctorDetailActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EDITDOCTOR_REQUEST_CODE && resultCode == EditDoctorActivity.SUBMITTED) {
+            submit = SUBMITTED;
             setResult(submit);
             load();
         }
@@ -379,6 +380,7 @@ public class DoctorDetailActivity extends AppCompatActivity {
             }
 
             if ("success".equals(s)) {
+                submit = SUBMITTED;
                 Toast.makeText(DoctorDetailActivity.this, "Doctor have been successfully deleted", Toast.LENGTH_SHORT).show();
                 setResult(SUBMITTED);
                 finish();

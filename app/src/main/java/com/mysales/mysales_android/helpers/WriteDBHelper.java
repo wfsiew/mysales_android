@@ -235,6 +235,20 @@ public class WriteDBHelper extends SQLiteOpenHelper {
             o.setAssistant1(cur.getString(cur.getColumnIndex("asst1")));
             o.setAssistant2(cur.getString(cur.getColumnIndex("asst2")));
             o.setAssistant3(cur.getString(cur.getColumnIndex("asst3")));
+            o.setMonMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("mon_mor"))));
+            o.setMonAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("mon_aft"))));
+            o.setTueMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("tue_mor"))));
+            o.setTueAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("tue_aft"))));
+            o.setWedMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("wed_mor"))));
+            o.setWedAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("wed_aft"))));
+            o.setThuMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("thu_mor"))));
+            o.setThuAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("thu_aft"))));
+            o.setFriMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("fri_mor"))));
+            o.setFriAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("fri_aft"))));
+            o.setSatMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sat_mor"))));
+            o.setSatAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sat_aft"))));
+            o.setSunAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_mor"))));
+            o.setSunAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_aft"))));
             ls.add(o);
             cur.moveToNext();
         }

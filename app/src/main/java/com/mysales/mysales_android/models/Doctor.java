@@ -227,6 +227,44 @@ public class Doctor {
         this.sunAft = sunAft;
     }
 
+    public String getShortDays() {
+        String s = "";
+        StringBuffer sb = new StringBuffer();
+        if (isMonMor() || isMonAft()) {
+            sb.append("Mon | ");
+        }
+
+        if (isTueMor() || isTueAft()) {
+            sb.append("Tue | ");
+        }
+
+        if (isWedMor() || isWedAft()) {
+            sb.append("Wed | ");
+        }
+
+        if (isThuMor() || isThuAft()) {
+            sb.append("Thu | ");
+        }
+
+        if (isFriMor() || isFriAft()) {
+            sb.append("Fri | ");
+        }
+
+        if (isSatMor() || isSatAft()) {
+            sb.append("Sat | ");
+        }
+
+        if (isSunMor() || isSunAft()) {
+            sb.append("Sun | ");
+        }
+
+        if (sb.length() > 0) {
+            s = sb.substring(0, sb.length() - 3);
+        }
+
+        return s;
+    }
+
     public String getDays() {
         String s = "";
         StringBuffer sb = new StringBuffer();

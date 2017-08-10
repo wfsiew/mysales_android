@@ -15,6 +15,7 @@ import com.mysales.mysales_android.R;
 import com.mysales.mysales_android.helpers.Utils;
 import com.mysales.mysales_android.models.Doctor;
 
+import java.security.GuardedObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -41,13 +42,14 @@ public class DoctorAdapter extends ArrayAdapter<Doctor> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
         v = inflater.inflate(R.layout.list_doctor, null);
-        ImageView imphone = (ImageView) v.findViewById(R.id.imphone);
-        ImageView imhp = (ImageView) v.findViewById(R.id.imhp);
-        ImageView imemail = (ImageView) v.findViewById(R.id.imemail);
         TextView txtname = (TextView) v.findViewById(R.id.txtname);
         TextView txtphone = (TextView) v.findViewById(R.id.txtphone);
         TextView txthp = (TextView) v.findViewById(R.id.txthp);
         TextView txtemail = (TextView) v.findViewById(R.id.txtemail);
+        TextView lbphone = (TextView) v.findViewById(R.id.lbphone);
+        TextView lbhp = (TextView) v.findViewById(R.id.lbhp);
+        TextView lbemail = (TextView) v.findViewById(R.id.lbemail);
+        TextView txtday = (TextView) v.findViewById(R.id.txtday);
         TextView txtcust = (TextView) v.findViewById(R.id.txtcust);
         CheckBox chk = (CheckBox) v.findViewById(R.id.chk);
 
@@ -56,15 +58,17 @@ public class DoctorAdapter extends ArrayAdapter<Doctor> {
         txtphone.setText(o.getPhone());
         txthp.setText(o.getHp());
         txtemail.setText(o.getEmail());
+        txtday.setText(o.getShortDays());
         txtcust.setText(String.format("%s - %s", o.getCustCode(), o.getCustName()));
         chk.setVisibility(showSelect ? View.VISIBLE : View.GONE);
 
-        imphone.setVisibility(Utils.isEmpty(o.getPhone()) ? View.GONE : View.VISIBLE);
-        imhp.setVisibility(Utils.isEmpty(o.getHp()) ? View.GONE : View.VISIBLE);
-        imemail.setVisibility(Utils.isEmpty(o.getEmail()) ? View.GONE : View.VISIBLE);
-        txtphone.setVisibility(imphone.getVisibility());
-        txthp.setVisibility(imhp.getVisibility());
-        txtemail.setVisibility(imemail.getVisibility());
+        lbphone.setVisibility(Utils.isEmpty(o.getPhone()) ? View.GONE : View.VISIBLE);
+        lbhp.setVisibility(Utils.isEmpty(o.getHp()) ? View.GONE : View.VISIBLE);
+        lbemail.setVisibility(Utils.isEmpty(o.getEmail()) ? View.GONE : View.VISIBLE);
+        txtphone.setVisibility(lbphone.getVisibility());
+        txthp.setVisibility(lbhp.getVisibility());
+        txtemail.setVisibility(lbemail.getVisibility());
+        txtday.setVisibility(Utils.isEmpty(o.getShortDays()) ? View.GONE : View.VISIBLE);
 
         chk.setTag(position);
         chk.setOnClickListener(new View.OnClickListener() {
