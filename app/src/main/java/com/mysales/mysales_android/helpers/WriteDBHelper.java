@@ -110,7 +110,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
         o.setFriAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("fri_aft"))));
         o.setSatMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sat_mor"))));
         o.setSatAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sat_aft"))));
-        o.setSunAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_mor"))));
+        o.setSunMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_mor"))));
         o.setSunAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_aft"))));
 
         return o;
