@@ -24,18 +24,20 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/btnok"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:text="OK" />
-
-        <Button
             android:id="@+id/btncancel"
+            style="@style/AppTheme.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
             android:text="Cancel" />
+
+        <Button
+            android:id="@+id/btnok"
+            style="@style/AppTheme.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:text="OK" />
 
     </LinearLayout>
 
