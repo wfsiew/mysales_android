@@ -58,7 +58,8 @@
 
         <ImageButton
             android:id="@+id/btnphone"
-            android:src="@drawable/ic_phone"
+            android:theme="@style/AppTheme.ButtonOK"
+            android:src="@drawable/ic_call"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -99,13 +100,15 @@
 
         <ImageButton
             android:id="@+id/btnmobile"
-            android:src="@drawable/ic_phone"
+            android:theme="@style/AppTheme.ButtonOK"
+            android:src="@drawable/ic_call"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <ImageButton
             android:id="@+id/btnmobilesms"
-            android:src="@drawable/ic_sms"
+            android:theme="@style/AppTheme.ButtonOK"
+            android:src="@drawable/ic_sms_white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

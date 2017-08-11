@@ -31,6 +31,7 @@
 
         <Button
             android:id="@+id/btnedit"
+            android:theme="@style/AppTheme.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
@@ -38,6 +39,7 @@
 
         <Button
             android:id="@+id/btndel"
+            android:theme="@style/AppTheme.ButtonDel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
