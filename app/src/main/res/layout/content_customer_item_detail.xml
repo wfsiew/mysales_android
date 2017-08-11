@@ -15,13 +15,22 @@
 
     <TextView
         android:id="@+id/txtmain"
+        android:textSize="14sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
-        style="?android:listSeparatorTextViewStyle" />
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <View
+        android:background="@color/colorPrimary"
+        android:paddingBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
 
     <ListView
         android:id="@+id/listitem"
+        android:divider="@color/colorAccent"
+        android:dividerHeight="1dp"
         style="@android:style/Widget.ListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
