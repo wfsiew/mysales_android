@@ -27,7 +27,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/colorAccent" />
 
     <LinearLayout
         android:id="@+id/lyphone"
@@ -69,7 +69,7 @@
         android:id="@+id/vphone"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/colorAccent" />
 
     <LinearLayout
         android:id="@+id/lymobile"
@@ -118,7 +118,7 @@
         android:id="@+id/vmobile"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/colorAccent" />
 
     <TextView
         android:id="@+id/txtemail"
@@ -137,7 +137,7 @@
         android:id="@+id/vemail"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/colorAccent" />
 
     <TextView
         android:id="@+id/txtasst1"
@@ -156,7 +156,7 @@
         android:id="@+id/vasst1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/colorAccent" />
 
     <TextView
         android:id="@+id/txtasst2"
@@ -175,7 +175,7 @@
         android:id="@+id/vasst2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/colorAccent" />
 
     <TextView
         android:id="@+id/txtasst3"
@@ -194,7 +194,7 @@
         android:id="@+id/vasst3"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/colorAccent" />
 
     <TextView
         android:id="@+id/txtday"
