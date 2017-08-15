@@ -29,6 +29,7 @@ import com.mysales.mysales_android.helpers.Utils;
 import com.mysales.mysales_android.helpers.WriteDBHelper;
 import com.mysales.mysales_android.models.Customer;
 import com.mysales.mysales_android.models.Doctor;
+import com.mysales.mysales_android.models.SwipeDetector;
 import com.mysales.mysales_android.tasks.CommonTask;
 
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class DoctorListActivity extends AppCompatActivity
     private String day;
 
     private WriteDBHelper db;
+    private SwipeDetector swipeDetector;
 
     private PopulateCustomerTask populateCustomerTask = null;
     private DoctorListTask doctorListTask = null;
@@ -91,6 +93,8 @@ public class DoctorListActivity extends AppCompatActivity
         listdoctor = findViewById(R.id.listdoctor);
         empty = findViewById(R.id.empty);
 
+        swipeDetector = new SwipeDetector();
+        listdoctor.setOnTouchListener(swipeDetector);
         listdoctor.setEmptyView(empty);
         listdoctor.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -108,6 +112,18 @@ public class DoctorListActivity extends AppCompatActivity
         listdoctor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                if (swipeDetector.swipeDetected()) {
+                    if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
+                        Toast.makeText(getApplicationContext(), "swipe RL", Toast.LENGTH_LONG).show();
+                    }
+
+                    else {
+                        Toast.makeText(getApplicationContext(), "swipe LR", Toast.LENGTH_LONG).show();
+                    }
+
+                    return;
+                }
+
                 if (showSelect) {
                     DoctorAdapter x = (DoctorAdapter) listdoctor.getAdapter();
                     x.select(view, position);
