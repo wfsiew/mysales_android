@@ -27,17 +27,18 @@ public class CustomerItemDetailAdapter extends ArrayAdapter<CustomerItem> {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View v = convertView;
-        CustomerItem o = (CustomerItem) getItem(position);
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        View v;
+        CustomerItem o = getItem(position);
 
         if (o.isHeader()) {
             v = inflater.inflate(R.layout.section_customer_item_detail_header, null);
 
             v.setClickable(false);
 
-            TextView header = (TextView) v.findViewById(R.id.section_header);
+            TextView header = v.findViewById(R.id.section_header);
             header.setText(o.getHeader());
         }
 
@@ -46,7 +47,7 @@ public class CustomerItemDetailAdapter extends ArrayAdapter<CustomerItem> {
 
             v.setClickable(false);
 
-            TextView footer = (TextView) v.findViewById(R.id.section_val);
+            TextView footer = v.findViewById(R.id.section_val);
 
             String val = String.format("%d (Sales Unit) %d (Bonus Unit) %s (Sales Value)", o.getSumunit(),
                     o.getSumbonus(), Utils.formatDouble(o.getSumvalue()));
@@ -54,9 +55,9 @@ public class CustomerItemDetailAdapter extends ArrayAdapter<CustomerItem> {
         }
 
         else {
-            v = inflater.inflate(R.layout.list_customer_item_detail, null);
-            TextView txtitem = (TextView) v.findViewById(R.id.txtitem);
-            TextView txtval = (TextView) v.findViewById(R.id.txtval);
+            v = inflater.inflate(R.layout.list_customer_item_detail,null);
+            TextView txtitem = v.findViewById(R.id.txtitem);
+            TextView txtval = v.findViewById(R.id.txtval);
 
             txtitem.setText(o.getItem());
             String val = String.format("%d (Sales Unit) %d (Bonus Unit) %s (Sales Value)", o.getUnit(),

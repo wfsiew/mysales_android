@@ -80,18 +80,18 @@ public class CustomerItemRecyclerViewAdapter
         return values == null ? 0 :  values.length;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        public final View view;
-        public final TextView txtcustname;
-        public final TextView txtcustcode;
-        public Customer item;
+        final View view;
+        final TextView txtcustname;
+        final TextView txtcustcode;
+        Customer item;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             this.view = view;
-            txtcustname = (TextView) view.findViewById(R.id.txtcustname);
-            txtcustcode = (TextView) view.findViewById(R.id.txtcustcode);
+            txtcustname = view.findViewById(R.id.txtcustname);
+            txtcustcode = view.findViewById(R.id.txtcustcode);
         }
     }
 }

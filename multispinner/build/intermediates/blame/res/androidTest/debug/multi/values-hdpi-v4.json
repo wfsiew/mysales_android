@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "/home/wfsiew/learn/mysales_android/C:\\learn\\mysales_android\\multispinner\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-hdpi-v4\\values-hdpi-v4.xml",
+        "outputFile": "C:\\learn\\mysales_android\\multispinner\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-hdpi-v4\\values-hdpi-v4.xml",
         "map": [
             {
                 "to": {
@@ -12,59 +12,7 @@
                     "endOffset": 327
                 },
                 "from": {
-                    "file": "/home/wfsiew/learn/mysales_android/C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-24.2.1.aar\\a61f74f813448a92984bb3d29fb7e9c5\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
-                    "position": {
-                        "startLine": 2,
-                        "startColumn": 4,
-                        "startOffset": 55,
-                        "endLine": 6,
-                        "endColumn": 13,
-                        "endOffset": 327
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "outputFile": "/home/wfsiew/learn/mysales_android/multispinner/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-hdpi-v4/values-hdpi-v4.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endLine": 6,
-                    "endColumn": 13,
-                    "endOffset": 327
-                },
-                "from": {
-                    "file": "/home/wfsiew/.gradle/caches/transforms-1/files-1.1/appcompat-v7-24.2.1.aar/968697f84d00b844c25a16ad3a2bab06/res/values-hdpi-v4/values-hdpi-v4.xml",
-                    "position": {
-                        "startLine": 2,
-                        "startColumn": 4,
-                        "startOffset": 55,
-                        "endLine": 6,
-                        "endColumn": 13,
-                        "endOffset": 327
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "outputFile": "/home/wfsiew/learn/mysales_android/C:\\home\\wfsiew\\learn\\mysales_android\\multispinner\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-hdpi-v4\\values-hdpi-v4.xml",
-        "map": [
-            {
-                "to": {
-                    "startLine": 2,
-                    "startColumn": 4,
-                    "startOffset": 55,
-                    "endLine": 6,
-                    "endColumn": 13,
-                    "endOffset": 327
-                },
-                "from": {
-                    "file": "/home/wfsiew/learn/mysales_android/C:\\home\\wfsiew\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-24.2.1.aar\\968697f84d00b844c25a16ad3a2bab06\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
+                    "file": "C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-24.2.1.aar\\cb41b141bb24e0afb0cd3ae4e7ac16db\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,

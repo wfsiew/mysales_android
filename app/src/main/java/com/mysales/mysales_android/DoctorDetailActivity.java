@@ -1,6 +1,5 @@
 package com.mysales.mysales_android;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,7 +62,7 @@ public class DoctorDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -73,22 +70,22 @@ public class DoctorDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        txtname = (TextView) findViewById(R.id.txtname);
-        txtcust = (TextView) findViewById(R.id.txtcust);
-        txtphone = (TextView) findViewById(R.id.txtphone);
-        txtmobile = (TextView) findViewById(R.id.txtmobile);
-        txtemail = (TextView) findViewById(R.id.txtemail);
-        txtasst1 = (TextView) findViewById(R.id.txtasst1);
-        txtasst2 = (TextView) findViewById(R.id.txtasst2);
-        txtasst3 = (TextView) findViewById(R.id.txtasst3);
-        txtday = (TextView) findViewById(R.id.txtday);
+        txtname = findViewById(R.id.txtname);
+        txtcust = findViewById(R.id.txtcust);
+        txtphone = findViewById(R.id.txtphone);
+        txtmobile = findViewById(R.id.txtmobile);
+        txtemail = findViewById(R.id.txtemail);
+        txtasst1 = findViewById(R.id.txtasst1);
+        txtasst2 = findViewById(R.id.txtasst2);
+        txtasst3 = findViewById(R.id.txtasst3);
+        txtday = findViewById(R.id.txtday);
 
-        lbphone = (TextView) findViewById(R.id.lbphone);
-        lbmobile = (TextView) findViewById(R.id.lbmobile);
-        lbemail = (TextView) findViewById(R.id.lbemail);
-        lbasst1 = (TextView) findViewById(R.id.lbasst1);
-        lbasst2 = (TextView) findViewById(R.id.lbasst2);
-        lbasst3 = (TextView) findViewById(R.id.lbasst3);
+        lbphone = findViewById(R.id.lbphone);
+        lbmobile = findViewById(R.id.lbmobile);
+        lbemail = findViewById(R.id.lbemail);
+        lbasst1 = findViewById(R.id.lbasst1);
+        lbasst2 = findViewById(R.id.lbasst2);
+        lbasst3 = findViewById(R.id.lbasst3);
 
         vphone = findViewById(R.id.vphone);
         vmobile = findViewById(R.id.vmobile);
@@ -100,11 +97,11 @@ public class DoctorDetailActivity extends AppCompatActivity {
         lyphone = findViewById(R.id.lyphone);
         lymobile = findViewById(R.id.lymobile);
 
-        btnedit = (Button) findViewById(R.id.btnedit);
-        btndel = (Button) findViewById(R.id.btndel);
-        btnphone = (ImageButton) findViewById(R.id.btnphone);
-        btnmobile = (ImageButton) findViewById(R.id.btnmobile);
-        btnmobilesms = (ImageButton) findViewById(R.id.btnmobilesms);
+        btnedit = findViewById(R.id.btnedit);
+        btndel = findViewById(R.id.btndel);
+        btnphone = findViewById(R.id.btnphone);
+        btnmobile = findViewById(R.id.btnmobile);
+        btnmobilesms = findViewById(R.id.btnmobilesms);
 
         btnedit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -264,13 +261,13 @@ public class DoctorDetailActivity extends AppCompatActivity {
 
         private static final String CLASS_NAME = "LoadDoctorTask";
 
-        public LoadDoctorTask() {
+        LoadDoctorTask() {
             super(DoctorDetailActivity.this);
         }
 
         @Override
         protected Doctor doWork() {
-            Doctor o = null;
+            Doctor o;
 
             try {
                 o = db.getDoctor(id);
@@ -348,14 +345,14 @@ public class DoctorDetailActivity extends AppCompatActivity {
 
         private static final String CLASS_NAME = "DeleteDoctorTask";
 
-        public DeleteDoctorTask(String ids) {
+        DeleteDoctorTask(String ids) {
             super(DoctorDetailActivity.this);
             this.ids = ids;
         }
 
         @Override
         protected String doWork() {
-            String r = null;
+            String r;
 
             try {
                 db.deletedoctors(ids);

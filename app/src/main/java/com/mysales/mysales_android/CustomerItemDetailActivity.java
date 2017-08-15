@@ -49,7 +49,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_item_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -163,7 +163,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
         private ArrayList<String> la;
         private CustomerAddress addr;
 
-        public CustomerItemDetailTask(String cust, String custName, String period, String year, String sort) {
+        CustomerItemDetailTask(String cust, String custName, String period, String year, String sort) {
             super(CustomerItemDetailActivity.this);
             this.cust = cust;
             this.custName = custName;
@@ -259,40 +259,40 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
             CustomerItemDetailAdapter adapter = new CustomerItemDetailAdapter(CustomerItemDetailActivity.this, lk);
             listitem.setAdapter(adapter);
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
 
             if (la.size() > 0) {
                 ArrayList<CustomerItem> lx = m.get(la.get(0));
                 if (lx.size() > 0) {
                     CustomerItem x = lx.get(0);
-                    sb.append(x.getCode() + " - " + x.getName() + "\n");
+                    sb.append(x.getCode()).append(" - ").append(x.getName()).append("\n");
 
                     if (!Utils.isEmpty(addr.getAddr1()))
                         sb.append(addr.getAddr1());
 
                     if (!Utils.isEmpty(addr.getAddr2())) {
                         if (sb.toString().trim().endsWith(",")) {
-                            sb.append(" " + addr.getAddr2());
+                            sb.append(" ").append(addr.getAddr2());
                         }
 
                         else {
-                            sb.append(", " + addr.getAddr2());
+                            sb.append(", ").append(addr.getAddr2());
                         }
                     }
 
                     if (!Utils.isEmpty(addr.getAddr3())) {
                         if (sb.toString().trim().endsWith(",")) {
-                            sb.append(" " + addr.getAddr3());
+                            sb.append(" ").append(addr.getAddr3());
                         }
 
                         else {
-                            sb.append(", " + addr.getAddr3());
+                            sb.append(", ").append(addr.getAddr3());
                         }
                     }
 
-                    sb.append("\nTotal Sales Unit: " + r.getTotalSalesUnit() + "\n")
-                            .append("Total Bonus Unit: " + r.getTotalBonusUnit() + "\n")
-                            .append("Total Sales Value: " + Utils.formatDouble(r.getTotalSalesValue()) + "\n");
+                    sb.append("\nTotal Sales Unit: ").append(r.getTotalSalesUnit()).append("\n")
+                            .append("Total Bonus Unit: ").append(r.getTotalBonusUnit()).append("\n")
+                            .append("Total Sales Value: ").append(Utils.formatDouble(r.getTotalSalesValue())).append("\n");
                     txtmain.setText(sb.toString());
                 }
             }

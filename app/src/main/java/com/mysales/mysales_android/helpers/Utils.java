@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.os.Build;
 import android.view.View;
 
@@ -41,7 +42,7 @@ public class Utils {
         return getEmptyString(v, "");
     }
 
-    public static String getEmptyString(String v, String k) {
+    private static String getEmptyString(String v, String k) {
         String s = v;
         if (isEmpty(v) || "null".equalsIgnoreCase(v)) {
             s = k;
@@ -51,18 +52,16 @@ public class Utils {
     }
 
     public static String getMessages(ArrayList<String> ls) {
-        String s = null;
         if (ls.isEmpty()) {
-            return s;
+            return null;
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < ls.size(); i++) {
             sb.append(String.format("%d. %s\n", i + 1, ls.get(i)));
         }
 
-        s = sb.toString();
-        return s;
+        return sb.toString();
     }
 
     public static String formatDouble(double x) {
@@ -81,13 +80,12 @@ public class Utils {
     }
 
     public static int getInt(boolean x) {
-        int a = x == true ? 1 : 0;
+        int a = x ? 1 : 0;
         return a;
     }
 
-    public static boolean getBoolean(int x) {
-        boolean a = x == 1 ? true : false;
-        return a;
+    static boolean getBoolean(int x) {
+        return x == 1;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -139,5 +137,9 @@ public class Utils {
             return;
 
         a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+    }
+
+    static void closeCursor(Cursor cur) {
+        if (cur != null) cur.close();
     }
 }

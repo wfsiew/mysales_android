@@ -17,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mysales.mysales_android.adapters.CustomerAdapter;
-import com.mysales.mysales_android.adapters.DoctorAdapter;
 import com.mysales.mysales_android.helpers.DBHelper;
 import com.mysales.mysales_android.helpers.Utils;
 import com.mysales.mysales_android.helpers.WriteDBHelper;
@@ -61,7 +60,7 @@ public class EditDoctorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_doctor);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -70,30 +69,30 @@ public class EditDoctorActivity extends AppCompatActivity {
         }
 
         progresssubmit = findViewById(R.id.progresssubmit);
-        txtcust = (TextView) findViewById(R.id.txtcust);
-        txtname = (EditText) findViewById(R.id.txtname);
-        txtphone = (EditText) findViewById(R.id.txtphone);
-        txtmobile = (EditText) findViewById(R.id.txtmobile);
-        txtemail = (EditText) findViewById(R.id.txtemail);
-        txtasst1 = (EditText) findViewById(R.id.txtasst1);
-        txtasst2 = (EditText) findViewById(R.id.txtasst2);
-        txtasst3 = (EditText) findViewById(R.id.txtasst3);
-        spcust = (Spinner) findViewById(R.id.spcust);
+        txtcust = findViewById(R.id.txtcust);
+        txtname = findViewById(R.id.txtname);
+        txtphone = findViewById(R.id.txtphone);
+        txtmobile = findViewById(R.id.txtmobile);
+        txtemail = findViewById(R.id.txtemail);
+        txtasst1 = findViewById(R.id.txtasst1);
+        txtasst2 = findViewById(R.id.txtasst2);
+        txtasst3 = findViewById(R.id.txtasst3);
+        spcust = findViewById(R.id.spcust);
 
-        chkmon_mor = (CheckBox) findViewById(R.id.chkmon_morning);
-        chkmon_aft = (CheckBox) findViewById(R.id.chkmon_afternoon);
-        chktue_mor = (CheckBox) findViewById(R.id.chktue_morning);
-        chktue_aft = (CheckBox) findViewById(R.id.chktue_afternoon);
-        chkwed_mor = (CheckBox) findViewById(R.id.chkwed_morning);
-        chkwed_aft = (CheckBox) findViewById(R.id.chkwed_afternoon);
-        chkthu_mor = (CheckBox) findViewById(R.id.chkthu_morning);
-        chkthu_aft = (CheckBox) findViewById(R.id.chkthu_afternoon);
-        chkfri_mor = (CheckBox) findViewById(R.id.chkfri_morning);
-        chkfri_aft = (CheckBox) findViewById(R.id.chkfri_afternoon);
-        chksat_mor = (CheckBox) findViewById(R.id.chksat_morning);
-        chksat_aft = (CheckBox) findViewById(R.id.chksat_afternoon);
-        chksun_mor = (CheckBox) findViewById(R.id.chksun_morning);
-        chksun_aft = (CheckBox) findViewById(R.id.chksun_afternoon);
+        chkmon_mor = findViewById(R.id.chkmon_morning);
+        chkmon_aft = findViewById(R.id.chkmon_afternoon);
+        chktue_mor = findViewById(R.id.chktue_morning);
+        chktue_aft = findViewById(R.id.chktue_afternoon);
+        chkwed_mor = findViewById(R.id.chkwed_morning);
+        chkwed_aft = findViewById(R.id.chkwed_afternoon);
+        chkthu_mor = findViewById(R.id.chkthu_morning);
+        chkthu_aft = findViewById(R.id.chkthu_afternoon);
+        chkfri_mor = findViewById(R.id.chkfri_morning);
+        chkfri_aft = findViewById(R.id.chkfri_afternoon);
+        chksat_mor = findViewById(R.id.chksat_morning);
+        chksat_aft = findViewById(R.id.chksat_afternoon);
+        chksun_mor = findViewById(R.id.chksun_morning);
+        chksun_aft = findViewById(R.id.chksun_afternoon);
 
         id = getIntent().getIntExtra(ARG_DOCTOR_ID, 0);
 
@@ -216,13 +215,13 @@ public class EditDoctorActivity extends AppCompatActivity {
 
         private static final String CLASS_NAME = "LoadDoctorTask";
 
-        public LoadDoctorTask() {
+        LoadDoctorTask() {
             super(EditDoctorActivity.this);
         }
 
         @Override
         protected Doctor doWork() {
-            Doctor o = null;
+            Doctor o;
 
             try {
                 o = db.getDoctor(id);
@@ -282,7 +281,7 @@ public class EditDoctorActivity extends AppCompatActivity {
 
         private static final String CLASS_NAME = "PopulateCustomerTask";
 
-        public PopulateCustomerTask() {
+        PopulateCustomerTask() {
             super(EditDoctorActivity.this);
         }
 
@@ -326,7 +325,7 @@ public class EditDoctorActivity extends AppCompatActivity {
 
         private static final String CLASS_NAME = "UpdateDoctorTask";
 
-        public UpdateDoctorTask(Doctor doctor) {
+        UpdateDoctorTask(Doctor doctor) {
             super(EditDoctorActivity.this);
             this.doctor = doctor;
             Utils.showProgress(true, progresssubmit, EditDoctorActivity.this);
@@ -334,7 +333,7 @@ public class EditDoctorActivity extends AppCompatActivity {
 
         @Override
         protected String doWork() {
-            String r = null;
+            String r;
 
             try {
                 db.updateDoctor(doctor);

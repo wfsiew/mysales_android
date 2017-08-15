@@ -28,7 +28,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
         db_path = Environment.getExternalStorageDirectory() + "/mysales/data.db";
     }
 
-    public void openDataBase(boolean read) throws SQLException {
+    private void openDataBase(boolean read) throws SQLException {
         int r = read ? SQLiteDatabase.OPEN_READONLY : SQLiteDatabase.OPEN_READWRITE;
         db = SQLiteDatabase.openDatabase(db_path, null, r);
     }
@@ -54,16 +54,24 @@ public class WriteDBHelper extends SQLiteOpenHelper {
 
     public ArrayList<Customer> getCustomers() {
         ArrayList<Customer> ls = new ArrayList<>();
-        openDataBase(true);
-        Cursor cur = db.rawQuery("select distinct cust_code, cust_name from doctor order by cust_name", null);
-        cur.moveToFirst();
+        Cursor cur = null;
 
-        while (cur.isAfterLast() == false) {
-            Customer o = new Customer();
-            o.setCode(cur.getString(cur.getColumnIndex("cust_code")));
-            o.setName(cur.getString(cur.getColumnIndex("cust_name")));
-            ls.add(o);
-            cur.moveToNext();
+        try {
+            openDataBase(true);
+            cur = db.rawQuery("select distinct cust_code, cust_name from doctor order by cust_name", null);
+            cur.moveToFirst();
+
+            while (!cur.isAfterLast()) {
+                Customer o = new Customer();
+                o.setCode(cur.getString(cur.getColumnIndex("cust_code")));
+                o.setName(cur.getString(cur.getColumnIndex("cust_name")));
+                ls.add(o);
+                cur.moveToNext();
+            }
+        }
+
+        finally {
+            Utils.closeCursor(cur);
         }
 
         return ls;
@@ -71,54 +79,61 @@ public class WriteDBHelper extends SQLiteOpenHelper {
 
     public Doctor getDoctor(int id) {
         Doctor o = new Doctor();
-        openDataBase(true);
-        StringBuffer sb = new StringBuffer();
+        Cursor cur = null;
 
-        sb.append("select id, name, phone, hp, email, cust_code, cust_name, ")
-                .append("asst1, asst2, asst3, ")
-                .append("mon_mor, mon_aft, tue_mor, tue_aft, ")
-                .append("wed_mor, wed_aft, thu_mor, thu_aft, ")
-                .append("fri_mor, fri_aft, sat_mor, sat_aft, sun_mor, sun_aft ")
-                .append("from doctor ")
-                .append("where id = " + id);
-        String q = sb.toString();
-        Cursor cur = db.rawQuery(q, null);
-        cur.moveToFirst();
+        try {
+            openDataBase(true);
+            StringBuilder sb = new StringBuilder();
 
-        if (cur.isAfterLast())
-            return o;
+            sb.append("select id, name, phone, hp, email, cust_code, cust_name, ")
+                    .append("asst1, asst2, asst3, ")
+                    .append("mon_mor, mon_aft, tue_mor, tue_aft, ")
+                    .append("wed_mor, wed_aft, thu_mor, thu_aft, ")
+                    .append("fri_mor, fri_aft, sat_mor, sat_aft, sun_mor, sun_aft ")
+                    .append("from doctor ").append("where id = ").append(id);
+            String q = sb.toString();
+            cur = db.rawQuery(q, null);
+            cur.moveToFirst();
 
-        o.setId(cur.getInt(cur.getColumnIndex("id")));
-        o.setName(cur.getString(cur.getColumnIndex("name")));
-        o.setPhone(cur.getString(cur.getColumnIndex("phone")));
-        o.setHp(cur.getString(cur.getColumnIndex("hp")));
-        o.setEmail(cur.getString(cur.getColumnIndex("email")));
-        o.setCustCode(cur.getString(cur.getColumnIndex("cust_code")));
-        o.setCustName(cur.getString(cur.getColumnIndex("cust_name")));
-        o.setAssistant1(cur.getString(cur.getColumnIndex("asst1")));
-        o.setAssistant2(cur.getString(cur.getColumnIndex("asst2")));
-        o.setAssistant3(cur.getString(cur.getColumnIndex("asst3")));
-        o.setMonMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("mon_mor"))));
-        o.setMonAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("mon_aft"))));
-        o.setTueMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("tue_mor"))));
-        o.setTueAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("tue_aft"))));
-        o.setWedMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("wed_mor"))));
-        o.setWedAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("wed_aft"))));
-        o.setThuMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("thu_mor"))));
-        o.setThuAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("thu_aft"))));
-        o.setFriMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("fri_mor"))));
-        o.setFriAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("fri_aft"))));
-        o.setSatMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sat_mor"))));
-        o.setSatAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sat_aft"))));
-        o.setSunMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_mor"))));
-        o.setSunAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_aft"))));
+            if (cur.isAfterLast())
+                return o;
+
+            o.setId(cur.getInt(cur.getColumnIndex("id")));
+            o.setName(cur.getString(cur.getColumnIndex("name")));
+            o.setPhone(cur.getString(cur.getColumnIndex("phone")));
+            o.setHp(cur.getString(cur.getColumnIndex("hp")));
+            o.setEmail(cur.getString(cur.getColumnIndex("email")));
+            o.setCustCode(cur.getString(cur.getColumnIndex("cust_code")));
+            o.setCustName(cur.getString(cur.getColumnIndex("cust_name")));
+            o.setAssistant1(cur.getString(cur.getColumnIndex("asst1")));
+            o.setAssistant2(cur.getString(cur.getColumnIndex("asst2")));
+            o.setAssistant3(cur.getString(cur.getColumnIndex("asst3")));
+            o.setMonMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("mon_mor"))));
+            o.setMonAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("mon_aft"))));
+            o.setTueMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("tue_mor"))));
+            o.setTueAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("tue_aft"))));
+            o.setWedMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("wed_mor"))));
+            o.setWedAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("wed_aft"))));
+            o.setThuMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("thu_mor"))));
+            o.setThuAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("thu_aft"))));
+            o.setFriMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("fri_mor"))));
+            o.setFriAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("fri_aft"))));
+            o.setSatMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sat_mor"))));
+            o.setSatAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sat_aft"))));
+            o.setSunMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_mor"))));
+            o.setSunAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_aft"))));
+        }
+
+        finally {
+            Utils.closeCursor(cur);
+        }
 
         return o;
     }
 
     public void createDoctor(Doctor doctor) {
         openDataBase(false);
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append("insert into doctor (name, phone, hp, email, cust_code, cust_name, ")
                 .append("asst1, asst2, asst3, ")
@@ -142,7 +157,7 @@ public class WriteDBHelper extends SQLiteOpenHelper {
 
     public void updateDoctor(Doctor doctor) {
         openDataBase(false);
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append("update doctor set name = ?, phone = ?, hp = ?, email = ?, cust_code = ?, cust_name = ?, ")
                 .append("asst1 = ?, asst2 = ?, asst3 = ?, ")
@@ -172,85 +187,92 @@ public class WriteDBHelper extends SQLiteOpenHelper {
     public ArrayList<Doctor> filterDoctor(String search, String day, String custCode, String custName) {
         ArrayList<Doctor> ls = new ArrayList<>();
         boolean where = false;
-        openDataBase(true);
-        StringBuffer sb = new StringBuffer();
+        Cursor cur = null;
 
-        sb.append("select id, name, phone, hp, email, cust_code, cust_name, ")
-                .append("asst1, asst2, asst3, ")
-                .append("mon_mor, mon_aft, tue_mor, tue_aft, ")
-                .append("wed_mor, wed_aft, thu_mor, thu_aft, ")
-                .append("fri_mor, fri_aft, sat_mor, sat_aft, sun_mor, sun_aft ")
-                .append("from doctor");
+        try {
+            openDataBase(true);
+            StringBuilder sb = new StringBuilder();
 
-        if (!Utils.isEmpty(search)) {
-            sb.append(" where (name like '%" + search + "%' or")
-                    .append(" phone like '%" + search + "%' or")
-                    .append(" hp like '%" + search + "%' or")
-                    .append(" email like '%" + search + "%' or")
-                    .append(" asst1 like '%" + search + "%' or")
-                    .append(" asst2 like '%" + search + "%' or")
-                    .append(" asst3 like '%" + search + "%')");
+            sb.append("select id, name, phone, hp, email, cust_code, cust_name, ")
+                    .append("asst1, asst2, asst3, ")
+                    .append("mon_mor, mon_aft, tue_mor, tue_aft, ")
+                    .append("wed_mor, wed_aft, thu_mor, thu_aft, ")
+                    .append("fri_mor, fri_aft, sat_mor, sat_aft, sun_mor, sun_aft ")
+                    .append("from doctor");
 
-            if (!Utils.isEmpty(day)) {
-                sb.append(" and " + getDay(day) + " = 1");
+            if (!Utils.isEmpty(search)) {
+                sb.append(" where (name like '%").append(search).append("%' or")
+                        .append(" phone like '%").append(search).append("%' or")
+                        .append(" hp like '%").append(search).append("%' or")
+                        .append(" email like '%").append(search).append("%' or")
+                        .append(" asst1 like '%").append(search).append("%' or")
+                        .append(" asst2 like '%").append(search).append("%' or")
+                        .append(" asst3 like '%").append(search).append("%')");
+
+                if (!Utils.isEmpty(day)) {
+                    sb.append(" and ").append(getDay(day)).append(" = 1");
+                }
+
+                if (!Utils.isEmpty(custCode) && !Utils.isEmpty(custName)) {
+                    sb.append(" and cust_code = '").append(custCode).append("'")
+                            .append(" and cust_name = '").append(custName).append("'");
+                }
+            } else {
+                if (!Utils.isEmpty(day)) {
+                    where = true;
+                    sb.append(" where ").append(getDay(day)).append(" = 1");
+                }
+
+                if (!Utils.isEmpty(custCode) && !Utils.isEmpty(custName)) {
+                    if (!where)
+                        sb.append(" where ");
+
+                    sb.append("cust_code = '").append(custCode).append("'")
+                            .append(" and cust_name = '")
+                            .append(custName).append("'");
+                }
             }
 
-            if (!Utils.isEmpty(custCode) && !Utils.isEmpty(custName)) {
-                sb.append(" and cust_code = '" + custCode + "'")
-                        .append(" and cust_name = '" + custName + "'");
+            sb.append(" order by name");
+
+            String q = sb.toString();
+            //System.out.println("===========" + q);
+            cur = db.rawQuery(q, null);
+            cur.moveToFirst();
+
+            while (!cur.isAfterLast()) {
+                Doctor o = new Doctor();
+                o.setId(cur.getInt(cur.getColumnIndex("id")));
+                o.setName(cur.getString(cur.getColumnIndex("name")));
+                o.setPhone(cur.getString(cur.getColumnIndex("phone")));
+                o.setHp(cur.getString(cur.getColumnIndex("hp")));
+                o.setEmail(cur.getString(cur.getColumnIndex("email")));
+                o.setCustCode(cur.getString(cur.getColumnIndex("cust_code")));
+                o.setCustName(cur.getString(cur.getColumnIndex("cust_name")));
+                o.setAssistant1(cur.getString(cur.getColumnIndex("asst1")));
+                o.setAssistant2(cur.getString(cur.getColumnIndex("asst2")));
+                o.setAssistant3(cur.getString(cur.getColumnIndex("asst3")));
+                o.setMonMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("mon_mor"))));
+                o.setMonAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("mon_aft"))));
+                o.setTueMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("tue_mor"))));
+                o.setTueAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("tue_aft"))));
+                o.setWedMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("wed_mor"))));
+                o.setWedAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("wed_aft"))));
+                o.setThuMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("thu_mor"))));
+                o.setThuAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("thu_aft"))));
+                o.setFriMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("fri_mor"))));
+                o.setFriAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("fri_aft"))));
+                o.setSatMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sat_mor"))));
+                o.setSatAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sat_aft"))));
+                o.setSunAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_mor"))));
+                o.setSunAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_aft"))));
+                ls.add(o);
+                cur.moveToNext();
             }
         }
 
-        else {
-            if (!Utils.isEmpty(day)) {
-                where = true;
-                sb.append(" where " + getDay(day) + " = 1");
-            }
-
-            if (!Utils.isEmpty(custCode) && !Utils.isEmpty(custName)) {
-                if (!where)
-                    sb.append(" where ");
-
-                sb.append("cust_code = '" + custCode + "'")
-                        .append(" and cust_name = '" + custName + "'");
-            }
-        }
-
-        sb.append(" order by name");
-
-        String q = sb.toString();
-        //System.out.println("===========" + q);
-        Cursor cur = db.rawQuery(q, null);
-        cur.moveToFirst();
-
-        while (cur.isAfterLast() == false) {
-            Doctor o = new Doctor();
-            o.setId(cur.getInt(cur.getColumnIndex("id")));
-            o.setName(cur.getString(cur.getColumnIndex("name")));
-            o.setPhone(cur.getString(cur.getColumnIndex("phone")));
-            o.setHp(cur.getString(cur.getColumnIndex("hp")));
-            o.setEmail(cur.getString(cur.getColumnIndex("email")));
-            o.setCustCode(cur.getString(cur.getColumnIndex("cust_code")));
-            o.setCustName(cur.getString(cur.getColumnIndex("cust_name")));
-            o.setAssistant1(cur.getString(cur.getColumnIndex("asst1")));
-            o.setAssistant2(cur.getString(cur.getColumnIndex("asst2")));
-            o.setAssistant3(cur.getString(cur.getColumnIndex("asst3")));
-            o.setMonMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("mon_mor"))));
-            o.setMonAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("mon_aft"))));
-            o.setTueMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("tue_mor"))));
-            o.setTueAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("tue_aft"))));
-            o.setWedMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("wed_mor"))));
-            o.setWedAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("wed_aft"))));
-            o.setThuMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("thu_mor"))));
-            o.setThuAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("thu_aft"))));
-            o.setFriMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("fri_mor"))));
-            o.setFriAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("fri_aft"))));
-            o.setSatMor(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sat_mor"))));
-            o.setSatAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sat_aft"))));
-            o.setSunAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_mor"))));
-            o.setSunAft(Utils.getBoolean(cur.getInt(cur.getColumnIndex("sun_aft"))));
-            ls.add(o);
-            cur.moveToNext();
+        finally {
+            Utils.closeCursor(cur);
         }
 
         return ls;

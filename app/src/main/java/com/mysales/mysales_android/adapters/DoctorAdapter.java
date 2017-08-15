@@ -1,5 +1,6 @@
 package com.mysales.mysales_android.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -38,22 +39,22 @@ public class DoctorAdapter extends ArrayAdapter<Doctor> {
         this.items = items;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View v = convertView;
-        v = inflater.inflate(R.layout.list_doctor, null);
-        TextView txtname = (TextView) v.findViewById(R.id.txtname);
-        TextView txtphone = (TextView) v.findViewById(R.id.txtphone);
-        TextView txthp = (TextView) v.findViewById(R.id.txthp);
-        TextView txtemail = (TextView) v.findViewById(R.id.txtemail);
-        TextView lbphone = (TextView) v.findViewById(R.id.lbphone);
-        TextView lbhp = (TextView) v.findViewById(R.id.lbhp);
-        TextView lbemail = (TextView) v.findViewById(R.id.lbemail);
-        TextView txtday = (TextView) v.findViewById(R.id.txtday);
-        TextView txtcust = (TextView) v.findViewById(R.id.txtcust);
-        CheckBox chk = (CheckBox) v.findViewById(R.id.chk);
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        View v = inflater.inflate(R.layout.list_doctor, null);
+        TextView txtname = v.findViewById(R.id.txtname);
+        TextView txtphone = v.findViewById(R.id.txtphone);
+        TextView txthp = v.findViewById(R.id.txthp);
+        TextView txtemail = v.findViewById(R.id.txtemail);
+        TextView lbphone = v.findViewById(R.id.lbphone);
+        TextView lbhp = v.findViewById(R.id.lbhp);
+        TextView lbemail = v.findViewById(R.id.lbemail);
+        TextView txtday = v.findViewById(R.id.txtday);
+        TextView txtcust = v.findViewById(R.id.txtcust);
+        CheckBox chk = v.findViewById(R.id.chk);
 
-        Doctor o = (Doctor) getItem(position);
+        Doctor o = getItem(position);
         txtname.setText(o.getName());
         txtphone.setText(o.getPhone());
         txthp.setText(o.getHp());
@@ -92,36 +93,35 @@ public class DoctorAdapter extends ArrayAdapter<Doctor> {
         if (selected == null)
             return null;
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (Integer i : selected.keySet()) {
-            sb.append(i + ",");
+            sb.append(i).append(",");
         }
 
-        String r = sb.substring(0, sb.length() - 1);
-        return r;
+        return sb.substring(0, sb.length() - 1);
     }
 
     public String getIds() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (Doctor o : items) {
-            sb.append(o.getId() + ",");
+            sb.append(o.getId()).append(",");
         }
 
-        String r = sb.substring(0, sb.length() - 1);
-        return r;
+        return sb.substring(0, sb.length() - 1);
     }
 
     public void select(View v, int position) {
         if (v != null) {
-            CheckBox chk = (CheckBox) v.findViewById(R.id.chk);
+            CheckBox chk = v.findViewById(R.id.chk);
             chk.setChecked(!chk.isChecked());
             doSelect(chk, position);
         }
     }
 
+    @SuppressLint("UseSparseArrays")
     private void doSelect(CheckBox chk, int position) {
         if (selected == null) {
-            selected = new HashMap<Integer, Integer>();
+            selected = new HashMap<>();
         }
 
         if (chk.isChecked()) {

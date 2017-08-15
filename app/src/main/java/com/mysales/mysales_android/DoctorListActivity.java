@@ -67,7 +67,7 @@ public class DoctorListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,10 +86,10 @@ public class DoctorListActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         lybottom = findViewById(R.id.lybottom);
-        btndel = (Button) findViewById(R.id.btndel);
-        btndelall = (Button) findViewById(R.id.btndelall);
+        btndel = findViewById(R.id.btndel);
+        btndelall = findViewById(R.id.btndelall);
         progress = findViewById(R.id.progress);
-        listdoctor = (ListView) findViewById(R.id.listdoctor);
+        listdoctor = findViewById(R.id.listdoctor);
         empty = findViewById(R.id.empty);
 
         listdoctor.setEmptyView(empty);
@@ -161,10 +161,10 @@ public class DoctorListActivity extends AppCompatActivity
         dlg.setContentView(R.layout.dialog_days);
         dlg.setTitle("Please Select");
 
-        Spinner spcust = (Spinner)  dlg.findViewById(R.id.spcust);
-        Spinner spday = (Spinner) dlg.findViewById(R.id.spday);
-        Button btnok = (Button) dlg.findViewById(R.id.btnok);
-        Button btncancel = (Button) dlg.findViewById(R.id.btncancel);
+        Spinner spcust = dlg.findViewById(R.id.spcust);
+        Spinner spday = dlg.findViewById(R.id.spday);
+        Button btnok = dlg.findViewById(R.id.btnok);
+        Button btncancel = dlg.findViewById(R.id.btncancel);
 
         spcust.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -225,7 +225,7 @@ public class DoctorListActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
@@ -250,7 +250,7 @@ public class DoctorListActivity extends AppCompatActivity
             super.onBackPressed();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -361,7 +361,7 @@ public class DoctorListActivity extends AppCompatActivity
 
         private static final String CLASS_NAME = "DoctorListTask";
 
-        public DoctorListTask() {
+        DoctorListTask() {
             super(DoctorListActivity.this);
             showProgress(true);
         }
@@ -407,7 +407,7 @@ public class DoctorListActivity extends AppCompatActivity
 
         private static final String CLASS_NAME = "PopulateCustomerTask";
 
-        public PopulateCustomerTask() {
+        PopulateCustomerTask() {
             super(DoctorListActivity.this);
         }
 
@@ -437,7 +437,7 @@ public class DoctorListActivity extends AppCompatActivity
         @Override
         protected void thenDoUiRelatedWork(ArrayList<Customer> ls) {
             CustomerAdapter adapter = new CustomerAdapter(DoctorListActivity.this, ls);
-            Spinner spcust = (Spinner) dlg.findViewById(R.id.spcust);
+            Spinner spcust = dlg.findViewById(R.id.spcust);
             spcust.setAdapter(adapter);
             Utils.unlockScreenOrientation(DoctorListActivity.this);
             load();
@@ -450,14 +450,14 @@ public class DoctorListActivity extends AppCompatActivity
 
         private static final String CLASS_NAME = "DeleteDoctorTask";
 
-        public DeleteDoctorTask(String ids) {
+        DeleteDoctorTask(String ids) {
             super(DoctorListActivity.this);
             this.ids = ids;
         }
 
         @Override
         protected String doWork() {
-            String r = null;
+            String r;
 
             try {
                 db.deletedoctors(ids);

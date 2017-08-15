@@ -61,7 +61,7 @@ public class AddDoctorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_doctor);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -253,7 +253,7 @@ public class AddDoctorActivity extends AppCompatActivity {
 
         private static final String CLASS_NAME = "PopulateCustomerTask";
 
-        public PopulateCustomerTask() {
+        PopulateCustomerTask() {
             super(AddDoctorActivity.this);
         }
 
@@ -292,7 +292,7 @@ public class AddDoctorActivity extends AppCompatActivity {
 
         private static final String CLASS_NAME = "AddDoctorTask";
 
-        public AddDoctorTask(Doctor doctor) {
+        AddDoctorTask(Doctor doctor) {
             super(AddDoctorActivity.this);
             this.doctor = doctor;
             Utils.showProgress(true, progresssubmit, AddDoctorActivity.this);
@@ -300,7 +300,7 @@ public class AddDoctorActivity extends AppCompatActivity {
 
         @Override
         protected String doWork() {
-            String r = null;
+            String r;
 
             try {
                 db.createDoctor(doctor);

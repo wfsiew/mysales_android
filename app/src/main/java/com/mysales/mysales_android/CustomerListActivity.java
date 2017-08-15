@@ -55,13 +55,13 @@ public class CustomerListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
         progress = findViewById(R.id.progress);
-        listcust = (RecyclerView) findViewById(R.id.listcust);
-        empty = (TextView) findViewById(R.id.empty);
+        listcust = findViewById(R.id.listcust);
+        empty = findViewById(R.id.empty);
 
         cust = getIntent().getStringExtra(ARG_CUST);
         item = getIntent().getStringExtra(ARG_ITEM);
@@ -162,7 +162,7 @@ public class CustomerListActivity extends AppCompatActivity {
         private String year;
         private String sort;
 
-        public  CustomerListTask(String cust, String item, String period, String year, String sort) {
+        CustomerListTask(String cust, String item, String period, String year, String sort) {
             super(CustomerListActivity.this);
             this.cust = cust;
             this.item = item;
