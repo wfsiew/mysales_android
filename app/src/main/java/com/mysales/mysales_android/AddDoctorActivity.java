@@ -70,31 +70,31 @@ public class AddDoctorActivity extends AppCompatActivity {
         }
 
         progresssubmit = findViewById(R.id.progresssubmit);
-        txttitle = (TextView) findViewById(R.id.txttitle);
-        txtcust = (TextView) findViewById(R.id.txtcust);
-        txtname = (EditText) findViewById(R.id.txtname);
-        txtphone = (EditText) findViewById(R.id.txtphone);
-        txtmobile = (EditText) findViewById(R.id.txtmobile);
-        txtemail = (EditText) findViewById(R.id.txtemail);
-        txtasst1 = (EditText) findViewById(R.id.txtasst1);
-        txtasst2 = (EditText) findViewById(R.id.txtasst2);
-        txtasst3 = (EditText) findViewById(R.id.txtasst3);
-        spcust = (Spinner) findViewById(R.id.spcust);
+        txttitle = findViewById(R.id.txttitle);
+        txtcust = findViewById(R.id.txtcust);
+        txtname = findViewById(R.id.txtname);
+        txtphone = findViewById(R.id.txtphone);
+        txtmobile = findViewById(R.id.txtmobile);
+        txtemail = findViewById(R.id.txtemail);
+        txtasst1 = findViewById(R.id.txtasst1);
+        txtasst2 = findViewById(R.id.txtasst2);
+        txtasst3 = findViewById(R.id.txtasst3);
+        spcust = findViewById(R.id.spcust);
 
-        chkmon_mor = (CheckBox) findViewById(R.id.chkmon_morning);
-        chkmon_aft = (CheckBox) findViewById(R.id.chkmon_afternoon);
-        chktue_mor = (CheckBox) findViewById(R.id.chktue_morning);
-        chktue_aft = (CheckBox) findViewById(R.id.chktue_afternoon);
-        chkwed_mor = (CheckBox) findViewById(R.id.chkwed_morning);
-        chkwed_aft = (CheckBox) findViewById(R.id.chkwed_afternoon);
-        chkthu_mor = (CheckBox) findViewById(R.id.chkthu_morning);
-        chkthu_aft = (CheckBox) findViewById(R.id.chkthu_afternoon);
-        chkfri_mor = (CheckBox) findViewById(R.id.chkfri_morning);
-        chkfri_aft = (CheckBox) findViewById(R.id.chkfri_afternoon);
-        chksat_mor = (CheckBox) findViewById(R.id.chksat_morning);
-        chksat_aft = (CheckBox) findViewById(R.id.chksat_afternoon);
-        chksun_mor = (CheckBox) findViewById(R.id.chksun_morning);
-        chksun_aft = (CheckBox) findViewById(R.id.chksun_afternoon);
+        chkmon_mor = findViewById(R.id.chkmon_morning);
+        chkmon_aft = findViewById(R.id.chkmon_afternoon);
+        chktue_mor = findViewById(R.id.chktue_morning);
+        chktue_aft = findViewById(R.id.chktue_afternoon);
+        chkwed_mor = findViewById(R.id.chkwed_morning);
+        chkwed_aft = findViewById(R.id.chkwed_afternoon);
+        chkthu_mor = findViewById(R.id.chkthu_morning);
+        chkthu_aft = findViewById(R.id.chkthu_afternoon);
+        chkfri_mor = findViewById(R.id.chkfri_morning);
+        chkfri_aft = findViewById(R.id.chkfri_afternoon);
+        chksat_mor = findViewById(R.id.chksat_morning);
+        chksat_aft = findViewById(R.id.chksat_afternoon);
+        chksun_mor = findViewById(R.id.chksun_morning);
+        chksun_aft = findViewById(R.id.chksun_afternoon);
 
         cust = getIntent().getStringExtra(ARG_CUST);
         custName = getIntent().getStringExtra(ARG_CUST_NAME);

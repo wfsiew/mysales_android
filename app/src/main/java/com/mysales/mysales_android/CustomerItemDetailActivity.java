@@ -58,8 +58,8 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
         }
 
         progress = findViewById(R.id.progress);
-        txtmain = (TextView) findViewById(R.id.txtmain);
-        listitem = (ListView) findViewById(R.id.listitem);
+        txtmain = findViewById(R.id.txtmain);
+        listitem = findViewById(R.id.listitem);
 
         cust = getIntent().getStringExtra(ARG_CUST);
         custName = getIntent().getStringExtra(ARG_CUST_NAME);
