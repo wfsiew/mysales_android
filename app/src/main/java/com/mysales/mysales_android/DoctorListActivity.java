@@ -486,7 +486,7 @@ public class DoctorListActivity extends AppCompatActivity
 
             if ("success".equals(s)) {
                 Toast.makeText(DoctorListActivity.this, "Doctor(s) have been successfully deleted", Toast.LENGTH_SHORT).show();
-                init();
+                DoctorListActivity.this.init();
             }
 
             else {
