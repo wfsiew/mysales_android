@@ -5,7 +5,7 @@ def readfile():
     wb = load_workbook('sample.xlsx', read_only=True)
     ws = wb['Sheet2']
 
-    m = 8428
+    m = 8211
 
     i = 0
     for row in ws.rows:
