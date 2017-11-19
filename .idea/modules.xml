@@ -3,8 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/learn-mysales_android.iml" filepath="$PROJECT_DIR$/learn-mysales_android.iml" />
       <module fileurl="file://$PROJECT_DIR$/multispinner/multispinner.iml" filepath="$PROJECT_DIR$/multispinner/multispinner.iml" />
       <module fileurl="file://$PROJECT_DIR$/mysales_android.iml" filepath="$PROJECT_DIR$/mysales_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/mysales_android-app.iml" filepath="$PROJECT_DIR$/app/mysales_android-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/multispinner/mysales_android-multispinner.iml" filepath="$PROJECT_DIR$/multispinner/mysales_android-multispinner.iml" />
     </modules>
   </component>
 </project>
