@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\learn\\mysales_android\\multispinner\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v26\\values-v26.xml",
+            "outputFile": "/home/wfsiew/learn/mysales_android/multispinner/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-v26/values-v26.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.1.aar\\6456a1fdfe15367bc6563409265f51f9\\res\\values-v26\\values-v26.xml",
+                    "source": "/home/wfsiew/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.0.1.aar/02edacfcb6b8dbb9596c4687deb958e9/res/values-v26/values-v26.xml",
                     "from": {
                         "startLines": "2,3,4,8,12,16",
                         "startColumns": "4,4,4,4,4,4",
@@ -23,7 +23,50 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\design-26.0.1.aar\\e74a16459975fa110218ed6e97533af2\\res\\values-v26\\values-v26.xml",
+                    "source": "/home/wfsiew/.gradle/caches/transforms-1/files-1.1/design-26.0.1.aar/3fde6bdca7fa57c226d46baebc98c82f/res/values-v26/values-v26.xml",
+                    "from": {
+                        "startLines": "2,6",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,299",
+                        "endLines": "5,6",
+                        "endColumns": "12,96",
+                        "endOffsets": "294,391"
+                    },
+                    "to": {
+                        "startLines": "16,21",
+                        "startColumns": "4,4",
+                        "startOffsets": "896,1233",
+                        "endLines": "19,21",
+                        "endColumns": "12,96",
+                        "endOffsets": "1135,1325"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/wfsiew/learn/mysales_android/C:\\learn\\mysales_android\\multispinner\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v26\\values-v26.xml",
+            "map": [
+                {
+                    "source": "/home/wfsiew/learn/mysales_android/C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.1.aar\\6456a1fdfe15367bc6563409265f51f9\\res\\values-v26\\values-v26.xml",
+                    "from": {
+                        "startLines": "2,3,4,8,12,16",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "55,130,217,431,657,896",
+                        "endLines": "2,3,7,11,15,16",
+                        "endColumns": "74,86,12,12,12,92",
+                        "endOffsets": "125,212,426,652,891,984"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,8,12,20",
+                        "startColumns": "4,4,4,4,4,4",
+                        "startOffsets": "55,130,217,431,657,1140",
+                        "endLines": "2,3,7,11,15,20",
+                        "endColumns": "74,86,12,12,12,92",
+                        "endOffsets": "125,212,426,652,891,1228"
+                    }
+                },
+                {
+                    "source": "/home/wfsiew/learn/mysales_android/C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\design-26.0.1.aar\\e74a16459975fa110218ed6e97533af2\\res\\values-v26\\values-v26.xml",
                     "from": {
                         "startLines": "2,6",
                         "startColumns": "4,4",

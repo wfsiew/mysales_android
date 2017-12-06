@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\learn\\mysales_android\\multispinner\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v23\\values-v23.xml",
+            "outputFile": "/home/wfsiew/learn/mysales_android/multispinner/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-v23/values-v23.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.1.aar\\6456a1fdfe15367bc6563409265f51f9\\res\\values-v23\\values-v23.xml",
+                    "source": "/home/wfsiew/.gradle/caches/transforms-1/files-1.1/appcompat-v7-26.0.1.aar/02edacfcb6b8dbb9596c4687deb958e9/res/values-v23/values-v23.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,19,32,33,34,35,36",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
@@ -15,7 +15,42 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\cardview-v7-26.0.1.aar\\b2e1e6636d9ec93df5337ea8cb5021fd\\res\\values-v23\\values-v23.xml",
+                    "source": "/home/wfsiew/.gradle/caches/transforms-1/files-1.1/cardview-v7-26.0.1.aar/eb470fa9289587535e8be2a2b5b8f286/res/values-v23/values-v23.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "4",
+                        "endColumns": "12",
+                        "endOffsets": "200"
+                    },
+                    "to": {
+                        "startLines": "37",
+                        "startColumns": "4",
+                        "startOffsets": "2646",
+                        "endLines": "39",
+                        "endColumns": "12",
+                        "endOffsets": "2791"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/wfsiew/learn/mysales_android/C:\\learn\\mysales_android\\multispinner\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v23\\values-v23.xml",
+            "map": [
+                {
+                    "source": "/home/wfsiew/learn/mysales_android/C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.1.aar\\6456a1fdfe15367bc6563409265f51f9\\res\\values-v23\\values-v23.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,19,32,33,34,35,36",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,190,325,400,487,1277,2079,2206,2311,2426,2533",
+                        "endLines": "2,3,4,5,18,31,32,33,34,35,36",
+                        "endColumns": "134,134,74,86,12,12,126,104,114,106,112",
+                        "endOffsets": "185,320,395,482,1272,2074,2201,2306,2421,2528,2641"
+                    }
+                },
+                {
+                    "source": "/home/wfsiew/learn/mysales_android/C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\cardview-v7-26.0.1.aar\\b2e1e6636d9ec93df5337ea8cb5021fd\\res\\values-v23\\values-v23.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
