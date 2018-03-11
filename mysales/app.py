@@ -32,6 +32,9 @@ def getcellvalue(ws, i, dic, key, otherkeys=[]):
     if v is None:
         raise Exception('unable to find column {0} in row {1}'.format(key, i))
 
+    if v == 0 and key == 'customer code':
+        v = 'PHARMASERV'
+
     return v
 
 def getlastrow(ws):
@@ -43,12 +46,10 @@ def getlastrow(ws):
 
         i += 1
 
-    print(i)
     return i
 
 def getvalue(c):
     k = c.value
-    print(k)
     if k in [None, 'NULL']:
         k = 0
 
@@ -96,6 +97,7 @@ def procsheet(sheetname, wb, o):
     n = getlastrow(ws)
     dic = getheader(ws)
     m = n + 1
+    print('sheet {0} lastrow: {1}'.format(sheetname, n))
 
     x = getcellvalue
     print('start sheet {0}'.format(sheetname))
@@ -108,7 +110,7 @@ def procsheet(sheetname, wb, o):
             x(ws, i, dic, 'customer code'),
             x(ws, i, dic, 'data'),
 
-            x(ws, i, dic, 'customer name', ['Hospital Name']),
+            x(ws, i, dic, 'customer name', ['hospital name']),
             x(ws, i, dic, 'clinic'),
             x(ws, i, dic, 'ims class 2'),
             x(ws, i, dic, 'customer group 1'),
@@ -138,7 +140,8 @@ def procsheet(sheetname, wb, o):
         )
 
         o.write(c + '\n')
-        print('done sheet: {0}'.format(sheetname))
+        
+    print('done sheet: {0}'.format(sheetname))
 
 def readfile():
     o = open('data.sql', 'w')
