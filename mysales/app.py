@@ -1,5 +1,145 @@
 from openpyxl import load_workbook
 
+STMT = ('insert into sales(ims_class1, year, period, cust_code, data, cust_name, clinic, ims_class2, cust_group1, cust_group2, cust_group3, '
+        'corporate_group, cust_addr1, cust_addr2, cust_addr3, '
+        'postal_code, area, territory, state, manager, detail_man_name, detail_man_code, '
+        'zp_item_code, product_group, item_name, sales_unit, bonus_unit, sales_value) values('
+        "'{0}', {1}, {2}, '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', "
+        "'{11}', '{12}', '{13}', '{14}', "
+        "'{15}', '{16}', '{17}', '{18}', '{19}', '{20}', '{21}', "
+        "'{22}', '{23}', '{24}', {25}, {26}, {27})"
+)
+
+def getsimilarheader(dic, key, otherkeys=[]):
+    k = None
+    if key in dic:
+        k = dic[key]
+
+    else:
+        for s in otherkeys:
+            if s in dic:
+                k = dic[s]
+                break
+
+    return k
+
+def getcellvalue(ws, i, dic, key, otherkeys=[]):
+    j = getsimilarheader(dic, key, otherkeys)
+    v = 0
+    if j is not None:
+        v = getvalue(ws.cell(row=i, column=j))
+
+    if v is None:
+        raise Exception('unable to find column {0} in row {1}'.format(key, i))
+
+    return v
+
+def getlastrow(ws):
+    i = 0
+    for row in ws.iter_rows():
+        k = row[0].value
+        if k in [None, 'NULL']:
+            break
+
+        i += 1
+
+    print(i)
+    return i
+
+def getvalue(c):
+    k = c.value
+    print(k)
+    if k in [None, 'NULL']:
+        k = 0
+
+    elif isinstance(k, str) and k.find("'") >= 0:
+        k = k.replace("'", "''")
+
+    return k
+
+def getheader(ws):
+    dic = {}
+    i = 0
+    for row in ws.iter_rows():
+        i += 1
+        if i > 1: break
+        j = 0
+        for cell in row:
+            j += 1
+            k = getvalue(cell)
+            dic[k.lower()] = j
+
+    return dic
+
+def readfile2():
+    o = open('data2.sql', 'w')
+    wb = load_workbook('file2.xlsx')
+    ls = ['2012', '2013', '2014', '2015', '2016', '2017', '2018']
+    for s in ls:
+        procsheet(s, wb, o)
+
+    wb.close()
+    o.close()
+
+def readfile1():
+    o = open('data1.sql', 'w')
+    wb = load_workbook('file1.xlsx')
+    ls = ['2012', '2013', '2014', '2015', '2016', '2017 nov', 'Dec', 'Jan', 'Feb']
+    for s in ls:
+        procsheet(s, wb, o)
+
+    wb.close()
+    o.close()
+
+def procsheet(sheetname, wb, o):
+    ws = wb[sheetname]
+    n = getlastrow(ws)
+    dic = getheader(ws)
+    m = n + 1
+
+    x = getcellvalue
+    print('start sheet {0}'.format(sheetname))
+
+    for i in range(2, m):
+        c = STMT.format(
+            x(ws, i, dic, 'ims class 1'), 
+            x(ws, i, dic, 'year'),
+            x(ws, i, dic, 'period'),
+            x(ws, i, dic, 'customer code'),
+            x(ws, i, dic, 'data'),
+
+            x(ws, i, dic, 'customer name', ['Hospital Name']),
+            x(ws, i, dic, 'clinic'),
+            x(ws, i, dic, 'ims class 2'),
+            x(ws, i, dic, 'customer group 1'),
+            x(ws, i, dic, 'customer group 2'),
+
+            x(ws, i, dic, 'customer group 3'),
+            x(ws, i, dic, 'corporate group'),
+            x(ws, i, dic, 'customer address 1', ['address 1']),
+            x(ws, i, dic, 'customer address 2', ['address 2']),
+            x(ws, i, dic, 'customer address 3', ['address 3']),
+
+            x(ws, i, dic, 'postal zip code', ['post code']),
+            x(ws, i, dic, 'area'),
+            x(ws, i, dic, 'territory'),
+            x(ws, i, dic, 'state', 'address 4'),
+            x(ws, i, dic, 'manager'),
+
+            x(ws, i, dic, 'detailman name'),
+            x(ws, i, dic, 'detailman code'),
+            x(ws, i, dic, 'zp item code'),
+            x(ws, i, dic, 'product group'),
+            x(ws, i, dic, 'item name', ['product name']),
+
+            x(ws, i, dic, 'sales units', ['sales qty', 'sales units sum']),
+            x(ws, i, dic, 'bonus units sum'),
+            x(ws, i, dic, 'sales value', ['sales value sum'])
+        )
+
+        o.write(c + '\n')
+        print('done sheet: {0}'.format(sheetname))
+
 def readfile():
     o = open('data.sql', 'w')
     wb = load_workbook('sample.xlsx', read_only=True)
@@ -43,4 +183,6 @@ def readfile():
     o.close()
 
 if __name__ == '__main__':
-    readfile()
+    #readfile()
+    readfile1()
+    readfile2()
