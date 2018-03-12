@@ -41,12 +41,14 @@ public class CustomerListActivity extends AppCompatActivity {
 
     private String cust;
     private String item;
+    private String productgroup;
     private String period;
     private String year;
     private String sort = "";
 
     public static final String ARG_CUST = "cust_name";
     public static final String ARG_ITEM = "item_name";
+    public static final String ARG_PRODUCT_GROUP = "product_group";
     public static final String ARG_PERIOD = "period";
     public static final String ARG_YEAR = "year";
 
@@ -65,6 +67,7 @@ public class CustomerListActivity extends AppCompatActivity {
 
         cust = getIntent().getStringExtra(ARG_CUST);
         item = getIntent().getStringExtra(ARG_ITEM);
+        productgroup = getIntent().getStringExtra(ARG_PRODUCT_GROUP);
         period = getIntent().getStringExtra(ARG_PERIOD);
         year = getIntent().getStringExtra(ARG_YEAR);
 
@@ -140,7 +143,7 @@ public class CustomerListActivity extends AppCompatActivity {
     }
 
     private void load() {
-        customerListTask = new CustomerListTask(cust, item, period, year, sort);
+        customerListTask = new CustomerListTask(cust, item, productgroup, period, year, sort);
         Needle.onBackgroundThread()
                 .withTaskType("customerList")
                 .execute(customerListTask);
@@ -158,14 +161,16 @@ public class CustomerListActivity extends AppCompatActivity {
 
         private String cust;
         private String item;
+        private String productgroup;
         private String period;
         private String year;
         private String sort;
 
-        CustomerListTask(String cust, String item, String period, String year, String sort) {
+        CustomerListTask(String cust, String item, String productgroup, String period, String year, String sort) {
             super(CustomerListActivity.this);
             this.cust = cust;
             this.item = item;
+            this.productgroup = productgroup;
             this.period = period;
             this.year = year;
             this.sort = sort;
@@ -177,7 +182,7 @@ public class CustomerListActivity extends AppCompatActivity {
             ArrayList<Customer> ls = new ArrayList<>();
 
             try {
-                ls = db.filterCustomer(cust, item, period, year, sort);
+                ls = db.filterCustomer(cust, item, productgroup, period, year, sort);
             }
 
             catch (Exception e) {

@@ -119,7 +119,28 @@ public class DBHelper extends SQLiteOpenHelper {
         return ls;
     }
 
-    public ArrayList<Customer> filterCustomer(String name, String item, String period, String year, String sort) {
+    public ArrayList<String> getProductGroups() {
+        ArrayList<String> ls = new ArrayList<>();
+        Cursor cur = null;
+
+        try {
+            cur = db.rawQuery("select distinct product_group from sales where product_group not in ('0') order by product_group", null);
+            cur.moveToFirst();
+
+            while (!cur.isAfterLast()) {
+                ls.add(cur.getString(cur.getColumnIndex("product_group")));
+                cur.moveToNext();
+            }
+        }
+
+        finally {
+            Utils.closeCursor(cur);
+        }
+
+        return ls;
+    }
+
+    public ArrayList<Customer> filterCustomer(String name, String item, String productgroup, String period, String year, String sort) {
         ArrayList<Customer> ls = new ArrayList<>();
         Cursor cur = null;
         boolean and = false;
@@ -151,6 +172,15 @@ public class DBHelper extends SQLiteOpenHelper {
                         sb.append(" and item_name in (").append(item).append(")");
                     } else {
                         sb.append(" item_name in (").append(item).append(")");
+                        and = true;
+                    }
+                }
+
+                if (!Utils.isEmpty(productgroup)) {
+                    if (and) {
+                        sb.append(" and product_group in (").append(productgroup).append(")");
+                    } else {
+                        sb.append(" product_group in (").append(productgroup).append(")");
                         and = true;
                     }
                 }

@@ -27,6 +27,7 @@ import com.mysales.mysales_android.helpers.DBHelper;
 import com.mysales.mysales_android.helpers.Utils;
 import com.mysales.mysales_android.tasks.CommonTask;
 
+import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 0;
 
     private AppCompatAutoCompleteTextView txtcust;
-    private MultiSpinnerSearch spitem, spperiod, spyear;
+    private MultiSpinnerSearch spitem, spproductgroup, spperiod, spyear;
     private Button btnsubmit;
 
     private DBHelper db;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity
 
         txtcust = findViewById(R.id.txtcust);
         spitem = findViewById(R.id.spitem);
+        spproductgroup = findViewById(R.id.spproductgroup);
         spperiod = findViewById(R.id.spperiod);
         spyear = findViewById((R.id.spyear));
         btnsubmit = findViewById(R.id.btnsubmit);
@@ -93,17 +95,20 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        final List<String> yearlist = Arrays.asList(getResources().getStringArray(R.array.year));
+        //final List<String> yearlist = Arrays.asList(getResources().getStringArray(R.array.year));
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        int gap = year - 2012 + 1;
         final List<KeyPairBoolData> lb = new ArrayList<>();
 
-        for (int i = 0; i < yearlist.size(); i++) {
+        for (int i = 0; i < gap; i++) {
             KeyPairBoolData h = new KeyPairBoolData();
-            String v = yearlist.get(i);
+            String v = String.valueOf(year);
             h.setId(i + 1);
             h.setName(v);
             h.setSelected(false);
 
             lb.add(h);
+            --year;
         }
 
         spyear.setLimit(-1, null);
@@ -161,10 +166,12 @@ public class MainActivity extends AppCompatActivity
         String period = getSelected(spperiod.getSelectedItems());
         String year = getSelected(spyear.getSelectedItems());
         String item = getSelected(spitem.getSelectedItems(), true);
+        String productgroup = getSelected(spproductgroup.getSelectedItems(), true);
 
         Intent i = new Intent(this, CustomerListActivity.class);
         i.putExtra(CustomerListActivity.ARG_CUST, txtcust.getText().toString());
         i.putExtra(CustomerListActivity.ARG_ITEM, item);
+        i.putExtra(CustomerListActivity.ARG_PRODUCT_GROUP, productgroup);
         i.putExtra(CustomerListActivity.ARG_PERIOD, period);
         i.putExtra(CustomerListActivity.ARG_YEAR, year);
 
@@ -267,13 +274,16 @@ public class MainActivity extends AppCompatActivity
             HashMap<String, ArrayList<String>> m = new HashMap<>();
             ArrayList<String> ls;
             ArrayList<String> li;
+            ArrayList<String> lp;
 
             try {
                 db.openDataBase();
                 ls = db.getCustomers();
                 li = db.getItems();
+                lp = db.getProductGroups();
                 m.put("customer", ls);
                 m.put("item", li);
+                m.put("productgroup", lp);
             }
 
             catch (Exception e) {
@@ -291,10 +301,12 @@ public class MainActivity extends AppCompatActivity
         protected void thenDoUiRelatedWork(HashMap<String, ArrayList<String>> m) {
             ArrayList<String> ls = m.get("customer");
             ArrayList<String> li = m.get("item");
+            ArrayList<String> lp = m.get("productgroup");
             ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this,
                     android.R.layout.simple_dropdown_item_1line, ls);
 
             final List<KeyPairBoolData> la = new ArrayList<>();
+            final List<KeyPairBoolData> lb = new ArrayList<>();
 
             for (int i = 0; i < li.size(); i++) {
                 KeyPairBoolData h = new KeyPairBoolData();
@@ -305,8 +317,25 @@ public class MainActivity extends AppCompatActivity
                 la.add(h);
             }
 
+            for (int i = 0; i < lp.size(); i++) {
+                KeyPairBoolData h = new KeyPairBoolData();
+                String  v= lp.get(i);
+                h.setId(i + 1);
+                h.setName(v);
+                h.setSelected(false);
+                lb.add(h);
+            }
+
             spitem.setLimit(-1, null);
             spitem.setItems(la, -1, new SpinnerListener() {
+                @Override
+                public void onItemsSelected(List<KeyPairBoolData> items) {
+
+                }
+            });
+
+            spproductgroup.setLimit(-1, null);
+            spproductgroup.setItems(lb, -1, new SpinnerListener() {
                 @Override
                 public void onItemsSelected(List<KeyPairBoolData> items) {
 
