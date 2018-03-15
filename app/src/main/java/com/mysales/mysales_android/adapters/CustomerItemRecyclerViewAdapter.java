@@ -21,11 +21,15 @@ public class CustomerItemRecyclerViewAdapter
         extends RecyclerView.Adapter<CustomerItemRecyclerViewAdapter.ViewHolder> {
 
     private final Customer[] values;
+    private String item;
+    private String productgroup;
     private String period;
     private String year;
 
-    public CustomerItemRecyclerViewAdapter(Customer[] items, String period, String year) {
+    public CustomerItemRecyclerViewAdapter(Customer[] items, String item, String productgroup, String period, String year) {
         values = items;
+        this.item = item;
+        this.productgroup = productgroup;
         this.period = period;
         this.year = year;
     }
@@ -54,6 +58,8 @@ public class CustomerItemRecyclerViewAdapter
                 Intent intent = new Intent(context, CustomerItemDetailActivity.class);
                 intent.putExtra(CustomerItemDetailActivity.ARG_CUST, customer.getCode());
                 intent.putExtra(CustomerItemDetailActivity.ARG_CUST_NAME, customer.getName());
+                intent.putExtra(CustomerItemDetailActivity.ARG_ITEM, item);
+                intent.putExtra(CustomerItemDetailActivity.ARG_PRODUCT_GROUP, productgroup);
                 intent.putExtra(CustomerItemDetailActivity.ARG_PERIOD, period);
                 intent.putExtra(CustomerItemDetailActivity.ARG_YEAR, year);
 

@@ -36,12 +36,16 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
 
     private String cust;
     private String custName;
+    private String item;
+    private String productgroup;
     private String period;
     private String year;
     private String sort = "";
 
     public static final String ARG_CUST = "cust_code";
     public static final String ARG_CUST_NAME = "cust_name";
+    public static final String ARG_ITEM = "item_name";
+    public static final String ARG_PRODUCT_GROUP = "product_group";
     public static final String ARG_PERIOD = "period";
     public static final String ARG_YEAR = "year";
 
@@ -63,6 +67,8 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
 
         cust = getIntent().getStringExtra(ARG_CUST);
         custName = getIntent().getStringExtra(ARG_CUST_NAME);
+        item = getIntent().getStringExtra(ARG_ITEM);
+        productgroup = getIntent().getStringExtra(ARG_PRODUCT_GROUP);
         period = getIntent().getStringExtra(ARG_PERIOD);
         year = getIntent().getStringExtra(ARG_YEAR);
 
@@ -139,7 +145,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
     }
 
     private void load() {
-        customerItemDetailTask = new CustomerItemDetailTask(cust, custName, period, year, sort);
+        customerItemDetailTask = new CustomerItemDetailTask(cust, custName, item, productgroup, period, year, sort);
         Needle.onBackgroundThread()
                 .withTaskType("customerItemDetail")
                 .execute(customerItemDetailTask);
@@ -157,16 +163,20 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
 
         private String cust;
         private String custName;
+        private String item;
+        private String productgroup;
         private String period;
         private String year;
         private String sort;
         private ArrayList<String> la;
         private CustomerAddress addr;
 
-        CustomerItemDetailTask(String cust, String custName, String period, String year, String sort) {
+        CustomerItemDetailTask(String cust, String custName, String item, String productgroup, String period, String year, String sort) {
             super(CustomerItemDetailActivity.this);
             this.cust = cust;
             this.custName = custName;
+            this.item = item;
+            this.productgroup = productgroup;
             this.period = period;
             this.year = year;
             this.sort = sort;
@@ -180,7 +190,7 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
             HashMap<String, ArrayList<CustomerItem>> m = new HashMap<>();
 
             try {
-                m = db.getItemsByCustomer(cust, custName, period, year, sort, addr, la);
+                m = db.getItemsByCustomer(cust, custName, item, productgroup, period, year, sort, addr, la);
             }
 
             catch (Exception e) {

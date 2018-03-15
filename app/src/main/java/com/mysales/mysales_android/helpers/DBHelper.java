@@ -262,7 +262,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return o;
     }
 
-    public HashMap<String, ArrayList<CustomerItem>> getItemsByCustomer(String code, String name, String period, String year,
+    public HashMap<String, ArrayList<CustomerItem>> getItemsByCustomer(String code, String name, String items, String productGroup, String period, String year,
                                                                        String sort,
                                                                        CustomerAddress addr,
                                                                        ArrayList<String> ls) {
@@ -287,6 +287,16 @@ public class DBHelper extends SQLiteOpenHelper {
                     .append(" where cust_code = '")
                     .append(code).append("' and cust_name = '")
                     .append(name).append("'");
+
+            if (!Utils.isEmpty(items)) {
+                sb.append(" and item_name in (").append(items).append(")");
+                sa.append(" and item_name in (").append(items).append(")");
+            }
+
+            if (!Utils.isEmpty(productGroup)) {
+                sb.append(" and product_group in (").append(productGroup).append(")");
+                sa.append(" and product_group in (").append(productGroup).append(")");
+            }
 
             if (!Utils.isEmpty(period)) {
                 sb.append(" and period in (").append(period).append(")");

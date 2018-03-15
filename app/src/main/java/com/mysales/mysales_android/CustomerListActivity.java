@@ -71,7 +71,7 @@ public class CustomerListActivity extends AppCompatActivity {
         period = getIntent().getStringExtra(ARG_PERIOD);
         year = getIntent().getStringExtra(ARG_YEAR);
 
-        listcust.setAdapter(new CustomerItemRecyclerViewAdapter(null, period, year));
+        listcust.setAdapter(new CustomerItemRecyclerViewAdapter(null, item, productgroup, period, year));
 
         db = new DBHelper(this);
 
@@ -199,7 +199,7 @@ public class CustomerListActivity extends AppCompatActivity {
         @Override
         protected void thenDoUiRelatedWork(ArrayList<Customer> ls) {
             showProgress(false);
-            CustomerItemRecyclerViewAdapter adapter = new CustomerItemRecyclerViewAdapter(ls.toArray(new Customer[0]), period, year);
+            CustomerItemRecyclerViewAdapter adapter = new CustomerItemRecyclerViewAdapter(ls.toArray(new Customer[0]), item, productgroup, period, year);
             listcust.setAdapter(adapter);
 
             listcust.setVisibility(adapter.getItemCount() > 0 ? View.VISIBLE : View.GONE);
