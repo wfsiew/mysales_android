@@ -68,14 +68,15 @@ def getheader(ws):
         for cell in row:
             j += 1
             k = getvalue(cell)
-            dic[k.lower()] = j
+            if k != 0:
+                dic[k.lower()] = j
 
     return dic
 
 def readfile2():
     o = open('data2.sql', 'w')
     wb = load_workbook('file2.xlsx')
-    ls = ['2012', '2013', '2014', '2015', '2016', '2017', '2018']
+    ls = wb.get_sheet_names()
     for s in ls:
         procsheet(s, wb, o)
 
@@ -85,7 +86,7 @@ def readfile2():
 def readfile1():
     o = open('data1.sql', 'w')
     wb = load_workbook('file1.xlsx')
-    ls = ['2012', '2013', '2014', '2015', '2016', '2017 nov', 'Dec', 'Jan', 'Feb']
+    ls = wb.get_sheet_names()
     for s in ls:
         procsheet(s, wb, o)
 
