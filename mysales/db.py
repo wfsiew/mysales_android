@@ -1,10 +1,14 @@
-import sqlite3
+import sqlite3, os
 
 def createdb():
     conn = None
 
     try:
-        conn = sqlite3.connect('app.db')
+        f = 'app.db'
+        if os.path.exists(f):
+            os.remove(f)
+
+        conn = sqlite3.connect(f)
         with open('create.sql') as k:
             for i in k:
                 conn.execute(i)
