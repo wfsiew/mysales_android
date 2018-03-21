@@ -1,0 +1,10 @@
+
+month 1 2 3 4 5 6 7 8 9 10 11 12/quarter 1 2 3 4/half yearly 1 2/yearly
+
+difflam
+actual: yyy
+target: zzz (actual vs target %, difference
+last year: aaa (actual vs last year%, difference)
+
+soap free
+
