@@ -4,7 +4,7 @@
             "outputFile": "C:\\learn\\mysales_android\\multispinner\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-land\\values-land.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\design-26.0.1.aar\\ff862fdb3eace8f4743cded55af656d6\\res\\values-land\\values-land.xml",
+                    "source": "C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\design-26.0.1.aar\\80ce62d7a4c8a94e04b9a20aed39077e\\res\\values-land\\values-land.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.1.aar\\c432cd8d90f5913691225f8a506e8dc5\\res\\values-land\\values-land.xml",
+                    "source": "C:\\Users\\wingfei.seiw\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.0.1.aar\\f1b9bcf7982e4e8b0d470598c6cefc98\\res\\values-land\\values-land.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",

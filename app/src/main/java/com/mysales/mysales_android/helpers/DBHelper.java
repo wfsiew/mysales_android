@@ -10,8 +10,11 @@ import android.os.Environment;
 import com.mysales.mysales_android.models.Customer;
 import com.mysales.mysales_android.models.CustomerAddress;
 import com.mysales.mysales_android.models.CustomerItem;
+import com.mysales.mysales_android.models.SalesSummary;
+import com.mysales.mysales_android.models.Target;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -371,5 +374,154 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         return m;
+    }
+
+    public SalesSummary getHalfYearlySummary(int h, String product, Target t) {
+        SalesSummary o = new SalesSummary();
+        Cursor cur = null;
+
+        try {
+            o.setProductGroup(product);
+            o.setTarget(t.getValue());
+
+            StringBuilder sb = new StringBuilder();
+
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            int pyear = year - 1;
+            String years = year + "," + pyear;
+
+            String period = "";
+            if (h == 1)
+                period = "1,2,3,4,5,6";
+
+            else if (h == 2)
+                period = "7,8,9,10,11,12";
+
+            sb.append("select year, sum(sales_value) salesv from sales")
+                    .append(" where period in (").append(period).append(")")
+                    .append(" and product_group like '").append(product).append("%'")
+                    .append(" and year in (").append(years).append(")")
+                    .append(" group by year");
+
+            String q = sb.toString();
+            cur = db.rawQuery(q, null);
+            cur.moveToFirst();
+
+            while (!cur.isAfterLast()) {
+                int y = cur.getInt(cur.getColumnIndex("year"));
+                if (y == year)
+                    o.setActual(cur.getDouble(cur.getColumnIndex("salesv")));
+
+                else if (y == pyear)
+                    o.setActual1(cur.getDouble(cur.getColumnIndex("salesv")));
+            }
+        }
+
+        finally {
+            Utils.closeCursor(cur);
+        }
+
+        return o;
+    }
+
+    public SalesSummary getQuarterlySummary(int quarter, String product, Target t) {
+        SalesSummary o = new SalesSummary();
+        Cursor cur = null;
+
+        try {
+            o.setProductGroup(product);
+            o.setTarget(t.getValue());
+
+            StringBuilder sb = new StringBuilder();
+
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            int pyear = year - 1;
+            String years = year + "," + pyear;
+
+            String period = "";
+            switch (quarter) {
+                case 1:
+                    period = "1,2,3";
+                    break;
+
+                case 2:
+                    period = "4,5,6";
+                    break;
+
+                case 3:
+                    period = "7,8,9";
+                    break;
+
+                case 4:
+                    period = "10,11,12";
+                    break;
+            }
+
+            sb.append("select year, sum(sales_value) salesv from sales")
+                    .append(" where period in (").append(period).append(")")
+                    .append(" and product_group like '").append(product).append("%'")
+                    .append(" and year in (").append(years).append(")")
+                    .append(" group by year");
+
+            String q = sb.toString();
+            cur = db.rawQuery(q, null);
+            cur.moveToFirst();
+
+            while (!cur.isAfterLast()) {
+                int y = cur.getInt(cur.getColumnIndex("year"));
+                if (y == year)
+                    o.setActual(cur.getDouble(cur.getColumnIndex("salesv")));
+
+                else if (y == pyear)
+                    o.setActual1(cur.getDouble(cur.getColumnIndex("salesv")));
+            }
+        }
+
+        finally {
+            Utils.closeCursor(cur);
+        }
+
+        return o;
+    }
+
+    public SalesSummary getMontlySummary(int month, String product, Target t) {
+        SalesSummary o = new SalesSummary();
+        Cursor cur = null;
+
+        try {
+            o.setProductGroup(product);
+            o.setTarget(t.getValue());
+
+            StringBuilder sb = new StringBuilder();
+
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            int pyear = year - 1;
+            String years = year + "," + pyear;
+
+            sb.append("select year, sum(sales_value) as salesv from sales")
+                    .append(" where period = ").append(month)
+                    .append(" and product_group like '").append(product).append("%'")
+                    .append(" and year in (").append(years).append(")")
+                    .append(" group by year");
+
+            String q = sb.toString();
+            cur = db.rawQuery(q, null);
+            cur.moveToFirst();
+
+            while (!cur.isAfterLast()) {
+                int y = cur.getInt(cur.getColumnIndex("year"));
+                if (y == year)
+                    o.setActual(cur.getDouble(cur.getColumnIndex("salesv")));
+
+                else if (y == pyear)
+                    o.setActual1(cur.getDouble(cur.getColumnIndex("salesv")));
+            }
+        }
+
+        finally {
+            Utils.closeCursor(cur);
+        }
+
+        return o;
     }
 }
