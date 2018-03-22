@@ -249,6 +249,11 @@ public class DoctorListActivity extends AppCompatActivity
             super.onBackPressed();
         }
 
+        else if (id == R.id.nav_summary) {
+            Intent i = new Intent(this, SalesSummaryActivity.class);
+            startActivity(i);
+        }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

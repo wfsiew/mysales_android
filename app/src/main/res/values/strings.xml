@@ -50,6 +50,7 @@
 
     <string name="title_customer_list">Customers</string>
     <string name="title_customer_detail">Customer Item Details</string>
+    <string name="title_sales_summary">Sales Summary</string>
     <string name="title_activity_doctor_list">Doctors</string>
     <string name="title_activity_doctor_detail">Doctor Details</string>
     <string name="title_add_doctor">Add Doctor</string>

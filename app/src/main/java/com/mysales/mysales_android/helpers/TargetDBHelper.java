@@ -201,30 +201,4 @@ public class TargetDBHelper extends SQLiteOpenHelper {
 
         return m;
     }
-
-    public ArrayList<Target> getTarget() {
-        ArrayList<Target> ls = new ArrayList<>();
-        Cursor cur = null;
-
-        try {
-            cur = db.rawQuery("select product_group, month, year, sales_value from target", null);
-            cur.moveToFirst();
-
-            while (!cur.isAfterLast()) {
-                Target o = new Target();
-                o.setProductGroup(cur.getString(cur.getColumnIndex("product_group")));
-                o.setMonth(cur.getInt(cur.getColumnIndex("month")));
-                o.setYear(cur.getInt(cur.getColumnIndex("year")));
-                o.setValue(cur.getDouble(cur.getColumnIndex("sales_value")));
-                ls.add(o);
-                cur.moveToNext();
-            }
-        }
-
-        finally {
-            Utils.closeCursor(cur);
-        }
-
-        return ls;
-    }
 }
