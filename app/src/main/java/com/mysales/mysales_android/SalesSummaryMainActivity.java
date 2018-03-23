@@ -103,6 +103,14 @@ public class SalesSummaryMainActivity extends AppCompatActivity
             lc.add(h);
         }
 
+        sphalfyear.setLimit(-1, null);
+        sphalfyear.setItems(lc, -1, new SpinnerListener() {
+            @Override
+            public void onItemsSelected(List<KeyPairBoolData> items) {
+
+            }
+        });
+
         btnsubmit1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
