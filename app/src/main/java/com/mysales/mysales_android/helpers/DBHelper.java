@@ -376,7 +376,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return m;
     }
 
-    public SalesSummary getHalfYearlySummary(int h, String product, Target t) {
+    public SalesSummary getHalfYearlySummary(String h, String product, Target t) {
         SalesSummary o = new SalesSummary();
         Cursor cur = null;
 
@@ -390,15 +390,10 @@ public class DBHelper extends SQLiteOpenHelper {
             int pyear = year - 1;
             String years = year + "," + pyear;
 
-            String period = "";
-            if (h == 1)
-                period = "1,2,3,4,5,6";
-
-            else if (h == 2)
-                period = "7,8,9,10,11,12";
+            String months = Utils.getHalfYearMonths(h);
 
             sb.append("select year, sum(sales_value) salesv from sales")
-                    .append(" where period in (").append(period).append(")")
+                    .append(" where period in (").append(months).append(")")
                     .append(" and product_group like '").append(product).append("%'")
                     .append(" and year in (").append(years).append(")")
                     .append(" group by year");
@@ -414,6 +409,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 else if (y == pyear)
                     o.setActual1(cur.getDouble(cur.getColumnIndex("salesv")));
+
+                cur.moveToNext();
             }
         }
 
@@ -424,7 +421,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return o;
     }
 
-    public SalesSummary getQuarterlySummary(int quarter, String product, Target t) {
+    public SalesSummary getQuarterlySummary(String quarter, String product, Target t) {
         SalesSummary o = new SalesSummary();
         Cursor cur = null;
 
@@ -438,27 +435,10 @@ public class DBHelper extends SQLiteOpenHelper {
             int pyear = year - 1;
             String years = year + "," + pyear;
 
-            String period = "";
-            switch (quarter) {
-                case 1:
-                    period = "1,2,3";
-                    break;
-
-                case 2:
-                    period = "4,5,6";
-                    break;
-
-                case 3:
-                    period = "7,8,9";
-                    break;
-
-                case 4:
-                    period = "10,11,12";
-                    break;
-            }
+            String months = Utils.getQuarterMonths(quarter);
 
             sb.append("select year, sum(sales_value) salesv from sales")
-                    .append(" where period in (").append(period).append(")")
+                    .append(" where period in (").append(months).append(")")
                     .append(" and product_group like '").append(product).append("%'")
                     .append(" and year in (").append(years).append(")")
                     .append(" group by year");
@@ -474,6 +454,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 else if (y == pyear)
                     o.setActual1(cur.getDouble(cur.getColumnIndex("salesv")));
+
+                cur.moveToNext();
             }
         }
 
@@ -484,7 +466,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return o;
     }
 
-    public SalesSummary getMontlySummary(int month, String product, Target t) {
+    public SalesSummary getMontlySummary(String months, String product, Target t) {
         SalesSummary o = new SalesSummary();
         Cursor cur = null;
 
@@ -499,7 +481,7 @@ public class DBHelper extends SQLiteOpenHelper {
             String years = year + "," + pyear;
 
             sb.append("select year, sum(sales_value) as salesv from sales")
-                    .append(" where period = ").append(month)
+                    .append(" where period in (").append(months).append(")")
                     .append(" and product_group like '").append(product).append("%'")
                     .append(" and year in (").append(years).append(")")
                     .append(" group by year");
@@ -515,6 +497,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 else if (y == pyear)
                     o.setActual1(cur.getDouble(cur.getColumnIndex("salesv")));
+
+                cur.moveToNext();
             }
         }
 

@@ -19,6 +19,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/activity_sales_summary_drawer" />
+        app:menu="@menu/activity_sales_summary_main_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

@@ -74,7 +74,7 @@ public class TargetDBHelper extends SQLiteOpenHelper {
         return ls;
     }
 
-    public HashMap<String, Target> getHalfYearlyTarget(int h) {
+    public HashMap<String, Target> getHalfYearlyTarget(String h) {
         HashMap<String, Target> m = new HashMap<>();
         Cursor cur = null;
 
@@ -82,16 +82,11 @@ public class TargetDBHelper extends SQLiteOpenHelper {
             StringBuilder sb = new StringBuilder();
             int year = Calendar.getInstance().get(Calendar.YEAR);
 
-            String period = "";
-            if (h == 1)
-                period = "1,2,3,4,5,6";
-
-            else if (h == 2)
-                period = "7,8,9,10,11,12";
+            String months = Utils.getHalfYearMonths(h);
 
             sb.append("select product_group, sum(sales_value) salesv from target")
                     .append(" where year = ").append(year)
-                    .append(" and month in (").append(period).append(")")
+                    .append(" and month in (").append(months).append(")")
                     .append(" group by product_group");
 
             String q = sb.toString();
@@ -115,7 +110,7 @@ public class TargetDBHelper extends SQLiteOpenHelper {
         return m;
     }
 
-    public HashMap<String, Target> getQuarterlyTarget(int quarter) {
+    public HashMap<String, Target> getQuarterlyTarget(String quarter) {
         HashMap<String, Target> m = new HashMap<>();
         Cursor cur = null;
 
@@ -123,28 +118,11 @@ public class TargetDBHelper extends SQLiteOpenHelper {
             StringBuilder sb = new StringBuilder();
             int year = Calendar.getInstance().get(Calendar.YEAR);
 
-            String period = "";
-            switch (quarter) {
-                case 1:
-                    period = "1,2,3";
-                    break;
-
-                case 2:
-                    period = "4,5,6";
-                    break;
-
-                case 3:
-                    period = "7,8,9";
-                    break;
-
-                case 4:
-                    period = "10,11,12";
-                    break;
-            }
+            String months = Utils.getQuarterMonths(quarter);
 
             sb.append("select product_group, sum(sales_value) salesv from target")
                     .append(" where year = ").append(year)
-                    .append(" and month in (").append(period).append(")")
+                    .append(" and month in (").append(months).append(")")
                     .append(" group by product_group");
 
             String q = sb.toString();
@@ -168,7 +146,7 @@ public class TargetDBHelper extends SQLiteOpenHelper {
         return m;
     }
 
-    public HashMap<String, Target> getMonthlyTarget(int month) {
+    public HashMap<String, Target> getMonthlyTarget(String months) {
         HashMap<String, Target> m = new HashMap<>();
         Cursor cur = null;
 
@@ -178,7 +156,7 @@ public class TargetDBHelper extends SQLiteOpenHelper {
 
             sb.append("select product_group, sum(sales_value) salesv from target")
                     .append(" where year = ").append(year)
-                    .append(" and month = ").append(month)
+                    .append(" and month in (").append(months).append(")")
                     .append(" group by product_group");
 
             String q = sb.toString();

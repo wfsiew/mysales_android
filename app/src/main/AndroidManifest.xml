@@ -50,6 +50,10 @@
             android:name=".SalesSummaryActivity"
             android:label="@string/title_sales_summary"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SalesSummaryMainActivity"
+            android:label="@string/title_sales_summary"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

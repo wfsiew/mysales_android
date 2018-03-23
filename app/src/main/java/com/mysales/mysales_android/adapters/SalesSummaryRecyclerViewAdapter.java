@@ -39,12 +39,29 @@ public class SalesSummaryRecyclerViewAdapter
         final SalesSummary salesSummary = values[position];
         holder.txtproductgroup.setText(salesSummary.getProductGroup());
         holder.txtactual.setText(String.format("Actual: %s", Utils.formatDouble(salesSummary.getActual())));
-        holder.txttarget.setText(String.format("Target: %s", Utils.formatDouble(salesSummary.getTarget())));
+        holder.txttarget.setText(String.format("Target: %s (%d %%, %s)",
+                Utils.formatDouble(salesSummary.getTarget()),
+                salesSummary.getActualvsTarget(),
+                Utils.formatDouble(salesSummary.getActualvsTargetDiff())
+                ));
+        holder.txtprevactual.setText(String.format("Last Year: %s (%d %%, %s)",
+                Utils.formatDouble(salesSummary.getActual1()),
+                salesSummary.getActualvsPrevYear(),
+                Utils.formatDouble(salesSummary.getActualvsPrevYearDiff())
+                ));
     }
 
     @Override
     public int getItemCount() {
         return values == null ? 0 :  values.length;
+    }
+
+    private int getPercentage(double a, double b) {
+        return (int) Math.round((a * 100) / b);
+    }
+
+    private double getDiff(double a, double b) {
+        return a - b;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -53,6 +70,7 @@ public class SalesSummaryRecyclerViewAdapter
         final TextView txtproductgroup;
         final TextView txtactual;
         final TextView txttarget;
+        final TextView txtprevactual;
         SalesSummary item;
 
         ViewHolder(View view) {
@@ -61,6 +79,7 @@ public class SalesSummaryRecyclerViewAdapter
             txtproductgroup = view.findViewById(R.id.txtproductgroup);
             txtactual = view.findViewById(R.id.txtactual);
             txttarget = view.findViewById(R.id.txttarget);
+            txtprevactual = view.findViewById(R.id.txtprevactual);
         }
     }
 }

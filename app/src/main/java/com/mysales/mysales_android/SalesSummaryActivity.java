@@ -27,8 +27,7 @@ import java.util.HashMap;
 
 import needle.Needle;
 
-public class SalesSummaryActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+public class SalesSummaryActivity extends AppCompatActivity {
 
     private View progress;
     private RecyclerView listsalessummary;
@@ -38,6 +37,14 @@ public class SalesSummaryActivity extends AppCompatActivity
 
     private SalesSummaryTask salesSummaryTask = null;
 
+    private String month;
+    private String quarter;
+    private String halfyear;
+
+    public static final String ARG_MONTH = "month";
+    public static final String ARG_QUARTER = "quarter";
+    public static final String ARG_HALFYEAR = "halfyear";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,17 +52,12 @@ public class SalesSummaryActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
         progress = findViewById(R.id.progress);
         listsalessummary = findViewById(R.id.listsalessummary);
+
+        month = getIntent().getStringExtra(ARG_MONTH);
+        quarter = getIntent().getStringExtra(ARG_QUARTER);
+        halfyear = getIntent().getStringExtra(ARG_HALFYEAR);
 
         listsalessummary.setAdapter(new SalesSummaryRecyclerViewAdapter(null));
 
@@ -76,23 +78,6 @@ public class SalesSummaryActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.nav_main) {
-            super.onBackPressed();
-        }
-
-        else if (id == R.id.nav_doctor) {
-            Intent i = new Intent(this, SalesSummaryActivity.class);
-            startActivity(i);
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (salesSummaryTask != null && !salesSummaryTask.isCanceled())
@@ -100,7 +85,7 @@ public class SalesSummaryActivity extends AppCompatActivity
     }
 
     private void load() {
-        salesSummaryTask = new SalesSummaryTask();
+        salesSummaryTask = new SalesSummaryTask(month, quarter, halfyear);
         Needle.onBackgroundThread()
                 .withTaskType("salesSummary")
                 .execute(salesSummaryTask);
@@ -115,8 +100,15 @@ public class SalesSummaryActivity extends AppCompatActivity
 
         private static final String CLASS_NAME = "SalesSummaryTask";
 
-        SalesSummaryTask() {
+        private String month;
+        private String quarter;
+        private String halfyear;
+
+        SalesSummaryTask(String month, String quarter, String halfyear) {
             super(SalesSummaryActivity.this);
+            this.month = month;
+            this.quarter = quarter;
+            this.halfyear = halfyear;
             showProgress(true);
         }
 
@@ -125,22 +117,39 @@ public class SalesSummaryActivity extends AppCompatActivity
             ArrayList<SalesSummary> ls = new ArrayList<>();
 
             try {
-                System.out.println("xxxxxxxx");
                 tdb.openDataBase();
-                System.out.println("gggggggggggggggggggg");
+                HashMap<String, Target> mt = null;
                 ArrayList<String> productGroups = tdb.getProductGroups();
-                HashMap<String, Target> monthlyTarget = tdb.getMonthlyTarget(3);
-                System.out.println("000000000000000000000");
+
+                if (!Utils.isEmpty(month))
+                    mt = tdb.getMonthlyTarget(month);
+
+                else if (!Utils.isEmpty(quarter))
+                    mt = tdb.getQuarterlyTarget(quarter);
+
+                else if (!Utils.isEmpty(halfyear))
+                    mt = tdb.getHalfYearlyTarget(halfyear);
 
                 db.openDataBase();
-                SalesSummary montlySummary = db.getMontlySummary(3, "DIFFLAM", monthlyTarget.get("DIFFLAM"));
 
-                ls.add(montlySummary);
-                System.out.println("---------" + ls.size());
+                for (String product : productGroups) {
+                    SalesSummary monthlySummary = null;
+
+                    if (!Utils.isEmpty(month))
+                        monthlySummary = db.getMontlySummary(month, product, mt.get(product));
+
+                    else if (!Utils.isEmpty(quarter))
+                        monthlySummary = db.getQuarterlySummary(quarter, product, mt.get(product));
+
+                    else if (!Utils.isEmpty(halfyear))
+                        monthlySummary = db.getHalfYearlySummary(halfyear, product, mt.get(product));
+
+                    if (monthlySummary != null)
+                        ls.add(monthlySummary);
+                }
             }
 
             catch (Exception e) {
-                System.out.println("eeeeeeeeeeeeeeeeeeeeeeee");
                 Log.e(CLASS_NAME, e.getMessage(), e);
             }
 

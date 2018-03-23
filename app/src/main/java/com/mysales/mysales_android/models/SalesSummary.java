@@ -42,4 +42,22 @@ public class SalesSummary {
     public void setActual1(double actual1) {
         this.actual1 = actual1;
     }
+
+    public int getActualvsTarget() {
+        int k = (int) Math.round((getActual() * 100) / getTarget());
+        return k;
+    }
+
+    public double getActualvsTargetDiff() {
+        return getActual() - getTarget();
+    }
+
+    public int getActualvsPrevYear() {
+        int k = (int) Math.round((getActual() * 100) / getActual1());
+        return k;
+    }
+
+    public double getActualvsPrevYearDiff() {
+        return getActual() - getActual1();
+    }
 }

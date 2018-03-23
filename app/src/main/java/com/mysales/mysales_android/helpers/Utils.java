@@ -12,8 +12,11 @@ import android.database.Cursor;
 import android.os.Build;
 import android.view.View;
 
+import com.androidbuts.multispinnerfilter.KeyPairBoolData;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wingfei.siew on 7/31/2017.
@@ -141,5 +144,94 @@ public class Utils {
 
     static void closeCursor(Cursor cur) {
         if (cur != null) cur.close();
+    }
+
+    public static String getSelected(List<KeyPairBoolData> li) {
+        return getSelected(li, false);
+    }
+
+    public static String getSelected(List<KeyPairBoolData> li, boolean usequote) {
+        StringBuilder sb = new StringBuilder();
+        String r = "";
+
+        if (li.isEmpty()) {
+            return r;
+        }
+
+        for (int i = 0; i < li.size(); i++) {
+            String v = Utils.escapeStr(li.get(i).getName());
+            if (usequote) {
+                sb.append(String.format("'%s'", v));
+            }
+
+            else {
+                sb.append(v);
+            }
+
+            if (i < li.size() - 1) {
+                sb.append(",");
+            }
+        }
+
+        r = sb.toString();
+        return r;
+    }
+
+    static String getHalfYearMonths(String h) {
+        String[] arr = null;
+        StringBuilder sb = new StringBuilder();
+
+        if (h.contains(",")) {
+            arr = h.split(",");
+        }
+
+        else {
+            arr = new String[] { h };
+        }
+
+        for (String y : arr) {
+            if ("1".equals(y)) {
+                sb.append("1,2,3,4,5,6");
+            }
+
+            else if ("2".equals(y)) {
+                sb.append("7,8,9,10,11,12");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    static String getQuarterMonths(String quarter) {
+        String[] arr = null;
+        StringBuilder sb = new StringBuilder();
+
+        if (quarter.contains(",")) {
+            arr = quarter.split(",");
+        }
+
+        else {
+            arr = new String[] { quarter };
+        }
+
+        for (String period : arr) {
+            if ("1".equals(period)) {
+                sb.append("1,2,3");
+            }
+
+            else if ("2".equals(period)) {
+                sb.append("4,5,6");
+            }
+
+            else if ("3".equals(period)) {
+                sb.append("7,8,9");
+            }
+
+            else if ("4".equals(period)) {
+                sb.append("10,11,12");
+            }
+        }
+
+        return sb.toString();
     }
 }

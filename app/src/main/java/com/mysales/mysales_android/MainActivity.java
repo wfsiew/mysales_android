@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         else if (id == R.id.nav_summary) {
-            Intent i = new Intent(this, SalesSummaryActivity.class);
+            Intent i = new Intent(this, SalesSummaryMainActivity.class);
             startActivity(i);
         }
 
@@ -168,10 +168,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void searchData() {
-        String period = getSelected(spperiod.getSelectedItems());
-        String year = getSelected(spyear.getSelectedItems());
-        String item = getSelected(spitem.getSelectedItems(), true);
-        String productgroup = getSelected(spproductgroup.getSelectedItems(), true);
+        String period = Utils.getSelected(spperiod.getSelectedItems());
+        String year = Utils.getSelected(spyear.getSelectedItems());
+        String item = Utils.getSelected(spitem.getSelectedItems(), true);
+        String productgroup = Utils.getSelected(spproductgroup.getSelectedItems(), true);
 
         Intent i = new Intent(this, CustomerListActivity.class);
         i.putExtra(CustomerListActivity.ARG_CUST, txtcust.getText().toString());
@@ -233,37 +233,6 @@ public class MainActivity extends AppCompatActivity
                 checkPermission();
             }
         }
-    }
-
-    private String getSelected(List<KeyPairBoolData> li) {
-        return getSelected(li, false);
-    }
-
-    private String getSelected(List<KeyPairBoolData> li, boolean usequote) {
-        StringBuilder sb = new StringBuilder();
-        String r = "";
-
-        if (li.isEmpty()) {
-            return r;
-        }
-
-        for (int i = 0; i < li.size(); i++) {
-            String v = Utils.escapeStr(li.get(i).getName());
-            if (usequote) {
-                sb.append(String.format("'%s'", v));
-            }
-
-            else {
-                sb.append(v);
-            }
-
-            if (i < li.size() - 1) {
-                sb.append(",");
-            }
-        }
-
-        r = sb.toString();
-        return r;
     }
 
     class PopulateCustomerTask extends CommonTask<HashMap<String, ArrayList<String>>> {

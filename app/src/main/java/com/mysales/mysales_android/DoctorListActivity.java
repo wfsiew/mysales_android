@@ -246,11 +246,12 @@ public class DoctorListActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_main) {
-            super.onBackPressed();
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
         }
 
         else if (id == R.id.nav_summary) {
-            Intent i = new Intent(this, SalesSummaryActivity.class);
+            Intent i = new Intent(this, SalesSummaryMainActivity.class);
             startActivity(i);
         }
 
