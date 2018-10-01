@@ -300,6 +300,26 @@ public class CustomerItemDetailActivity extends AppCompatActivity {
                         }
                     }
 
+                    if (!Utils.isEmpty(addr.getTelephone())) {
+                        if (sb.toString().trim().endsWith(",")) {
+                            sb.append(" ").append(addr.getTelephone());
+                        }
+
+                        else {
+                            sb.append(", ").append(addr.getTelephone());
+                        }
+                    }
+
+                    if (!Utils.isEmpty(addr.getContact())) {
+                        if (sb.toString().trim().endsWith(",")) {
+                            sb.append(" ").append(addr.getContact());
+                        }
+
+                        else {
+                            sb.append(", ").append(addr.getContact());
+                        }
+                    }
+
                     sb.append("\nTotal Sales Unit: ").append(r.getTotalSalesUnit()).append("\n")
                             .append("Total Bonus Unit: ").append(r.getTotalBonusUnit()).append("\n")
                             .append("Total Sales Value: ").append(Utils.formatDouble(r.getTotalSalesValue())).append("\n");

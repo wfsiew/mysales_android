@@ -12,6 +12,8 @@ public class CustomerAddress {
     private String postalCode;
     private String area;
     private String territory;
+    private String telephone;
+    private String contact;
 
     public String getAddr1() {
         return addr1;
@@ -79,6 +81,28 @@ public class CustomerAddress {
         }
     }
 
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+        if ("0".equals(this.telephone)) {
+            this.telephone = "";
+        }
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+        if ("0".equals(this.contact)) {
+            this.contact = "";
+        }
+    }
+
     public void set(CustomerAddress address) {
         setAddr1(address.getAddr1());
         setAddr2(address.getAddr2());
@@ -86,5 +110,7 @@ public class CustomerAddress {
         setPostalCode(address.getPostalCode());
         setArea(address.getArea());
         setTerritory(address.getTerritory());
+        setTelephone(address.getTelephone());
+        setContact(address.getContact());
     }
 }

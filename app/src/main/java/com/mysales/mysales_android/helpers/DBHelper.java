@@ -235,7 +235,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private CustomerAddress getCustomerAddress(String code, String name) {
         CustomerAddress o = new CustomerAddress();
-        String q = "select cust_addr1, cust_addr2, cust_addr3, postal_code, area, territory from sales" +
+        String q = "select cust_addr1, cust_addr2, cust_addr3, postal_code, area, territory, telephone, contact_person from sales" +
                 " where cust_code = '" + code  + "'  and cust_name = '" + name + "'";
         Cursor cur = null;
 
@@ -249,6 +249,8 @@ public class DBHelper extends SQLiteOpenHelper {
             String postalcode = cur.getString(cur.getColumnIndex("postal_code"));
             String area = cur.getString(cur.getColumnIndex("area"));
             String territory = cur.getString(cur.getColumnIndex("territory"));
+            String telephone = cur.getString(cur.getColumnIndex("telephone"));
+            String contact = cur.getString(cur.getColumnIndex("contact"));
 
             o.setAddr1(addr1);
             o.setAddr2(addr2);
@@ -256,6 +258,8 @@ public class DBHelper extends SQLiteOpenHelper {
             o.setPostalCode(postalcode);
             o.setArea(area);
             o.setTerritory(territory);
+            o.setTelephone(telephone);
+            o.setContact(contact);
         }
 
         finally {
