@@ -122,6 +122,27 @@ public class DBHelper extends SQLiteOpenHelper {
         return ls;
     }
 
+    public ArrayList<String> getTerritories() {
+        ArrayList<String> ls = new ArrayList<>();
+        Cursor cur = null;
+
+        try {
+            cur = db.rawQuery("select distinct territory from sales where territory not in ('0') order by territory", null);
+            cur.moveToFirst();
+
+            while (!cur.isAfterLast()) {
+                ls.add(cur.getString(cur.getColumnIndex("territory")));
+                cur.moveToNext();
+            }
+        }
+
+        finally {
+            Utils.closeCursor(cur);
+        }
+
+        return ls;
+    }
+
     public ArrayList<String> getProductGroups() {
         ArrayList<String> ls = new ArrayList<>();
         Cursor cur = null;
@@ -143,7 +164,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return ls;
     }
 
-    public ArrayList<Customer> filterCustomer(String name, String item, String productgroup, String period, String year, String sort) {
+    public ArrayList<Customer> filterCustomer(String name, String item, String productgroup, String territory, String period, String year, String sort) {
         ArrayList<Customer> ls = new ArrayList<>();
         Cursor cur = null;
         boolean and = false;
@@ -184,6 +205,15 @@ public class DBHelper extends SQLiteOpenHelper {
                         sb.append(" and product_group in (").append(productgroup).append(")");
                     } else {
                         sb.append(" product_group in (").append(productgroup).append(")");
+                        and = true;
+                    }
+                }
+
+                if (!Utils.isEmpty(territory)) {
+                    if (and) {
+                        sb.append(" and territory in (").append(territory).append(")");
+                    } else {
+                        sb.append(" territory in (").append(territory).append(")");
                         and = true;
                     }
                 }
@@ -250,7 +280,7 @@ public class DBHelper extends SQLiteOpenHelper {
             String area = cur.getString(cur.getColumnIndex("area"));
             String territory = cur.getString(cur.getColumnIndex("territory"));
             String telephone = cur.getString(cur.getColumnIndex("telephone"));
-            String contact = cur.getString(cur.getColumnIndex("contact"));
+            String contact = cur.getString(cur.getColumnIndex("contact_person"));
 
             o.setAddr1(addr1);
             o.setAddr2(addr2);
@@ -269,7 +299,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return o;
     }
 
-    public HashMap<String, ArrayList<CustomerItem>> getItemsByCustomer(String code, String name, String items, String productGroup, String period, String year,
+    public HashMap<String, ArrayList<CustomerItem>> getItemsByCustomer(String code, String name, String items, String productGroup, String territory, String period, String year,
                                                                        String sort,
                                                                        CustomerAddress addr,
                                                                        ArrayList<String> ls) {
@@ -303,6 +333,11 @@ public class DBHelper extends SQLiteOpenHelper {
             if (!Utils.isEmpty(productGroup)) {
                 sb.append(" and product_group in (").append(productGroup).append(")");
                 sa.append(" and product_group in (").append(productGroup).append(")");
+            }
+
+            if (!Utils.isEmpty(territory)) {
+                sb.append(" and territory in (").append(territory).append(")");
+                sa.append(" and territory in (").append(territory).append(")");
             }
 
             if (!Utils.isEmpty(period)) {

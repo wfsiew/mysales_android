@@ -23,13 +23,15 @@ public class CustomerItemRecyclerViewAdapter
     private final Customer[] values;
     private String item;
     private String productgroup;
+    private String territory;
     private String period;
     private String year;
 
-    public CustomerItemRecyclerViewAdapter(Customer[] items, String item, String productgroup, String period, String year) {
+    public CustomerItemRecyclerViewAdapter(Customer[] items, String item, String productgroup, String territory, String period, String year) {
         values = items;
         this.item = item;
         this.productgroup = productgroup;
+        this.territory = territory;
         this.period = period;
         this.year = year;
     }

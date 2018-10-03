@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 0;
 
     private AppCompatAutoCompleteTextView txtcust;
-    private MultiSpinnerSearch spitem, spproductgroup, spperiod, spyear;
+    private MultiSpinnerSearch spitem, spproductgroup, spterritory, spperiod, spyear;
     private Button btnsubmit;
 
     private DBHelper db;
@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity
         txtcust = findViewById(R.id.txtcust);
         spitem = findViewById(R.id.spitem);
         spproductgroup = findViewById(R.id.spproductgroup);
+        spterritory = findViewById(R.id.spterritory);
         spperiod = findViewById(R.id.spperiod);
         spyear = findViewById((R.id.spyear));
         btnsubmit = findViewById(R.id.btnsubmit);
@@ -172,11 +173,13 @@ public class MainActivity extends AppCompatActivity
         String year = Utils.getSelected(spyear.getSelectedItems());
         String item = Utils.getSelected(spitem.getSelectedItems(), true);
         String productgroup = Utils.getSelected(spproductgroup.getSelectedItems(), true);
+        String territory = Utils.getSelected(spterritory.getSelectedItems(), true);
 
         Intent i = new Intent(this, CustomerListActivity.class);
         i.putExtra(CustomerListActivity.ARG_CUST, txtcust.getText().toString());
         i.putExtra(CustomerListActivity.ARG_ITEM, item);
         i.putExtra(CustomerListActivity.ARG_PRODUCT_GROUP, productgroup);
+        i.putExtra(CustomerListActivity.ARG_TERRITORY, territory);
         i.putExtra(CustomerListActivity.ARG_PERIOD, period);
         i.putExtra(CustomerListActivity.ARG_YEAR, year);
 
@@ -249,15 +252,18 @@ public class MainActivity extends AppCompatActivity
             ArrayList<String> ls;
             ArrayList<String> li;
             ArrayList<String> lp;
+            ArrayList<String> lt;
 
             try {
                 db.openDataBase();
                 ls = db.getCustomers();
                 li = db.getItems();
                 lp = db.getProductGroups();
+                lt = db.getTerritories();
                 m.put("customer", ls);
                 m.put("item", li);
                 m.put("productgroup", lp);
+                m.put("territory", lt);
             }
 
             catch (Exception e) {
@@ -276,11 +282,13 @@ public class MainActivity extends AppCompatActivity
             ArrayList<String> ls = m.get("customer");
             ArrayList<String> li = m.get("item");
             ArrayList<String> lp = m.get("productgroup");
+            ArrayList<String> lt = m.get("territory");
             ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this,
                     android.R.layout.simple_dropdown_item_1line, ls);
 
             final List<KeyPairBoolData> la = new ArrayList<>();
             final List<KeyPairBoolData> lb = new ArrayList<>();
+            final List<KeyPairBoolData> lc = new ArrayList<>();
 
             for (int i = 0; i < li.size(); i++) {
                 KeyPairBoolData h = new KeyPairBoolData();
@@ -293,11 +301,20 @@ public class MainActivity extends AppCompatActivity
 
             for (int i = 0; i < lp.size(); i++) {
                 KeyPairBoolData h = new KeyPairBoolData();
-                String  v= lp.get(i);
+                String v = lp.get(i);
                 h.setId(i + 1);
                 h.setName(v);
                 h.setSelected(false);
                 lb.add(h);
+            }
+
+            for (int i = 0; i < lt.size(); i++) {
+                KeyPairBoolData h = new KeyPairBoolData();
+                String v = lt.get(i);
+                h.setId(i + 1);
+                h.setName(v);
+                h.setSelected(false);
+                lc.add(h);
             }
 
             spitem.setLimit(-1, null);
@@ -310,6 +327,14 @@ public class MainActivity extends AppCompatActivity
 
             spproductgroup.setLimit(-1, null);
             spproductgroup.setItems(lb, -1, new SpinnerListener() {
+                @Override
+                public void onItemsSelected(List<KeyPairBoolData> items) {
+
+                }
+            });
+
+            spterritory.setLimit(-1, null);
+            spterritory.setItems(lc, -1, new SpinnerListener() {
                 @Override
                 public void onItemsSelected(List<KeyPairBoolData> items) {
 
